@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import fetch from 'node-fetch'
 
 import { withFirebase } from '../Firebase';
@@ -7,11 +7,12 @@ const Admin = ({ firebase }) => {
   const [loading, setLoading] = useState(false)
   const [users, setUsers] = useState([])
   const [search, setSearch] = useState('')
-  const [info, setInfo] = useState(null)
+  const [info, setInfo] = useState('')
 
-  useEffect(() => {
+
+  const getUsers = () => {
     setLoading(true)
-    firebase.users().on('value', snapshot => {
+    firebase.users().once('value', snapshot => {
       const usersObject = snapshot.val()
 
       const usersList = Object.keys(usersObject).map(key => ({
@@ -22,12 +23,9 @@ const Admin = ({ firebase }) => {
       setUsers(usersList)
       setLoading(false)
     })
-    return () => {
-      firebase.users().off()
-    }
-  }, [firebase])
+  }
 
-  const onSubmit = async event => {
+  const handleSubmit = async event => {
     event.preventDefault()
 
     // make request of given URL, needs to handle errors
@@ -39,23 +37,64 @@ const Admin = ({ firebase }) => {
     // create parser and convert text to HTML document
     const parser = new DOMParser()
     const doc = parser.parseFromString(data, 'text/html')
+    const title = doc.querySelector('meta[property="og:title"]').getAttribute('content')
+
+    const titleFound = await firebase.coffees().orderByChild('title').equalTo(title).limitToFirst(1).once("value", snapshot => {
+      if (snapshot.exists()) {
+        return true
+      }
+   
+      return false
+    })
+
+    if (titleFound) {
+      setSearch('')
+      setInfo(`The coffee '${title}' already exists in the database`)
+      return
+   }
+
+    // would like to add: 1) whole bean option - surely there's very few with only ground options right? 2) weight 3) flavor notes
+    const roast = search.includes('light-roast') ? 'light' // this assumes the "search" parameter returned valid HTML
+      : search.includes('medium-roast') ? 'medium'
+      : search.includes('dark-roast') ? 'dark'
+      : null
     
-    // parse the ld+json document into an object
-    const ldjson = JSON.parse(doc.querySelector('script[type="application/ld+json"]').innerText)
-    const obj = {
-      brand: ldjson.brand,
-      image: ldjson.image,
-      name: ldjson.name,
-      url: ldjson.url,
-      lowPrice: ldjson.offers.lowPrice,
-      highPrice: ldjson.offers.highPrice,
-      currency: ldjson.offers.priceCurrency,
-      offers: ldjson.offers.offers
+    const countryList = ['Brazil', 'Vietnam', 'Columbia', 'Colombia', 'Sumatra', 'Indonesia', 'Ethiopia', 'Honduras', 'India', 'Uganda', 'Mexico', 'Guatemala', 'Peru', 'Nicaragua', 'Costa Rica']
+    const body = doc.querySelector('body').innerText
+    const countries = []
+    for (const country of countryList) {
+      if (body.includes(country)) {
+        countries.push(country)
+      }
     }
+    // declaring description here to search for items more quickly and so these terms are only searched for in description
+    const description = doc.querySelector('meta[property="og:description"]').getAttribute('content')
+
+    const fairTrade = description.toLowerCase().includes('fair trade') || description.toLowerCase().includes('fairtrade')
+    const organic = description.toLowerCase().includes('organic')
+    const shadeGrown = description.toLowerCase().includes('shade grown') || description.toLowerCase().includes('shadegrown')
     
-    // NEED TO ADD LOGIC FROM HOMEPAGE TO ADD THE RETURNED COFFEE TO FIREBASE DB
+    const metaCoffeeObj = {
+      title,
+      price: doc.querySelector('meta[property="og:price:amount"]').getAttribute('content'),
+      currency: doc.querySelector('meta[property="og:price:currency"]').getAttribute('content'),
+      description,
+      url: doc.querySelector('meta[property="og:url"]').getAttribute('content'),
+      imageUrl: doc.querySelector('meta[property="og:image:secure_url"]').getAttribute('content'),
+      siteName: doc.querySelector('meta[property="og:site_name"]').getAttribute('content'),
+      roastType: roast,
+      countries,
+      organic,
+      fairTrade,
+      shadeGrown
+    }
+
+
+    // chain a new unique key with push command and then set the object created above
+    firebase.coffees().push().set(metaCoffeeObj)
+    
     setSearch('')
-    setInfo(obj)
+    setInfo(`${metaCoffeeObj.siteName}'s ${metaCoffeeObj.title} has been successfully added to the database`)
   }
 
   return (
@@ -63,10 +102,11 @@ const Admin = ({ firebase }) => {
       <h1>Admin</h1>
 
       {loading && <div>Loading...</div>}
+      {info && info}
 
-      <UserList users={users}/>
+      { users.length > 0 ? <UserList users={users} /> : <button onClick={getUsers}>Load user list</button> }
 
-      <form onSubmit={onSubmit}>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           value={search}
@@ -79,100 +119,13 @@ const Admin = ({ firebase }) => {
   )
 }
 
-// class Admin extends React.Component {
-//   constructor(props) {
-//     super(props)
-
-//     this.state = {
-//       loading: false,
-//       users: [],
-//       search: '',
-//       info: null,
-//     };
-//   }
-
-//   componentDidMount() {
-//     this.setState({ loading: true })
-//     this.props.firebase.users().on('value', snapshot => {
-//       const usersObject = snapshot.val()
-
-//       const usersList = Object.keys(usersObject).map(key => ({
-//         ...usersObject[key],
-//         uid: key,
-//       }))
-
-//       this.setState({
-//         users: usersList,
-//         loading: false,
-//       });
-//     });
-//   }
-
-//   componentWillUnmount() {
-//     this.props.firebase.users().off();
-//   }
-
-//   onSubmit = async event => {
-//     event.preventDefault()
-//     const html = await fetch(this.state.search)
-//     const data = await html.text()
-//     const parser = new DOMParser()
-//     const doc = parser.parseFromString(data, 'text/html')
-    
-//     const ldjson = JSON.parse(doc.querySelector('script[type="application/ld+json"]').innerText)
-//     const obj = {
-//       brand: ldjson.brand,
-//       image: ldjson.image,
-//       name: ldjson.name,
-//       url: ldjson.url,
-//       lowPrice: ldjson.offers.lowPrice,
-//       highPrice: ldjson.offers.highPrice,
-//       currency: ldjson.offers.priceCurrency,
-//       offers: ldjson.offers.offers
-//     }
-//     console.log(obj)
-//     this.setState({ search: '' })
-//     this.setState({ info: obj })
-//   }
-
-//   render() {
-//     const { users, loading, search } = this.state;
-
-//     return (
-//       <div>
-//         <h1>Admin</h1>
-
-//         {loading && <div>Loading...</div>}
-
-//         <UserList users={users}/>
-
-//         <form onSubmit={this.onSubmit}>
-//           <input
-//             type="text"
-//             value={search}
-//             placeholder="Enter a product URL link"
-//             onChange={({ target }) => this.setState({ search: target.value })}
-//           />
-//           <button type="submit">Submit</button>
-//         </form>
-//       </div>
-//     )
-//   }
-// }
-
 const UserList = ({ users }) => (
   <ul>
     {users.map(user => (
       <li key={user.uid}>
-        <span>
-          <strong>User ID:</strong> {user.uid}
-        </span>
-        <span>
-          <strong> Email:</strong> {user.email}
-        </span>
-        <span>
-          <strong> Username:</strong> {user.username}
-        </span>
+        <span><strong> User ID:</strong> {user.uid}</span>
+        <span><strong> Email:</strong> {user.email}</span>
+        <span><strong> Username:</strong> {user.username}</span>
       </li>
     ))}
   </ul>

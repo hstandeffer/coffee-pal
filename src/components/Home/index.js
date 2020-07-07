@@ -37,16 +37,8 @@ class HomeBase extends React.Component {
   onSubmit = event => {
     event.preventDefault()
     const { coffeeName, coffeeBrand, roastType, wholeBean } = this.state;
-    const coffeeKey = this.props.firebase.coffee().push().key;
     
-    this.props.firebase
-      .coffee(coffeeKey)
-      .set({
-        coffeeName,
-        coffeeBrand,
-        roastType,
-        wholeBean,
-      })
+    this.props.firebase.coffees().push().set({ coffeeName, coffeeBrand, roastType, wholeBean })
   }
 
   render() {

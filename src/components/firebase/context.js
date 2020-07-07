@@ -15,7 +15,7 @@ export default FirebaseContext;
 //     return function(props) {
 //         <FirebaseContext.Consumer>
 //              return function(firebase) {
-//                  <Component {...props} firebase={firebase} />
+//                <Component {...props} firebase={firebase} />
 //              }
 //         </FirebaseContext.Consumer>
 //     }
