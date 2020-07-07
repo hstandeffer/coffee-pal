@@ -1,0 +1,9 @@
+import styled from 'styled-components';
+
+export const StyledButton = styled.button`
+  font-size: 1em;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #f2f2f2;
+`
