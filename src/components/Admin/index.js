@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import { compose } from 'recompose'
+
 import fetch from 'node-fetch'
 
-import { withFirebase } from '../Firebase';
+import { withAuthorization } from '../Session'
+import { withFirebase } from '../Firebase'
+import * as ROLES from '../../constants/roles'
 
 const Admin = ({ firebase }) => {
   const [loading, setLoading] = useState(false)
@@ -39,19 +43,20 @@ const Admin = ({ firebase }) => {
     const doc = parser.parseFromString(data, 'text/html')
     const title = doc.querySelector('meta[property="og:title"]').getAttribute('content')
 
-    const titleFound = await firebase.coffees().orderByChild('title').equalTo(title).limitToFirst(1).once("value", snapshot => {
+    let foundTitle = ''
+    await firebase.coffees().orderByChild('title').equalTo(title).limitToFirst(1).once("value", snapshot => {
       if (snapshot.exists()) {
-        return true
+        const found = snapshot.val()
+        const key = Object.keys(found)[0]
+        foundTitle = found[key].title
       }
-   
-      return false
     })
 
-    if (titleFound) {
+    if (foundTitle) {
+      setInfo(`The coffee: '${foundTitle}' already exists`)
       setSearch('')
-      setInfo(`The coffee '${title}' already exists in the database`)
-      return
-   }
+      return false
+    }
 
     // would like to add: 1) whole bean option - surely there's very few with only ground options right? 2) weight 3) flavor notes
     const roast = search.includes('light-roast') ? 'light' // this assumes the "search" parameter returned valid HTML
@@ -70,9 +75,9 @@ const Admin = ({ firebase }) => {
     // declaring description here to search for items more quickly and so these terms are only searched for in description
     const description = doc.querySelector('meta[property="og:description"]').getAttribute('content')
 
-    const fairTrade = description.toLowerCase().includes('fair trade') || description.toLowerCase().includes('fairtrade')
-    const organic = description.toLowerCase().includes('organic')
-    const shadeGrown = description.toLowerCase().includes('shade grown') || description.toLowerCase().includes('shadegrown')
+    const fairTrade = description.toLowerCase().includes('fair trade') || body.toLowerCase().includes('fair trade')
+    const organic = description.toLowerCase().includes('organic') || body.toLowerCase().includes('organic')
+    const shadeGrown = description.toLowerCase().includes('shade grown') || body.toLowerCase().includes('shade grown')
     
     const metaCoffeeObj = {
       title,
@@ -102,7 +107,7 @@ const Admin = ({ firebase }) => {
       <h1>Admin</h1>
 
       {loading && <div>Loading...</div>}
-      {info && info}
+      {info && <div>{info}</div>}
 
       { users.length > 0 ? <UserList users={users} /> : <button onClick={getUsers}>Load user list</button> }
 
@@ -131,4 +136,9 @@ const UserList = ({ users }) => (
   </ul>
 ) 
 
-export default withFirebase(Admin)
+const condition = authUser => authUser && !!authUser.roles[ROLES.ADMIN]
+
+export default compose(
+  withAuthorization(condition),
+  withFirebase
+)(Admin)

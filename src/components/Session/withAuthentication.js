@@ -14,11 +14,14 @@ const withAuthentication = Component => {
     }
 
     componentDidMount() {
-      this.listener = this.props.firebase.auth.onAuthStateChanged(authUser => {
-        authUser
-          ? this.setState({ authUser })
-          : this.setState({ authUser: null });
-      })
+      this.listener = this.props.firebase.onAuthUserListener(
+        authUser => { // this is the "next" callback function passed to the firebase class, passing in authUser when state changes
+          this.setState({ authUser })
+        },
+        () => { // this is the "fallback" callback function passed to the firebase class, setting authUser to null when state changes
+          this.setState({ authUser: null })
+        }
+      )
     }
   
     componentWillUnmount() {

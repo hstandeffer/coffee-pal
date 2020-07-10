@@ -1,5 +1,5 @@
 import React from 'react';
-import { withAuthorization, AuthUserContext } from '../Session';
+import { withAuthorization } from '../Session';
 import { withFirebase } from '../Firebase';
 import { compose } from "recompose";
 import { withRouter } from 'react-router-dom';
@@ -24,19 +24,22 @@ class SearchBase extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({loading: true})
-    this.props.firebase.coffees().on('value', snapshot => {
-      const coffeeObject = snapshot.val()
+    this.setState({ loading: true })
+    this.props.firebase.coffees().on('value', snapshot => { // change to "once" when functional implemented
+      if (snapshot.exists()) {
 
-      const coffeesList = Object.keys(coffeeObject).map(key => ({
-        ...coffeeObject[key],
-        uid: key,
-      }))
-
-      this.setState({
-        coffees: coffeesList,
-        loading: false
-      })
+        const coffeeObject = snapshot.val()
+        
+        const coffeesList = Object.keys(coffeeObject).map(key => ({
+          ...coffeeObject[key],
+          uid: key,
+        }))
+        
+        this.setState({
+          coffees: coffeesList,
+          loading: false
+        })
+      }
     })
   }
 
@@ -49,9 +52,7 @@ class SearchBase extends React.Component {
   }
 
   onFavoriteClick = ( coffeeId ) => {
-    this.props.firebase
-      .userCoffees(this.props.firebase.auth.currentUser.uid, coffeeId)
-      .set(true)
+    this.props.firebase.userCoffees(this.props.firebase.auth.currentUser.uid, coffeeId).set(true)
   }
 
   render() {
@@ -81,8 +82,8 @@ const CoffeeList = ({ coffees, searchQuery, onFavoriteClick }) => (
     {coffees
       .filter(coffee => {
         return (
-          (coffee.coffeeBrand.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1) ||
-          (coffee.coffeeName.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1)
+          (coffee.title.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1) ||
+          (coffee.siteName.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1)
         )
       })
       .map(coffee => (
@@ -95,10 +96,9 @@ const CoffeeList = ({ coffees, searchQuery, onFavoriteClick }) => (
 const CoffeeItem = ({ coffee, onFavoriteClick  }) => {
   return (
     <StyledCoffeeItemDiv>
-      <strong>{coffee.coffeeBrand}</strong>
-      <p>{coffee.coffeeName}</p>
+      <strong>{coffee.title}</strong>
+      <p>{coffee.siteName}</p>
       <p>{coffee.roastType}</p>
-      <p>{coffee.wholeBean ? 'Whole Bean' : 'Ground'}</p>
       <button onClick={() => onFavoriteClick(coffee.uid)}>Add to List</button>
     </StyledCoffeeItemDiv>
   )

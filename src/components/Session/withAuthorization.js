@@ -1,27 +1,26 @@
-import React from 'react';
-import { withRouter } from 'react-router-dom';
-import { compose } from 'recompose';
+import React from 'react'
+import { withRouter } from 'react-router-dom'
+import { compose } from 'recompose'
 
-import AuthUserContext from './context';
-import { withFirebase} from '../Firebase';
-import * as ROUTES from '../../constants/routes';
+import AuthUserContext from './context'
+import { withFirebase} from '../Firebase'
+import * as ROUTES from '../../constants/routes'
 
 const withAuthorization = condition => Component => {
   class WithAuthorization extends React.Component {
     componentDidMount() {
-      this.listener = this.props.firebase.auth.onAuthStateChanged(
+      this.listener = this.props.firebase.onAuthUserListener(
         authUser => {
           if (!condition(authUser)) {
-            this.props.history.push(ROUTES.SIGN_IN);
-            // if authUser is null, it will redirect to the sign in page using Router's history function
-            // else it will do nothing here but render the passed component later
+            this.props.history.push(ROUTES.HOME)
           }
         },
-      );
+        () => this.props.history.push(ROUTES.SIGN_IN) // redirect to sign in page if user is not logged in
+      )
     }
 
     componentWillUnmount() {
-      this.listener();
+      this.listener()
     }
     
     render() {
@@ -38,7 +37,7 @@ const withAuthorization = condition => Component => {
   return compose(
     withRouter,
     withFirebase,
-  )(WithAuthorization);
-};
+  )(WithAuthorization)
+}
 
-export default withAuthorization;
+export default withAuthorization

@@ -1,74 +1,47 @@
-import React from 'react';
-import { StyledDiv } from './style'
-import { withAuthorization, AuthUserContext } from '../Session';
+import React, { useState, useEffect } from 'react';
+import { StyledDiv, Ul } from './style'
+import { withAuthorization } from '../Session';
 import { withFirebase } from '../Firebase';
 import { compose } from "recompose";
 import { withRouter } from 'react-router-dom';
 
-class ProfilePage extends React.Component {
-  constructor(props) {
-    super(props)
+const ProfilePage = ({ firebase }) => {
+  const [coffees, setCoffees] = useState([])
+  const [loading, setLoading] = useState(false)
 
-    this.state = {
-      coffees: []
-    }
-  }
-
-  componentDidMount() { // no clue how this renders the data before sending response back, maybe restructure db or get help
-    let temp = []
-    this.props.firebase.userCoffees(this.props.firebase.auth.currentUser.uid).once('value')
-    .then((snapshot) => {
-      snapshot.forEach((child) => {
-        this.props.firebase.coffee(child.key).once('value')
-          .then(snapshot => {
-            temp.push(snapshot.val())
-            this.setState({coffees: temp})
-          })
+  useEffect(() => {
+    setLoading(true)
+    firebase.userCoffees(firebase.auth.currentUser.uid).once('value')
+      .then((snapshot) => {
+        const coffeeIdsObject = snapshot.val()
+        const coffeeIdsList = Object.keys(coffeeIdsObject).map(key => ({
+          ...coffeeIdsObject[key],
+          uid: key,
+        }))
+        coffeeIdsList.forEach((item) => {
+          firebase.coffee(item.uid).once('value')
+            .then((snapshot) => {
+              setCoffees(c => c.concat({...snapshot.val(), uid: item.uid})) // functional update using previous value to update
+            })
         })
+        setLoading(false)
       })
-  }
+  }, [firebase])
 
-  render() {
-    return (
-      <StyledDiv>
-        <ul>
-          {this.state.coffees.map(coffee => (
-            <li key={coffee.coffeeName}>{coffee.coffeeBrand}</li>
+  return (
+    <StyledDiv>
+      <h2>Your Saved Coffees</h2>
+      {!loading ? 
+        <Ul>
+          {coffees.map(coffee => (
+            <li key={coffee.title}>{coffee.title}</li>
           ))}
-        </ul>
-      </StyledDiv>
-    )
-  }
+        </Ul>
+        : <h2>Loading User's Coffees..</h2>
+      }
+    </StyledDiv>
+  )
 }
-
-// const ProfilePage = ({ firebase }) => {
-//   const [titles, setTitles] = useState([])
-
-//   const getData = () => {
-//     let temp = []
-//     firebase.userCoffees(firebase.auth.currentUser.uid).once('value')
-//       .then((snapshot) => {
-//         snapshot.forEach((child) => {
-//           console.log('sent request ', child.key)
-//           firebase.coffee(child.key).once('value')
-//             .then(snapshot => {
-//               console.log('got response', snapshot.val())
-//               temp.push(snapshot.val())
-//               return snapshot.val()
-//             })
-//         })
-//       })
-//   }
-
-//   useEffect(() => {
-//     const data = getData()
-//     console.log(data)
-//   }, [])
-
-//     return (
-//       <h2>{titles ? JSON.stringify(titles) : 'Hi'}</h2>
-//     )
-// }
 
 const Profile = compose(
   withRouter,
@@ -77,4 +50,4 @@ const Profile = compose(
 
 const condition = authUser => !!authUser;
 
-export default withAuthorization(condition)(ProfilePage)
+export default withAuthorization(condition)(Profile)

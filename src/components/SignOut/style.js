@@ -5,5 +5,5 @@ export const StyledButton = styled.button`
   border: none;
   background: transparent;
   cursor: pointer;
-  color: #f2f2f2;
+  color: black;
 `

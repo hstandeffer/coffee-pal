@@ -31,6 +31,7 @@ const App = () => (
       <Route path={ROUTES.SEARCH} component={SearchPage} />
     </div>
   </Router>
-);
+)
 
-export default withAuthentication(App);
+// this wraps the entire app around the authentication context so the authUser object is always available on auth state change
+export default withAuthentication(App)

@@ -10,7 +10,7 @@ import * as ROUTES from '../../constants/routes';
 
 const SignInPage = () => (
   <StyledDiv>
-    <h1>Sign In</h1>
+    <h1>Login</h1>
     <SignInForm />
     <PasswordForgetLink />
     <SignUpLink />
@@ -88,6 +88,4 @@ const SignInForm = compose(
   withFirebase,
 )(SignInFormBase);
 
-export default SignInPage;
-
-export { SignInForm };
+export default SignInPage

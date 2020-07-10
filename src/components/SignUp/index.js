@@ -65,6 +65,10 @@ class SignUpFormBase extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
+  onChangeCheckbox = event => {
+    this.setState({ [event.target.name]: event.target.checked });
+  };
+
   render() {
     const {
       username,
@@ -148,7 +152,6 @@ class SignUpFormBase extends Component {
           <option value="other">Other</option>
         </Select>
         <StyledButton disabled={isInvalid} type="submit">Sign Up</StyledButton> 
-        {/* add a prop into the styles that will change the color depending on valid or not */}
 
         {error && <p>{error.message}</p>}
       </form>

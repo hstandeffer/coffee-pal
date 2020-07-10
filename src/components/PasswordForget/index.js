@@ -5,7 +5,7 @@ import { Input, StyledDiv, StyledButton, StyledLink } from './style';
 
 const PasswordForgetPage = () => (
   <StyledDiv>
-    <h1>PasswordForget</h1>
+    <h1>Password Forget</h1>
     <PasswordForgetForm />
   </StyledDiv>
 );
