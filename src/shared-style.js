@@ -1,23 +1,13 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom'
 
-// these are the exact same from sign out.. what better way to organize and reduce repetitiveness?
-export const Input = styled.input`
-	display: block;
-	margin: 10px auto;
-	padding: 10px;
-	background: transparent;
-	border: none;
-	width: 90%;
-	background: #f7f7f7;
-	font-family: inherit;
-	font-size: 20px;
-
-	&:focus {
-		outline-color: #73777d;
-	}
+// these are the exact same components.. what better way to organize and reduce repetitiveness?
+export const StyledH1 = styled.h1`
+	margin-top: 0;
 `
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.div
+`
   width: 100%;
 	padding: 24px;
 
@@ -40,6 +30,22 @@ export const StyledDiv = styled.div`
 	}
 `
 
+export const Input = styled.input`
+	display: block;
+	margin: 10px auto;
+	padding: 10px;
+	background: transparent;
+	border: none;
+	width: 90%;
+	background: #f7f7f7;
+	font-family: inherit;
+	font-size: 20px;
+
+	&:focus {
+		outline-color: #73777d;
+	}
+`
+
 export const StyledButton = styled.button`
 	font-size: 20px;
 	margin-top: 10px;
@@ -54,4 +60,8 @@ export const StyledButton = styled.button`
 	&:disabled {
 		opacity: 0.75
 	}
+`
+
+export const StyledLink = styled(Link)`
+    text-decoration: none;
 `

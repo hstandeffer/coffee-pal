@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
-import { Input, StyledDiv, StyledButton } from './style';
+import { StyledH1, Wrapper, Input, StyledDiv, StyledButton } from '../../shared-style';
 
 import { SignUpLink } from '../SignUp'
 import { PasswordForgetLink } from '../PasswordForget';
@@ -9,12 +9,14 @@ import { withFirebase } from '../Firebase'
 import * as ROUTES from '../../constants/routes';
 
 const SignInPage = () => (
-  <StyledDiv>
-    <h1>Login</h1>
-    <SignInForm />
-    <PasswordForgetLink />
-    <SignUpLink />
-  </StyledDiv>
+  <Wrapper>
+    <StyledDiv>
+      <StyledH1>Login</StyledH1>
+      <SignInForm />
+      <PasswordForgetLink />
+      <SignUpLink />
+    </StyledDiv>
+  </Wrapper>
 );
 
 const INITIAL_STATE = {

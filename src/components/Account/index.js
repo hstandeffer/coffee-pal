@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyledDiv } from './style'
-
+import { Wrapper, StyledDiv } from '../../shared-style';
 import { PasswordForgetForm } from '../PasswordForget';
 import PasswordChangeForm from '../PasswordChange';
 import { withAuthorization, AuthUserContext } from '../Session';
@@ -8,11 +7,13 @@ import { withAuthorization, AuthUserContext } from '../Session';
 const AccountPage = () => (
   <AuthUserContext.Consumer>
     {authUser => (
-      <StyledDiv>
-        <h1>Account Settings: {authUser.email}</h1>
-        <PasswordForgetForm />
-        <PasswordChangeForm />
-      </StyledDiv>
+      <Wrapper>
+        <StyledDiv>
+          <h1>Account Settings: {authUser.email}</h1>
+          <PasswordForgetForm />
+          <PasswordChangeForm />
+        </StyledDiv>
+      </Wrapper>
     )}
   </AuthUserContext.Consumer>  
 )

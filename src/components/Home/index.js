@@ -3,7 +3,8 @@ import { withAuthorization } from '../Session';
 import { withFirebase } from '../Firebase';
 import { compose } from "recompose";
 import { withRouter } from 'react-router-dom';
-import { Input, CheckLabel, CheckInput, StyledDiv, StyledButton } from './style';
+import { CheckLabel, CheckInput } from './style';
+import { Wrapper, Input, StyledDiv, StyledButton } from '../../shared-style'
 
 const INITIAL_STATE = {
   coffeeName: '',
@@ -13,10 +14,12 @@ const INITIAL_STATE = {
 }
 
 const HomePage = () => (
-  <StyledDiv>
-    <h1>Add Coffee to Your List</h1>
-    <Home />
-  </StyledDiv>
+  <Wrapper>
+    <StyledDiv>
+      <h1>Add Coffee to Your List</h1>
+      <Home />
+    </StyledDiv>
+  </Wrapper>
 )
 
 class HomeBase extends React.Component {

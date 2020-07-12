@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, StyledButton } from './style';
+import { Input, StyledButton } from '../../shared-style';
 
 import { withFirebase } from '../Firebase';
 

@@ -20,10 +20,10 @@ const StyledBurger = styled.div`
   div {
     width: 2rem;
     height: 0.25rem;
-    background-color: ${({ open }) => open ? '#ccc' : '#333'};
+    background-color: ${({ open }) => open ? '#ccc' : '#fff'};
     border-radius: 10px;
     transform-origin: 1px;
-    transition: all 0.3s linear;
+    transition: all 0.2s linear;
 
     &:nth-child(1) {
       transform: ${({ open }) => open ? 'rotate(45deg)' : 'rotate(0)'}
@@ -50,7 +50,7 @@ const Burger = ({ authUser }) => {
         <div />
         <div />
       </StyledBurger>
-      <RightNav authUser={authUser} open={open}/>
+      <RightNav authUser={authUser} open={open} onClick={() => setOpen(!open)} />
     </>
   )
 }

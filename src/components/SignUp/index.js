@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
-import { Input, Select, StyledDiv, StyledButton, StyledLink } from './style';
+import { Wrapper, Input, StyledDiv, StyledButton, StyledLink } from '../../shared-style';
+import { Select } from './style'
 
 import { withFirebase } from '../Firebase'
 import * as ROUTES from '../../constants/routes';
 
 const SignUpPage = () => (
-  <StyledDiv>
-    <h1>Sign Up</h1>
-    <SignUpForm />
-  </StyledDiv>
+  <Wrapper>
+    <StyledDiv>
+      <h1>Sign Up</h1>
+      <SignUpForm />
+    </StyledDiv>
+  </Wrapper>
 );
 
 const INITIAL_STATE = {

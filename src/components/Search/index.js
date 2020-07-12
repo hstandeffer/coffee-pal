@@ -3,12 +3,15 @@ import { withAuthorization } from '../Session';
 import { withFirebase } from '../Firebase';
 import { compose } from "recompose";
 import { withRouter } from 'react-router-dom';
-import { Input, Wrapper, StyledCoffeeItemDiv, CenteredDiv } from './style';
+import { Input, Wrapper, StyledDiv, StyledH1 } from '../../shared-style'
+import { StyledCoffeeItemDiv, CenteredDiv } from './style';
 
 const SearchPage = () => (
   <Wrapper>
-    <h1>Search Coffees in Our Database</h1>
-    <Search />
+    <StyledDiv>
+      <StyledH1>Search Coffees</StyledH1>
+      <Search />
+    </StyledDiv>
   </Wrapper>
 )
 

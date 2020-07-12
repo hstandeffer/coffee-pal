@@ -1,24 +1,36 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
+
+export const Wrapper = styled.div`
+  width: 100%;
+  /* background: #28445b; */
+`
 
 export const StyledDiv = styled.div`
-  width: 75%;
+  width: 100%;
   padding: 24px;
-  margin: 30px auto;
+  margin: 0px auto;
   text-align: center;
-  background: white;
+  color: #fff;
+`
+
+export const StyledH1 = styled.h1`
+  margin: 0;
 `
 
 export const StyledButton = styled.button`
   font-size: 20px;
-  margin-top: 10px;
-  padding: 0.25em 1em;
+  padding: 0.5em 1.5em;
   border: none;
-  border-radius: 20px;
+  border-radius: 4px;
   cursor: pointer;
-  color: #FFF;
-  background: linear-gradient(to right, #075444, #076652);
+  color: #fff;
+  background: #0a8c5d; 
 
   &:focus {
     outline: none;
+  }
+
+  &:hover {
+    background: #0d7f56;
   }
 `

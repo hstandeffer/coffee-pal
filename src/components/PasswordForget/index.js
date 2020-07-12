@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
-import { Input, StyledDiv, StyledButton, StyledLink } from './style';
+import { Input, StyledDiv, StyledButton, StyledLink } from '../../shared-style';
 
 const PasswordForgetPage = () => (
   <StyledDiv>

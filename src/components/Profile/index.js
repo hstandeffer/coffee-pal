@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { StyledDiv, Ul } from './style'
 import { withAuthorization } from '../Session';
 import { withFirebase } from '../Firebase';
 import { compose } from "recompose";
 import { withRouter } from 'react-router-dom';
+
+import { StyledDiv, Ul } from './style'
 
 const ProfilePage = ({ firebase }) => {
   const [coffees, setCoffees] = useState([])

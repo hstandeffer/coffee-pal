@@ -6,7 +6,7 @@ import StyledSignOutButton from '../SignOut'
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-  color: black;
+  color: #fff;
 `
 
 const Ul = styled.ul`
@@ -14,6 +14,8 @@ const Ul = styled.ul`
   display: flex;
   flex-flow: row nowrap;
   margin: 0;
+  z-index: 19; 
+  /* look into the account buttons overlapping if above line is removed */
 
   li {
     padding: 18px 10px;
@@ -30,10 +32,6 @@ const Ul = styled.ul`
     width: 300px;
     padding-top: 3.5rem;
     transition: transform 0.3s ease-in-out;
-
-    li {
-      color: #fff;
-    }
   }
 `
 
@@ -67,13 +65,13 @@ const authRoutes = [
   }
 ]
 
-const RightNav = ({ open, authUser }) => {
+const RightNav = ({ open, authUser, onClick }) => {
   const routeList = authUser ? authRoutes : nonAuthRoutes
   return (
     <Ul open={open}>
       {routeList.map((obj) => (
         <li key={obj.text}>
-          <StyledLink to={obj.route}>{obj.text}</StyledLink>
+          <StyledLink onClick={onClick} to={obj.route}>{obj.text}</StyledLink>
         </li>
       ))}
       {authUser ? <li><StyledSignOutButton /></li> : null}

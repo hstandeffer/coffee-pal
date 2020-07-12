@@ -15,10 +15,19 @@ import SearchPage from '../Search'
 import * as ROUTES from '../../constants/routes';
 import { withAuthentication } from '../Session'
 
+import styled from 'styled-components'
+
+const StyledDiv = styled.div`
+  /* background-color: #CEB784; */
+  background: #28445b;
+`
+
 const App = () => (
   <Router>
     <div>
-      <Navigation /> 
+      <StyledDiv>
+        <Navigation /> 
+      </StyledDiv>
 
       <Route exact path={ROUTES.LANDING} component={LandingPage} />
       <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
