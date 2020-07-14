@@ -1,23 +1,21 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom'
 
-// these are the exact same components.. what better way to organize and reduce repetitiveness?
 export const StyledH1 = styled.h1`
 	margin-top: 0;
 `
 
-export const Wrapper = styled.div
-`
+export const Wrapper = styled.div`
   width: 100%;
 	padding: 24px;
 
 	@media (max-width: 560px) {
-		padding: 24px 0;
+		padding: 0;
 	}
 `
 
 export const StyledDiv = styled.div`
-	max-width: 480px;
+	max-width: ${({ maxWidth }) => maxWidth ? maxWidth : '480px' };
 	padding: 24px;
 	margin: 0px auto;
 	text-align: center;

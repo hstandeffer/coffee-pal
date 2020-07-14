@@ -1,23 +1,26 @@
 import styled from 'styled-components'
 
-export const Wrapper = styled.div`
+export const LandingBanner = styled.div`
   width: 100%;
-  /* background: #28445b; */
-`
-
-export const StyledDiv = styled.div`
-  width: 100%;
-  padding: 24px;
-  margin: 0px auto;
+  margin: 50px auto;
   text-align: center;
   color: #fff;
+`
+
+export const FullWidthWrapper = styled.div`
+  width: 100%;
+`
+
+export const FullWidthDiv = styled.div`
+  width: 100%;
+  background-color: ${({ bgColor }) => bgColor ? bgColor : '#fff'};
 `
 
 export const StyledH1 = styled.h1`
   margin: 0;
 `
 
-export const StyledButton = styled.button`
+export const GetStartedButton = styled.button`
   font-size: 20px;
   padding: 0.5em 1.5em;
   border: none;
