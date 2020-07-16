@@ -4,7 +4,7 @@ import { withFirebase } from '../Firebase';
 import { compose } from "recompose";
 import { withRouter } from 'react-router-dom';
 import { Wrapper, StyledDiv, StyledH1 } from '../../shared-style'
-import { FlexDiv, FlexProductDiv, Image } from './style';
+import { FlexDiv, FlexProductDiv, ImageDiv, Image, ProductInfoDiv } from './style';
 
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -91,8 +91,9 @@ const SearchPage = () => {
     <>
       <Grid container direction="row" justify="center">
         <Grid item md={3}>
+          {/* need to make this page mobile accessible somehow */}
           <Wrapper>
-            <StyledDiv>
+            <StyledDiv>              
               <Filters filters={filters} setFilters={setFilters} />
             </StyledDiv>
           </Wrapper>
@@ -100,7 +101,7 @@ const SearchPage = () => {
         <Grid item md={9}>
           <Wrapper>
             <StyledDiv maxWidth={'none'}>
-              <StyledH1>Search Coffees</StyledH1>
+              <StyledH1>Browse Coffees</StyledH1>
               <Search filters={filters} />
             </StyledDiv>
           </Wrapper>
@@ -186,9 +187,7 @@ const SearchBase = ({ firebase, filters }) => {
   }
 
   return (
-    <div>
-      <CoffeeList coffees={filteredCoffees.length > 0 ? filteredCoffees : coffees} onFavoriteClick={onFavoriteClick} />
-    </div>
+    <CoffeeList coffees={filteredCoffees.length > 0 ? filteredCoffees : coffees} onFavoriteClick={onFavoriteClick} />
   )
 }
 
@@ -206,12 +205,18 @@ const CoffeeList = ({ coffees, onFavoriteClick }) => {
 const CoffeeItem = ({ coffee, onFavoriteClick  }) => {
   return (
     <FlexProductDiv>
-      <Image src={coffee.imageUrl} />
-      <div>
-        <p><strong>{coffee.title}</strong> - {coffee.siteName}</p>
-        <p>{coffee.roastType}</p>
-        <button onClick={() => onFavoriteClick(coffee.uid)}>Add to List</button>
-      </div>
+      <ImageDiv>
+        <Image src={coffee.imageUrl} />
+      </ImageDiv>
+      <ProductInfoDiv>
+        <div>
+          <span><strong>{coffee.title}</strong> - {coffee.siteName}</span>
+        </div>
+        <div>
+          <span>{coffee.roastType}</span>
+          <button style={{display:`block`}} onClick={() => onFavoriteClick(coffee.uid)}>Add to List</button>
+        </div>
+      </ProductInfoDiv>
     </FlexProductDiv>
   )
 }
