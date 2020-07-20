@@ -132,7 +132,7 @@ const Admin = ({ firebase }) => {
       {loading && <div>Loading...</div>}
       {info && <div>{info}</div>}
 
-      {/* { users.length > 0 ? <UserList users={users} /> : <button onClick={getUsers}>Load user list</button> } */}
+      { users.length > 0 ? <UserList users={users} /> : <button onClick={getUsers}>Load user list</button> }
 
       <form onSubmit={handleSubmit}>
         <input

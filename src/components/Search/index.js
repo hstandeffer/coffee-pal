@@ -3,18 +3,29 @@ import { withAuthorization } from '../Session';
 import { withFirebase } from '../Firebase';
 import { compose } from "recompose";
 import { withRouter } from 'react-router-dom';
-import { Wrapper, StyledDiv, StyledH1 } from '../../shared-style'
-import { FlexDiv, FlexProductDiv, ImageDiv, Image, ProductInfoDiv } from './style';
+import { StyledH1 } from '../../shared-style'
+import {
+  FlexContainer,
+  FlexProductDiv,
+  FiltersDiv,
+  StyledH2,
+  ItemsDiv,
+  ImageContainer,
+  ImageContentContainer,
+  InfoContainer
+} from './style';
 
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-// import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid'
+import Hidden from '@material-ui/core/Hidden'
 
-const Filters = ({ filters, setFilters }) => {
+import TemporaryDrawer from './TemporaryDrawer'
+
+export const Filters = ({ filters, setFilters }) => {
   // TODO: add range slider component for price filter
 
   const handleChange = (event) => {
@@ -28,7 +39,7 @@ const Filters = ({ filters, setFilters }) => {
 
   return (
     <>
-      <h2>Filters</h2>
+      <StyledH2>Filters</StyledH2>
       {/* <Input
         name="searchQuery"
         type="text"
@@ -90,21 +101,21 @@ const SearchPage = () => {
   return (
     <>
       <Grid container direction="row" justify="center">
-        <Grid item md={3}>
-          {/* need to make this page mobile accessible somehow */}
-          <Wrapper>
-            <StyledDiv>              
+        <Hidden smDown>
+          <Grid item md={3}>
+            <FiltersDiv>              
               <Filters filters={filters} setFilters={setFilters} />
-            </StyledDiv>
-          </Wrapper>
-        </Grid>
-        <Grid item md={9}>
-          <Wrapper>
-            <StyledDiv maxWidth={'none'}>
-              <StyledH1>Browse Coffees</StyledH1>
-              <Search filters={filters} />
-            </StyledDiv>
-          </Wrapper>
+            </FiltersDiv>
+          </Grid>
+        </Hidden>
+        <Grid item md={9} sm={12}>
+          <ItemsDiv>
+            <StyledH1>All Coffees</StyledH1>
+            <Hidden mdUp>
+              <TemporaryDrawer filters={filters} setFilters={setFilters} />
+            </Hidden>
+            <Search filters={filters} />
+          </ItemsDiv>
         </Grid>
       </Grid>
     </>
@@ -191,35 +202,32 @@ const SearchBase = ({ firebase, filters }) => {
   )
 }
 
-// filter through each coffee and find ones matching search query in brand or name
 const CoffeeList = ({ coffees, onFavoriteClick }) => {
   return (
-    <FlexDiv>
+    <FlexContainer>
       {coffees.map(coffee => (
           <CoffeeItem coffee={coffee} key={coffee.uid} onFavoriteClick={onFavoriteClick} />
         ))}
-    </FlexDiv>
+    </FlexContainer>
   )
 }
 
-const CoffeeItem = ({ coffee, onFavoriteClick  }) => {
-  return (
-    <FlexProductDiv>
-      <ImageDiv>
-        <Image src={coffee.imageUrl} />
-      </ImageDiv>
-      <ProductInfoDiv>
-        <div>
-          <span><strong>{coffee.title}</strong> - {coffee.siteName}</span>
-        </div>
-        <div>
-          <span>{coffee.roastType}</span>
-          <button style={{display:`block`}} onClick={() => onFavoriteClick(coffee.uid)}>Add to List</button>
-        </div>
-      </ProductInfoDiv>
-    </FlexProductDiv>
-  )
-}
+const CoffeeItem = ({ coffee, onFavoriteClick }) => (
+  <FlexProductDiv>
+    <ImageContainer>
+      <ImageContentContainer>
+        <img src={coffee.imageUrl} alt={coffee.title} />
+      </ImageContentContainer>
+    </ImageContainer>
+    <InfoContainer>
+      <div style={{height: '45px', overflow: 'hidden'}}>{coffee.title}</div>
+      <div style={{textTransform: 'capitalize'}}>{coffee.roastType} roast</div>
+      <div>
+        <button onClick={() => onFavoriteClick(coffee.uid)}>Favorite</button>
+      </div>
+    </InfoContainer>
+  </FlexProductDiv>
+)
 
 const Search = compose(
   withRouter,
