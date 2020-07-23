@@ -18,6 +18,11 @@ export const ItemsDiv = styled.div`
 	text-align: center;
 	background: #fff;
 	border-radius: 4px; 
+
+  @media (max-width: 600px) {
+    margin: 0 auto;
+    border-radius: 0px;
+  }
 `
 
 export const StyledCoffeeItemDiv = styled.div`
@@ -32,7 +37,7 @@ export const FlexContainer = styled.div`
   flex-flow: row wrap;
   justify-content: flex-start;
   
-  @media (max-width: 560px) {
+  @media (max-width: 600px) {
     margin: 0 2%;
   }
 `
@@ -40,10 +45,14 @@ export const FlexContainer = styled.div`
 export const FlexProductDiv = styled.div`
   text-align: left;
   margin: 2%;
-  flex: 0 0 29%;
+  flex: 0 0 21%;
   flex-flow: column;
 
-  @media (max-width: 560px) {
+  @media (max-width: 960px) {
+    flex: 0 0 29%;
+  }
+  
+  @media (max-width: 600px) {
     flex: 0 0 46%;
   }
 `

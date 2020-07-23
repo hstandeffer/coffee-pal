@@ -19,15 +19,13 @@ import styled from 'styled-components'
 
 const StyledDiv = styled.div`
   /* background-color: #CEB784; */
-  background: #28445b;
+  /* background: #28445b; */
 `
 
 const App = () => (
   <Router>
     <div>
-      <StyledDiv>
-        <Navigation /> 
-      </StyledDiv>
+      <Navigation /> 
 
       <Route exact path={ROUTES.LANDING} component={LandingPage} />
       <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
