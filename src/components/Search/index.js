@@ -3,10 +3,10 @@ import { withAuthorization } from '../Session';
 import { withFirebase } from '../Firebase';
 import { compose } from "recompose";
 import { withRouter } from 'react-router-dom';
-import { StyledH1 } from '../../shared-style'
 import {
   FlexContainer,
   FlexProductDiv,
+  FiltersWrapper,
   FiltersDiv,
   StyledH2,
   ItemsDiv,
@@ -38,7 +38,7 @@ export const Filters = ({ filters, setFilters }) => {
   const { fairTrade, shadeGrown, organic, lightRoast, mediumRoast, darkRoast } = filters
 
   return (
-    <>
+    <FiltersWrapper>
       <StyledH2>Filters</StyledH2>
       {/* <Input
         name="searchQuery"
@@ -91,7 +91,7 @@ export const Filters = ({ filters, setFilters }) => {
           }
           label="Dark" />
       </FormGroup>
-    </>
+    </FiltersWrapper>
   )
 }
 
@@ -110,7 +110,6 @@ const SearchPage = () => {
         </Hidden>
         <Grid item md={9} sm={12}>
           <ItemsDiv>
-            <StyledH1>All Coffees</StyledH1>
             <Hidden mdUp>
               <TemporaryDrawer filters={filters} setFilters={setFilters} />
             </Hidden>
@@ -220,8 +219,9 @@ const CoffeeItem = ({ coffee, onFavoriteClick }) => (
       </ImageContentContainer>
     </ImageContainer>
     <InfoContainer>
-      <div style={{height: '45px', overflow: 'hidden'}}>{coffee.title}</div>
-      <div style={{textTransform: 'capitalize'}}>{coffee.roastType} roast</div>
+      <div style={{height: '40px', overflow: 'hidden', fontWeight: 'bold'}}>{coffee.title}</div>
+      <div style={{margin: '5px 0'}}>${coffee.price}</div>
+      <div style={{margin: '5px 0', textTransform: 'capitalize'}}>{coffee.roastType} roast</div>
       <div>
         <button onClick={() => onFavoriteClick(coffee.uid)}>Favorite</button>
       </div>

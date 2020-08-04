@@ -1,4 +1,5 @@
 import React from 'react';
+import { withAuthorization } from '../Session';
 import { LandingBanner, GetStartedButton, FullWidthWrapper, FeaturesWrapper, FeaturesHeader } from './style'
 import { Input } from '../../shared-style'
 import { Link } from 'react-router-dom';
@@ -34,4 +35,4 @@ const Landing = () => (
   </FullWidthWrapper>
 );
 
-export default Landing;
+export default Landing; // send false condition to redirect to browse page if logged in

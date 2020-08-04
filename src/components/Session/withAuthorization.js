@@ -12,7 +12,7 @@ const withAuthorization = condition => Component => {
       this.listener = this.props.firebase.onAuthUserListener(
         authUser => {
           if (!condition(authUser)) {
-            this.props.history.push(ROUTES.HOME)
+            this.props.history.push(ROUTES.BROWSE)
           }
         },
         () => this.props.history.push(ROUTES.SIGN_IN) // redirect to sign in page if user is not logged in

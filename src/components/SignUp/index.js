@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
+import { withAuthorization } from '../Session';
 import { Wrapper, Input, StyledDiv, StyledButton, StyledLink } from '../../shared-style';
 import { Select } from './style'
 
@@ -54,7 +55,7 @@ class SignUpFormBase extends Component {
       })
       .then(() => {
         this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.HOME);
+        this.props.history.push(ROUTES.BROWSE);
       })
       .catch(error => {
         this.setState({ error });
@@ -171,6 +172,6 @@ const SignUpForm = compose(
   withFirebase,
 )(SignUpFormBase);
 
-export default SignUpPage;
+export default SignUpPage
 
-export { SignUpForm, SignUpLink };
+export { SignUpForm, SignUpLink }

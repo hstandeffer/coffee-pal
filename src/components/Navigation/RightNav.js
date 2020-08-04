@@ -49,12 +49,8 @@ const nonAuthRoutes = [
 
 const authRoutes = [
   {
-    route: ROUTES.HOME,
-    text: 'Home'
-  },
-  {
-    route: ROUTES.SEARCH,
-    text: 'Search'
+    route: ROUTES.BROWSE,
+    text: 'Browse'
   },
   {
     route: ROUTES.PROFILE,

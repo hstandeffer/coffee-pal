@@ -1,5 +1,13 @@
 import styled from 'styled-components';
 
+export const FiltersWrapper = styled.div`
+  
+  @media(max-width: 961px) {
+    width: 250px;
+    padding: 1em 2.5em;
+  }
+`
+
 export const FiltersDiv = styled.div`
 	padding: 24px;
   margin: 0 10px;
@@ -47,6 +55,8 @@ export const FlexProductDiv = styled.div`
   margin: 2%;
   flex: 0 0 21%;
   flex-flow: column;
+  border-bottom: 2px solid #8080808a;
+  padding-bottom: 2em;
 
   @media (max-width: 960px) {
     flex: 0 0 29%;

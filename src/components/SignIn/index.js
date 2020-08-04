@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
+import { withAuthorization } from '../Session';
 import { StyledH1, Wrapper, Input, StyledDiv, StyledButton } from '../../shared-style';
 
 import { SignUpLink } from '../SignUp'
@@ -39,7 +40,7 @@ class SignInFormBase extends Component {
       .doSignInWithEmailAndPassword(email, password)
       .then(() => {
         this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.HOME);
+        this.props.history.push(ROUTES.BROWSE);
       })
       .catch(error => {
         this.setState({ error });
