@@ -3,23 +3,27 @@ import styled from 'styled-components'
 import Burger from './Burger'
 import { Link } from 'react-router-dom';
 import * as ROUTES from '../../constants/routes'
-import {ReactComponent as ReactLogo} from '../../logo.svg'
 
 export const StyledLink = styled(Link)`
   text-decoration: none;
-  color: #fff;
+  color: #36414a;
+  font-weight: 600;
 `
 
 const Nav = styled.nav`
   width: 100%;
   height: 65px;
-  padding: 0 20px;
+  padding: 0 5em;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   .logo {
     padding: 15px 0;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 20px;
   }
 `
 
@@ -28,7 +32,7 @@ const Navbar = ({ authUser }) => {
     <Nav>
       <div className="logo">
         <StyledLink to={ROUTES.LANDING}>
-          <ReactLogo width="150px" height="41px" />
+          Coffee Buddy
         </StyledLink>
       </div>
       <Burger authUser={authUser} />

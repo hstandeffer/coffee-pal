@@ -2,9 +2,9 @@ import styled from 'styled-components'
 
 export const LandingBanner = styled.div`
   width: 100%;
-  margin: 50px auto;
+  padding: 5em 0;
   text-align: center;
-  color: #fff;
+  color: #36414a;
 `
 
 export const FullWidthWrapper = styled.div`
@@ -13,7 +13,21 @@ export const FullWidthWrapper = styled.div`
 
 export const FullWidthDiv = styled.div`
   width: 100%;
-  background-color: ${({ bgColor }) => bgColor ? bgColor : '#fff'};
+  background-color: '#fff';
+`
+
+export const FeaturesWrapper = styled.div`
+  padding: 5em 10em 10em;
+  text-align: center;
+  background: linear-gradient(287deg, #2795c7, #38b4c3);
+`
+
+// export const FeaturesDiv = styled.div`
+//   padding: 
+// `
+
+export const FeaturesHeader = styled.h2`
+  color: #fff;
 `
 
 export const StyledH1 = styled.h1`

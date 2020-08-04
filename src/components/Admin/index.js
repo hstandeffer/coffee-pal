@@ -111,6 +111,8 @@ const Admin = ({ firebase }) => {
       shadeGrown
     }
 
+    // TODO: set this object to a useState value and then display the data it found and allow edits before uploading to db
+
     if (!window.confirm(`is the data correct? ${JSON.stringify(metaCoffeeObj)}`)) {
       setSearch('')
       setInfo(`${metaCoffeeObj.siteName}'s ${metaCoffeeObj.title} was not added to the database`)

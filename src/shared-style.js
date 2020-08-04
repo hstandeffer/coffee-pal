@@ -7,7 +7,7 @@ export const StyledH1 = styled.h1`
 
 export const Wrapper = styled.div`
   width: 100%;
-	padding: 24px;
+	padding: 2.5em;
 
 	@media (max-width: 560px) {
 		padding: 0;
@@ -16,11 +16,12 @@ export const Wrapper = styled.div`
 
 export const StyledDiv = styled.div`
 	max-width: ${({ maxWidth }) => maxWidth ? maxWidth : '480px' };
-	padding: 24px;
+	padding: 2.5em;
 	margin: 0px auto;
 	text-align: center;
 	background: #fff;
 	border-radius: 4px;
+	border: 1px solid #d9e7ea;
 
 	@media (max-width: 560px) {
 		padding: 24px 0;

@@ -6,7 +6,8 @@ import StyledSignOutButton from '../SignOut'
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-  color: #fff;
+  color: #36414a;
+  font-weight: 600;
 `
 
 const Ul = styled.ul`
@@ -23,7 +24,7 @@ const Ul = styled.ul`
 
   @media (max-width: 768px) {
     flex-flow: column nowrap;
-    background-color: #0D2538;
+    background-color: #fff;
     position: fixed;
     transform: ${({ open }) => open ? 'translateX(0)' : 'translateX(100%)'};
     top: 0;
