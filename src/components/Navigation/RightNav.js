@@ -2,11 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 import * as ROUTES from '../../constants/routes'
 import { Link } from 'react-router-dom'
-import StyledSignOutButton from '../SignOut'
+import StyledButton from '../SignOut'
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-  color: #fff;
+  color: ${({ open }) => open ? '#4A4A4A' : '#fff' };
   font-weight: 600;
 `
 
@@ -30,7 +30,7 @@ const Ul = styled.ul`
     top: 0;
     right: 0;
     height: 100vh;
-    width: 300px;
+    width: 100%;
     padding-top: 3.5rem;
     transition: transform 0.3s ease-in-out;
   }
@@ -68,10 +68,10 @@ const RightNav = ({ open, authUser, onClick }) => {
     <Ul open={open}>
       {routeList.map((obj) => (
         <li key={obj.text}>
-          <StyledLink onClick={onClick} to={obj.route}>{obj.text}</StyledLink>
+          <StyledLink open={open} onClick={onClick} to={obj.route}>{obj.text}</StyledLink>
         </li>
       ))}
-      {authUser ? <li><StyledSignOutButton /></li> : null}
+      {authUser ? <li><StyledButton open={open} /></li> : null}
     </Ul>
   )
 }

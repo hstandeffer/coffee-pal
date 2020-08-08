@@ -9,7 +9,7 @@ const AccountPage = () => (
     {authUser => (
       <Wrapper>
         <StyledDiv>
-          <h1>Account Settings: {authUser.email}</h1>
+          <h3>Account Settings: {authUser.email}</h3>
           <PasswordForgetForm />
           <PasswordChangeForm />
         </StyledDiv>

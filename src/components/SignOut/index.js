@@ -12,7 +12,7 @@ const handleSignout = async props => {
 }
 
 const SignOutButton = (props) => (
-  <StyledButton type="button" onClick={() => handleSignout(props)}>Sign Out</StyledButton>
+  <StyledButton open={props.open} type="button" onClick={() => handleSignout(props)}>Sign Out</StyledButton>
 );
 
 export default compose(withFirebase, withRouter)(SignOutButton)

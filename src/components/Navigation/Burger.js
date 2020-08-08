@@ -15,13 +15,12 @@ const StyledBurger = styled.div`
     display: flex;
     justify-content: space-around;
     flex-flow: column nowrap;
-
   }
 
   div {
     width: 2rem;
     height: 0.25rem;
-    background-color: ${({ open }) => open ? '#36414a' : '#36414a'};
+    background-color: ${({ open }) => open ? 'grey' : '#fff'};
     border-radius: 10px;
     transform-origin: 1px;
     transition: all 0.2s linear;

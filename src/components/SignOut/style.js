@@ -5,7 +5,7 @@ export const StyledButton = styled.button`
   border: none;
   background: transparent;
   cursor: pointer;
-  color: #fff;
+  color: ${({ open }) => open && !!open ? '#4A4A4A' : '#fff' };
   padding: 0;
   font-weight: 600;
 `

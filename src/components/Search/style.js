@@ -26,7 +26,6 @@ export const ItemsDiv = styled.div`
 	text-align: center;
 	background: #fff;
 	border-radius: 4px;
-  border: 1px solid #d7d3d3;
 
   @media (max-width: 600px) {
     margin: 0 auto;
@@ -55,9 +54,8 @@ export const FlexProductDiv = styled.div`
   text-align: left;
   margin: 2%;
   flex: 0 0 21%;
-  flex-flow: column;
-  border-bottom: 2px solid #8080808a;
-  padding-bottom: 2em;
+  flex-flow: column;  
+  box-shadow: 1px 0px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
 
   @media (max-width: 960px) {
     flex: 0 0 29%;
@@ -102,12 +100,15 @@ export const ImageContentContainer = styled.div`
     width: 100%;
     position: relative;
     top: 50%;
+    height: 100%;
+    object-fit: cover;
     transform: translateY(-50%);
   }
 `
 
 export const InfoContainer = styled.div`
   width: 100%;
+  padding: 10px;
 `
 
 export const Image = styled.img`
