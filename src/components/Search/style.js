@@ -25,7 +25,8 @@ export const ItemsDiv = styled.div`
   margin: 0 10px;
 	text-align: center;
 	background: #fff;
-	border-radius: 4px; 
+	border-radius: 4px;
+  border: 1px solid #d7d3d3;
 
   @media (max-width: 600px) {
     margin: 0 auto;
@@ -85,7 +86,7 @@ export const ImageContainer = styled.div`
     width: 100%;
     height: 100%;
     content: " ";
-    background-color: rgba(0,0,0,0.03)
+    background-color: none;
   }
 `
 

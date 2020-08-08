@@ -5,7 +5,7 @@ import { Input, StyledDiv, StyledButton, StyledLink } from '../../shared-style';
 
 const PasswordForgetPage = () => (
   <StyledDiv>
-    <h1>Password Forget</h1>
+    <h1>Forgot your password?</h1>
     <PasswordForgetForm />
   </StyledDiv>
 );

@@ -3,7 +3,6 @@ import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 import { withAuthorization } from '../Session';
 import { Wrapper, Input, StyledDiv, StyledButton, StyledLink } from '../../shared-style';
-import { Select } from './style'
 
 import { withFirebase } from '../Firebase'
 import * as ROUTES from '../../constants/routes';
@@ -37,7 +36,7 @@ class SignUpFormBase extends Component {
   }
 
   onSubmit = event => {
-    const {username, email, passwordOne, experience, favoriteBrewingMethod, favoriteRoastType, drinkOfChoice } = this.state;
+    const { username, email, passwordOne } = this.state;
 
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
@@ -47,10 +46,6 @@ class SignUpFormBase extends Component {
           .set({
             username,
             email,
-            experience,
-            favoriteBrewingMethod,
-            favoriteRoastType,
-            drinkOfChoice
           });
       })
       .then(() => {
@@ -79,10 +74,6 @@ class SignUpFormBase extends Component {
       email,
       passwordOne,
       passwordTwo,
-      experience,
-      favoriteBrewingMethod,
-      favoriteRoastType,
-      drinkOfChoice,
       error
     } = this.state;
 
@@ -90,11 +81,7 @@ class SignUpFormBase extends Component {
       passwordOne !== passwordTwo ||
       passwordOne === '' ||
       email === '' ||
-      username === '' ||
-      experience === 'Experience' ||
-      favoriteBrewingMethod === '' ||
-      favoriteRoastType === '' ||
-      drinkOfChoice === '';
+      username === ''
 
     return (
       <form onSubmit={this.onSubmit}>
@@ -126,35 +113,6 @@ class SignUpFormBase extends Component {
           type="password"
           placeholder="Confirm Password"
         />
-        <Select name="experience" value={experience} onChange={this.onChange}>
-          <option value="expLevel">Experience</option>
-          <option value="beginner">Beginner</option>
-          <option value="intermediate">Intermediate</option>
-          <option value="expert">Expert</option>
-        </Select>
-        <Select name="favoriteBrewingMethod" value={favoriteBrewingMethod} onChange={this.onChange}>
-          <option value="favBrew">Favorite Brewing Method</option>
-          <option value="dripMachine">Drip Machine</option>
-          <option value="espressoMachine">Espresso Machine</option>
-          <option value="frenchPress">French Press</option>
-          <option value="aeropress">Aeropress</option>
-          <option value="moka">Moka Pot</option>
-          <option value="other">Other</option>
-        </Select>
-        <Select name="favoriteRoastType" value={favoriteRoastType} onChange={this.onChange}>
-          <option value="favRoast">Favorite Roast Type</option>
-          <option value="beginner">Light</option>
-          <option value="medium">Medium</option>
-          <option value="expert">Dark</option>
-        </Select>
-        <Select name="drinkOfChoice" value={drinkOfChoice} onChange={this.onChange}>
-          <option value="drinkOfChoice">Drink of Choice</option>
-          <option value="blackCoffee">Black Coffee</option>
-          <option value="espresso">Espresso</option>
-          <option value="latte">Latte</option>
-          <option value="cappucino">Cappucino</option>
-          <option value="other">Other</option>
-        </Select>
         <StyledButton disabled={isInvalid} type="submit">Sign Up</StyledButton> 
 
         {error && <p>{error.message}</p>}
@@ -172,6 +130,8 @@ const SignUpForm = compose(
   withFirebase,
 )(SignUpFormBase);
 
-export default SignUpPage
+const condition = () => 'public'
+
+export default withAuthorization(condition)(SignUpPage)
 
 export { SignUpForm, SignUpLink }

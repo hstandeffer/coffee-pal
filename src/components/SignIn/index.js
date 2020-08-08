@@ -86,9 +86,12 @@ class SignInFormBase extends Component {
   }
 }
 
+
 const SignInForm = compose(
   withRouter,
   withFirebase,
 )(SignInFormBase);
+  
+const condition = () => 'public'
 
-export default SignInPage
+export default withAuthorization(condition)(SignInPage)

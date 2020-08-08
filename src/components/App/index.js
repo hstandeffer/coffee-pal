@@ -10,26 +10,47 @@ import AccountPage from '../Account';
 import AdminPage from '../Admin';
 import ProfilePage from '../Profile';
 import SearchPage from '../Search'
+import BrowsePage from '../Browse'
+import TastingPage from '../Tasting'
 
 import * as ROUTES from '../../constants/routes';
 import { withAuthentication } from '../Session'
 
-const App = () => (
-  <Router>
-    <div>
-      <Navigation /> 
+class App extends React.Component {
+  constructor(props) {
+    super(props)
 
-      <Route exact path={ROUTES.LANDING} component={LandingPage} />
-      <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
-      <Route path={ROUTES.SIGN_IN} component={SignInPage} />
-      <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
-      <Route path={ROUTES.ACCOUNT} component={AccountPage} />
-      <Route path={ROUTES.PROFILE} component={ProfilePage} />
-      <Route path={ROUTES.ADMIN} component={AdminPage} />
-      <Route path={ROUTES.BROWSE} component={SearchPage} />
-    </div>
-  </Router>
-)
+    this.state = { loaded: false }
+  }
+
+  componentDidMount() {
+    this.setState({ loaded: true })
+  }
+
+  render() {
+    if (!this.state.loaded) {
+      return null
+    }
+    return (
+      <Router>
+        <div>
+          <Navigation /> 
+
+          <Route exact path={ROUTES.LANDING} component={LandingPage} />
+          <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
+          <Route path={ROUTES.SIGN_IN} component={SignInPage} />
+          <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+          <Route path={ROUTES.ACCOUNT} component={AccountPage} />
+          <Route path={ROUTES.PROFILE} component={ProfilePage} />
+          <Route path={ROUTES.ADMIN} component={AdminPage} />
+          <Route path={ROUTES.BROWSE} component={BrowsePage} />
+          <Route path={ROUTES.SEARCH} component={SearchPage} />
+          <Route path={ROUTES.TASTING} component={TastingPage} />
+        </div>
+      </Router>
+    )
+  }
+}
 
 // this wraps the entire app around the authentication context so the authUser object is always available on auth state change
 export default withAuthentication(App)

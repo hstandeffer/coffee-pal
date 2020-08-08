@@ -2,9 +2,13 @@ import styled from 'styled-components'
 
 export const LandingBanner = styled.div`
   width: 100%;
-  padding: 5em 0;
+  padding: 5em 1em;
   text-align: center;
   color: #36414a;
+
+  @media (max-width: 600px) {
+    padding: 5em 30px;
+  }
 `
 
 export const FullWidthWrapper = styled.div`
@@ -17,9 +21,17 @@ export const FullWidthDiv = styled.div`
 `
 
 export const FeaturesWrapper = styled.div`
-  padding: 5em 10em 10em;
+  padding: 5em 15em 10em;
   text-align: center;
   background: linear-gradient(287deg, #2795c7, #38b4c3);
+
+  @media (max-width: 960px) {
+    padding: 5em 5em 10em
+  }
+
+  @media (max-width: 600px) {
+    padding: 5em 1.5em 10em;
+  }
 `
 
 // export const FeaturesDiv = styled.div`

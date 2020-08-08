@@ -6,7 +6,7 @@ import StyledSignOutButton from '../SignOut'
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-  color: #36414a;
+  color: #fff;
   font-weight: 600;
 `
 

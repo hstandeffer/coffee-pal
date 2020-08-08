@@ -33,6 +33,8 @@ const Landing = () => (
       </Grid>
     </FeaturesWrapper>
   </FullWidthWrapper>
-);
+)
 
-export default Landing; // send false condition to redirect to browse page if logged in
+const condition = () => 'public'
+
+export default withAuthorization(condition)(Landing)

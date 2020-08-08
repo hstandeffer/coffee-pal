@@ -134,9 +134,9 @@ const Admin = ({ firebase }) => {
       {loading && <div>Loading...</div>}
       {info && <div>{info}</div>}
 
-      { users.length > 0 ? <UserList users={users} /> : <button onClick={getUsers}>Load user list</button> }
+      { users.length > 0 ? <UserList users={users} /> : <button style={{margin: '20px auto'}} onClick={getUsers}>Load user list</button> }
 
-      <form onSubmit={handleSubmit}>
+      <form style={{margin: '20px auto'}} onSubmit={handleSubmit}>
         <input
           type="text"
           value={search}

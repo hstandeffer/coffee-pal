@@ -5,7 +5,7 @@ export const StyledButton = styled.button`
   border: none;
   background: transparent;
   cursor: pointer;
-  color: #36414a;
+  color: #fff;
   padding: 0;
   font-weight: 600;
 `

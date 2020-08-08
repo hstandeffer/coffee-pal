@@ -40,13 +40,7 @@ export const Filters = ({ filters, setFilters }) => {
   return (
     <FiltersWrapper>
       <StyledH2>Filters</StyledH2>
-      {/* <Input
-        name="searchQuery"
-        type="text"
-        placeholder="Search..."
-        value={searchQuery || ''}
-        onChange={({ target }) => setFilters({...filters, searchQuery: target.value })}
-      /> */}
+   
       <FormGroup>
         <Typography component="h2">
           <strong>Growing Methods</strong>
@@ -174,7 +168,7 @@ const SearchBase = ({ firebase, filters }) => {
 
   useEffect(() => {
     setLoading(true)
-    firebase.coffees().once('value', snapshot => {
+    firebase.coffees().limitToFirst(1).once('value', snapshot => {
       if (snapshot.exists()) {
         const coffeeObject = snapshot.val()
         const coffeesList = Object.keys(coffeeObject).map(key => ({
@@ -236,4 +230,4 @@ const Search = compose(
 
 const condition = authUser => !!authUser; //shorthand for if authUser DOES NOT EQUAL null
 
-export default withAuthorization(condition)(SearchPage);
+export default withAuthorization(condition)(SearchPage)

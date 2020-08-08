@@ -8,14 +8,30 @@ import * as ROUTES from '../../constants/routes'
 
 const withAuthorization = condition => Component => {
   class WithAuthorization extends React.Component {
+    constructor(props) {
+      super(props)
+
+      this.state = {
+        loaded: false
+      }
+    }
+
     componentDidMount() {
       this.listener = this.props.firebase.onAuthUserListener(
         authUser => {
-          if (!condition(authUser)) {
+          if (!condition(authUser) || condition(authUser) === 'public') {
             this.props.history.push(ROUTES.BROWSE)
           }
+          this.setState({ loaded: true })
         },
-        () => this.props.history.push(ROUTES.SIGN_IN) // redirect to sign in page if user is not logged in
+        (authUser = null) => {
+          if (condition(authUser) === 'public') {
+            this.setState({ loaded: true })
+          }
+          else {
+            this.props.history.push(ROUTES.SIGN_IN)
+          }
+        }
       )
     }
 
@@ -24,6 +40,10 @@ const withAuthorization = condition => Component => {
     }
     
     render() {
+      if (!this.state.loaded) { // okay way of handling public route redirects
+        return null
+      }
+
       return (
         <AuthUserContext.Consumer>
           {authUser =>

@@ -1,10 +1,18 @@
-import React from 'react';
-import { StyledButton } from './style';
+import React from 'react'
+import { StyledButton } from './style'
+import * as ROUTES from '../../constants/routes'
 
-import { withFirebase } from '../Firebase';
+import { compose } from 'recompose'
+import { withRouter } from 'react-router-dom'
+import { withFirebase } from '../Firebase'
 
-const SignOutButton = ({ firebase }) => (
-  <StyledButton type="button" onClick={firebase.doSignOut}>Sign Out</StyledButton>
+const handleSignout = async props => {
+  await props.firebase.doSignOut()
+  await props.history.push(ROUTES.LANDING)
+}
+
+const SignOutButton = (props) => (
+  <StyledButton type="button" onClick={() => handleSignout(props)}>Sign Out</StyledButton>
 );
 
-export default withFirebase(SignOutButton);
+export default compose(withFirebase, withRouter)(SignOutButton)

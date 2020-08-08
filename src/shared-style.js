@@ -9,21 +9,21 @@ export const Wrapper = styled.div`
   width: 100%;
 	padding: 2.5em;
 
-	@media (max-width: 560px) {
+	@media (max-width: 600px) {
 		padding: 0;
 	}
 `
 
 export const StyledDiv = styled.div`
-	max-width: ${({ maxWidth }) => maxWidth ? maxWidth : '480px' };
+	max-width: 480px;
 	padding: 2.5em;
-	margin: 0px auto;
+	margin: 2.5em auto;
 	text-align: center;
 	background: #fff;
 	border-radius: 4px;
 	border: 1px solid #d9e7ea;
 
-	@media (max-width: 560px) {
+	@media (max-width: 600px) {
 		padding: 24px 0;
 		border-radius: 0;
 	}
@@ -31,7 +31,7 @@ export const StyledDiv = styled.div`
 
 export const Input = styled.input`
 	display: block;
-	margin: 10px auto;
+	margin: 15px auto;
 	padding: 10px;
 	background: transparent;
 	border: none;
@@ -39,6 +39,8 @@ export const Input = styled.input`
 	background: #f7f7f7;
 	font-family: inherit;
 	font-size: 20px;
+	border: 1px solid #d9e7ea;
+	border-radius: 4px;
 
 	&:focus {
 		outline-color: #73777d;

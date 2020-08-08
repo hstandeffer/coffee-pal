@@ -8,6 +8,7 @@ export const StyledLink = styled(Link)`
   text-decoration: none;
   color: #36414a;
   font-weight: 600;
+  color: #fff;
 `
 
 const Nav = styled.nav`
@@ -17,9 +18,11 @@ const Nav = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: #24676d;
 
   .logo {
     padding: 15px 0;
+    color: #fff;
   }
 
   @media (max-width: 768px) {
