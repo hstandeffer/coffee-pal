@@ -4,12 +4,14 @@ export const AlgoliaSearchBarDiv = styled.div`
   height: 50px;
   border-radius: 4px;
   background: #f5f5fa;
-  /* display: flex; */
-  align-items: center;
-  margin: 25px 10%;
+  margin: 0 1.5% 15px;
+  
+  @media(max-width: 960px) {
+    margin: 0 calc(5%/3) 15px;
+  }
 
   @media(max-width: 600px) {
-    margin: 10px 3.5%;
+    margin: 10px 5%;
   }
 `
 

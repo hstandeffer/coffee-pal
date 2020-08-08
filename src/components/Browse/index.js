@@ -4,11 +4,12 @@ import { InstantSearch, connectSearchBox, connectHits } from 'react-instantsearc
 import {
   FlexContainer,
   FlexProductDiv,
-  ItemsDiv,
   ImageContainer,
   ImageContentContainer,
   InfoContainer
 } from '../Search/style';
+
+import { Wrapper } from '../../shared-style'
 
 import Grid from '@material-ui/core/Grid'
 import Hidden from '@material-ui/core/Hidden'
@@ -28,20 +29,18 @@ const searchClient = algoliasearch(
 );
 
 const Browse = () => (
-  <InstantSearch indexName="coffee" searchClient={searchClient} >
-    <CustomSearchBox />
-    <>
-      <Grid container direction="row" justify="center">
+  <Wrapper>
+    <InstantSearch indexName="coffee" searchClient={searchClient} >
+      <CustomSearchBox />
+      <>
         <Grid item xs={12}>
-          <ItemsDiv style={{margin: '0 10%'}}>
-            <FlexContainer>
-              <CustomHits hitComponent={Hit} />
-            </FlexContainer>
-          </ItemsDiv>
+          <FlexContainer>
+            <CustomHits hitComponent={Hit} />
+          </FlexContainer>
         </Grid>
-      </Grid>
-    </>
-  </InstantSearch>
+      </>
+    </InstantSearch>
+  </Wrapper>
 );
 
 const Hits = ({ hits }) => (

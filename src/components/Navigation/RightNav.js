@@ -32,6 +32,9 @@ const Ul = styled.ul`
     height: 100vh;
     width: 100%;
     padding-top: 3.5rem;
+    padding-left: 0;
+    text-align: center;
+    font-size: 20px;
     transition: transform 0.3s ease-in-out;
   }
 `
@@ -62,13 +65,13 @@ const authRoutes = [
   }
 ]
 
-const RightNav = ({ open, authUser, onClick }) => {
+const RightNav = ({ open, authUser, onClick, closeMenu }) => {
   const routeList = authUser ? authRoutes : nonAuthRoutes
   return (
     <Ul open={open}>
       {routeList.map((obj) => (
         <li key={obj.text}>
-          <StyledLink open={open} onClick={onClick} to={obj.route}>{obj.text}</StyledLink>
+          <StyledLink open={open} onClick={closeMenu} to={obj.route}>{obj.text}</StyledLink>
         </li>
       ))}
       {authUser ? <li><StyledButton open={open} /></li> : null}

@@ -50,7 +50,7 @@ const Burger = ({ authUser }) => {
         <div />
         <div />
       </StyledBurger>
-      <RightNav authUser={authUser} open={open} onClick={() => setOpen(!open)} />
+      <RightNav authUser={authUser} open={open} closeMenu={() => setOpen(false)} onClick={() => setOpen(!open)} />
     </>
   )
 }

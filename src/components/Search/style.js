@@ -21,11 +21,9 @@ export const StyledH2 = styled.h2`
 `
 
 export const ItemsDiv = styled.div`
-  padding: 24px;
-  margin: 0 10px;
-	text-align: center;
 	background: #fff;
-	border-radius: 4px;
+  border-radius: 4px;
+  text-align: center;
 
   @media (max-width: 600px) {
     margin: 0 auto;
@@ -44,25 +42,40 @@ export const FlexContainer = styled.div`
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
+
+  &:after {
+    content: "";
+    margin-left: 22%;
+
+    @media(max-width: 600px) {
+      marign-left: 47%;
+    }
+
+    @media(max-width: 960px) {
+      margin-left: 30%;
+    }
+  }
   
   @media (max-width: 600px) {
-    margin: 0 2%;
+    margin: 0 3.5%;
   }
 `
 
 export const FlexProductDiv = styled.div`
   text-align: left;
-  margin: 2%;
-  flex: 0 0 21%;
+  flex: 0 0 22%;
+  margin: 2% 1.5%;
   flex-flow: column;  
   box-shadow: 1px 0px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
 
   @media (max-width: 960px) {
-    flex: 0 0 29%;
+    flex: 0 0 30%;
+    margin: 2% calc(5%/3);
   }
   
   @media (max-width: 600px) {
-    flex: 0 0 46%;
+    flex: 0 0 47%;
+    margin: 2% 1.5%;
   }
 `
 
