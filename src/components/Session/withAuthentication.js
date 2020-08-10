@@ -17,7 +17,6 @@ const withAuthentication = Component => {
     componentDidMount() {
       this.listener = this.props.firebase.onAuthUserListener(
         authUser => { // this is the "next" callback function passed to the firebase class, passing in authUser when state changes
-          console.log('checking auth')
           this.setState({ authUser })
           this.setState({ loaded: true})
         },

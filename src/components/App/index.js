@@ -43,7 +43,7 @@ class App extends React.Component {
           <Route path={ROUTES.ACCOUNT} component={AccountPage} />
           <Route path={ROUTES.PROFILE} component={ProfilePage} />
           <Route path={ROUTES.ADMIN} component={AdminPage} />
-          <Route path={ROUTES.BROWSE} component={BrowsePage} />
+          <Route exact path={ROUTES.BROWSE} component={BrowsePage} />
           <Route path={ROUTES.SEARCH} component={SearchPage} />
           <Route path={ROUTES.TASTING} component={TastingPage} />
         </div>

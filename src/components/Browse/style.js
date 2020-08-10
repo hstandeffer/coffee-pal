@@ -57,3 +57,68 @@ export const AlgoliaPoweredByImage = styled.img`
 export const AlgoliaPoweredByLink = styled.a`
   height: 16px;
 `
+
+export const AlgoliaStyledStats = styled.p`
+  margin: 5px 1.5%;
+  text-align: right;
+  font-size: 13px;
+  color: grey;
+  
+  @media(max-width: 960px) {
+    margin: 5px calc(5%/3);
+  }
+
+  @media(max-width: 600px) {
+    margin: 5px 5%;
+  }
+`
+
+export const AlgoliaStyledUl = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+`
+
+export const AlgoliaStyledCurrentRefinementOuterSpan = styled.span`
+  display: block;
+  margin: 2px;
+  padding: 4px 8px;
+  background-color: #24676d;
+  font-size: 13px;
+  color: #fff;
+  border-radius: 4px;
+
+  button {
+    color: #fff;
+    opacity: .8;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    border: 0;
+  }
+`
+
+export const AlgoliaStyledLi = styled.li`
+  margin-bottom: 8px;
+
+  label {
+    cursor: pointer;
+  }
+`
+
+export const AlgoliaStyledOuterRefinementListSpan = styled.span`
+  margin-left: 8px;
+  cursor: pointer;
+`
+
+export const AlgoliaStyledRefinementListCountSpan = styled.span`
+  display: inline-block;
+  background-color: rgba(197,201,224,.2);
+  color: #848ab8;
+  border-radius: 4px;
+  margin-left: 8px;
+  padding: 2px 4px;
+  font-size: 10px;
+  letter-spacing: 1.3px;
+`

@@ -1,6 +1,14 @@
 import React, { useState } from 'react'
 import algoliasearch from 'algoliasearch/lite';
-import { InstantSearch, connectSearchBox, connectHits } from 'react-instantsearch-dom';
+import {
+  InstantSearch,
+  connectSearchBox,
+  connectHits,
+  connectStats,
+  connectRefinementList,
+  ClearRefinements,
+  connectCurrentRefinements,
+} from 'react-instantsearch-dom';
 import {
   FlexContainer,
   FlexProductDiv,
@@ -20,7 +28,13 @@ import {
   AlgoliaSearchBarInput,
   AlgoliaSearchBarSubmitButton,
   AlgoliaPoweredByImage,
-  AlgoliaPoweredByLink
+  AlgoliaPoweredByLink,
+  AlgoliaStyledStats,
+  AlgoliaStyledUl,
+  AlgoliaStyledCurrentRefinementOuterSpan,
+  AlgoliaStyledLi,
+  AlgoliaStyledOuterRefinementListSpan,
+  AlgoliaStyledRefinementListCountSpan
 } from './style'
 
 const searchClient = algoliasearch(
@@ -28,28 +42,107 @@ const searchClient = algoliasearch(
   'd3b6a47c767eebf56ba2732462bf8875'
 );
 
-const Browse = () => (
-  <Wrapper>
+const Browse = () => {
+  return (
+    <Wrapper>
     <InstantSearch indexName="coffee" searchClient={searchClient} >
-      <CustomSearchBox />
-      <>
-        <Grid item xs={12}>
+      <Grid container>
+        <Grid item xs={12} md={2}>
+          <ClearRefinements />
+          <CustomCurrentRefinements transformItems={items =>
+            items.map(item => {
+              if (item.label === 'siteName: ') {
+                item.label = 'Brand: '
+              }
+              return item
+            })
+          }/>
+          <CustomRefinementList attribute="siteName" operator="or" />
+        </Grid>
+        <Grid item xs={12} md={10}>
+          <CustomSearchBox />
+          <CustomStats />
           <FlexContainer>
             <CustomHits hitComponent={Hit} />
           </FlexContainer>
         </Grid>
-      </>
+      </Grid>
     </InstantSearch>
   </Wrapper>
-);
+  )
+}
 
-const Hits = ({ hits }) => (
-  hits.map(hit => (
-    <Hit hit={hit} key={hit.objectID} />
-  ))
-)
+const CustomCurrentRefinements = connectCurrentRefinements(({ items, refine }) => (
+  <div>
+    <AlgoliaStyledUl>
+      {items.map(item => (
+        <li key={item.label}>
+          {item.items ? (
+            <>
+              {item.items.map(nested => (
+                <AlgoliaStyledCurrentRefinementOuterSpan key={nested.label}>
+                  <span>
+                    {`${item.label} ${nested.label} `}
+                  </span>
+                  <button
+                    onClick={event => {
+                      event.preventDefault();
+                      refine(nested.value);
+                    }}
+                  >✕</button>
+                </AlgoliaStyledCurrentRefinementOuterSpan>
+              ))}
+            </>
+          ) : (
+            <a
+              href='/#'
+              onClick={event => {
+                event.preventDefault();
+                refine(item.value);
+              }}
+            >
+              {item.label}
+            </a>
+          )}
+        </li>
+      ))}
+    </AlgoliaStyledUl>
+  </div>
+))
 
-const CustomHits = connectHits(Hits);
+const CustomRefinementList = connectRefinementList(({ items, refine }) => (
+  <div>
+    <AlgoliaStyledUl>
+      {items.map(item => (
+          <AlgoliaStyledLi key={item.label}>
+            <label>
+              <input type="checkbox" onChange={() => refine(item.value)} checked={item.isRefined} />
+              <AlgoliaStyledOuterRefinementListSpan>
+                <span style={{fontWeight: item.isRefined ? '700' : ''}}>
+                  {item.label}
+                </span>
+              </AlgoliaStyledOuterRefinementListSpan>
+              <AlgoliaStyledRefinementListCountSpan>
+                {item.count}
+              </AlgoliaStyledRefinementListCountSpan>
+            </label>
+          </AlgoliaStyledLi> 
+      ))}
+    </AlgoliaStyledUl>
+  </div>
+))
+
+const CustomStats = connectStats(({ processingTimeMS, nbHits }) => (
+  <AlgoliaStyledStats>{nbHits} results found in {processingTimeMS} ms</AlgoliaStyledStats>
+))
+
+const CustomHits = connectHits(({ hits }) => {
+  return (
+    hits.map(hit => (
+        <Hit hit={hit} key={hit.objectID} />
+    ))
+  )
+})
 
 const Hit = ({ hit }) => (
   <FlexProductDiv>
@@ -69,25 +162,29 @@ const Hit = ({ hit }) => (
   </FlexProductDiv>
 )
 
-const SearchBox = ({ currentRefinement, isSearchStalled, refine }) => {
+// const CustomSearchBox = connectSearchBox(SearchBox);
+
+const CustomSearchBox = connectSearchBox(({ currentRefinement, isSearchStalled, refine }) => {
   const [val, setVal] = useState('')
 
-  const onSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault()
     refine(val)
+  }
+  
+  if (isSearchStalled) {
+    return <h3>Search is loading...</h3>
   }
 
   return (
     <AlgoliaSearchBarDiv>
-      {/* {isSearchStalled ? 'Search is loading...' : ''} */}
-      <AlgoliaSearchBarForm onSubmit={onSubmit} noValidate action="" role="search">
+      <AlgoliaSearchBarForm onSubmit={handleSubmit} noValidate action="" role="search">
         <AlgoliaSearchBarSubmitButton type="submit">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8a97fd" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         </AlgoliaSearchBarSubmitButton>
         <AlgoliaSearchBarInput
           type="search"
           value={val}
-          searchAsYouType={false}
           onChange={({ target }) => setVal(target.value)}
           placeholder="Search for coffees..."
         />
@@ -104,8 +201,6 @@ const SearchBox = ({ currentRefinement, isSearchStalled, refine }) => {
       </AlgoliaSearchBarForm>
     </AlgoliaSearchBarDiv>
   )
-}
-
-const CustomSearchBox = connectSearchBox(SearchBox);
+})
 
 export default Browse
