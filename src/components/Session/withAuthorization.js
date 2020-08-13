@@ -8,6 +8,8 @@ import * as ROUTES from '../../constants/routes'
 
 const withAuthorization = condition => Component => {
   class WithAuthorization extends React.Component {
+    _isMounted = false;
+
     constructor(props) {
       super(props)
 
@@ -17,16 +19,21 @@ const withAuthorization = condition => Component => {
     }
 
     componentDidMount() {
+      this._isMounted = true
       this.listener = this.props.firebase.onAuthUserListener(
         authUser => {
           if (!condition(authUser) || condition(authUser) === 'public') {
             this.props.history.push(ROUTES.BROWSE)
           }
-          this.setState({ loaded: true })
+          if (this._isMounted) {
+            this.setState({ loaded: true })
+          }
         },
         (authUser = null) => {
           if (condition(authUser) === 'public') {
-            this.setState({ loaded: true })
+            if (this._isMounted) {
+              this.setState({ loaded: true })
+            }
           }
           else {
             this.props.history.push(ROUTES.SIGN_IN)
@@ -36,6 +43,7 @@ const withAuthorization = condition => Component => {
     }
 
     componentWillUnmount() {
+      this._isMounted = false;
       this.listener()
     }
     

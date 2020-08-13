@@ -19,7 +19,7 @@ const Landing = () => (
       <FeaturesHeader>Import coffee information from a product URL</FeaturesHeader>
       <Input placeholder="Enter a product URL"></Input>
     </FeaturesWrapper>
-    <FeaturesWrapper>
+    {/* <FeaturesWrapper>
       <Grid container direction="row">
         <Grid container item justify="center" xs={12} sm={4}>
           <p>Item 1</p>
@@ -31,7 +31,7 @@ const Landing = () => (
           <p>Item 3</p>
         </Grid>
       </Grid>
-    </FeaturesWrapper>
+    </FeaturesWrapper> */}
   </FullWidthWrapper>
 )
 

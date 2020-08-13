@@ -23,7 +23,9 @@ export const FullWidthDiv = styled.div`
 export const FeaturesWrapper = styled.div`
   padding: 5em 15em 10em;
   text-align: center;
-  background: linear-gradient(287deg, #2795c7, #38b4c3);
+  /* background: linear-gradient(287deg, #2795c7, #38b4c3); */
+  background: #00bcd4;
+  
 
   @media (max-width: 960px) {
     padding: 5em 5em 10em
