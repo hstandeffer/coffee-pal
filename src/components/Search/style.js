@@ -62,7 +62,7 @@ export const FlexContainer = styled.div`
 `
 
 export const FlexProductDiv = styled.div`
-  text-align: left;
+  text-align: center;
   flex: 0 0 22%;
   margin: 2% 1.5%;
   flex-flow: column;  

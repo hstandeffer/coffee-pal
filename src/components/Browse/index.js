@@ -6,23 +6,18 @@ import {
   connectHits,
   connectStats,
   connectRefinementList,
-  ClearRefinements,
   connectCurrentRefinements,
 } from 'react-instantsearch-dom';
 import {
-  FlexContainer,
   FlexProductDiv,
   ImageContainer,
   ImageContentContainer,
   InfoContainer
 } from '../Search/style';
-
-import { Wrapper } from '../../shared-style'
-
-import Grid from '@material-ui/core/Grid'
 import Hidden from '@material-ui/core/Hidden'
 
 import {
+  TestDiv,
   AlgoliaSearchBarDiv,
   AlgoliaSearchBarForm,
   AlgoliaSearchBarInput,
@@ -34,7 +29,21 @@ import {
   AlgoliaStyledCurrentRefinementOuterSpan,
   AlgoliaStyledLi,
   AlgoliaStyledOuterRefinementListSpan,
-  AlgoliaStyledRefinementListCountSpan
+  AlgoliaStyledRefinementListCountSpan,
+  TestButton,
+  TestFooter,
+  FlexContainer,
+  AlgoliaRefinementHeader,
+  AlgoliaRefinementListWrapper,
+  AlgoliaAllRefinementListsWrapper,
+  SaveFiltersButtonMobile,
+  MobileFiltersButtonWrapper,
+  ClearRefinementsButtonMobile,
+  BrowseWrapper,
+  BrowseFiltersDiv,
+  BrowseHitsDiv,
+  ClearRefinementsButton,
+  BrowseFiltersHeaderDiv
 } from './style'
 
 const searchClient = algoliasearch(
@@ -43,38 +52,95 @@ const searchClient = algoliasearch(
 );
 
 const Browse = () => {
+  const [filtering, setFiltering] = useState(false) 
   return (
-    <Wrapper>
-    <InstantSearch indexName="coffee" searchClient={searchClient} >
-      <Grid container>
-        <Grid item xs={12} md={2}>
-          <ClearRefinements />
-          <CustomCurrentRefinements transformItems={items =>
-            items.map(item => {
-              if (item.label === 'siteName: ') {
-                item.label = 'Brand: '
-              }
-              return item
-            })
-          }/>
-          <CustomRefinementList attribute="siteName" operator="or" />
-        </Grid>
-        <Grid item xs={12} md={10}>
-          <CustomSearchBox />
-          <CustomStats />
-          <FlexContainer>
-            <CustomHits hitComponent={Hit} />
-          </FlexContainer>
-        </Grid>
-      </Grid>
-    </InstantSearch>
-  </Wrapper>
+    <BrowseWrapper>
+      <InstantSearch indexName="coffee" searchClient={searchClient}>
+      <Hidden mdUp>
+        <TestButton filtering={filtering} onClick={() => setFiltering(!filtering)}>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 14"><path d="M15 1H1l5.6 6.3v4.37L9.4 13V7.3z" stroke="#fff" strokeWidth="1.29" fill="none" fillRule="evenodd" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+          Show Filters
+        </TestButton>
+      </Hidden>
+          <BrowseFiltersDiv>
+            <TestDiv filtering={filtering}>
+              <BrowseFiltersHeaderDiv>
+                <h2>Filters</h2>
+                <CustomClearRefinements />
+              </BrowseFiltersHeaderDiv>
+              <CustomCurrentRefinements transformItems={items =>
+                items.map(item => {
+                  if (item.label === 'siteName: ') {
+                    item.label = 'Brand: '
+                  }
+                  return item
+                })
+              }/>
+              <AlgoliaAllRefinementListsWrapper>
+                <CustomRefinementList header="Brand" attribute="siteName" operator="or" />
+                <CustomRefinementList header="Roast Type" attribute="roastType" operator="or" />
+              </AlgoliaAllRefinementListsWrapper>
+              <TestFooter filtering={filtering}>
+                <CustomClearRefinementsMobile />
+                <SaveFiltersMobile onClick={() => setFiltering(false)} />
+              </TestFooter>
+            </TestDiv>
+          </BrowseFiltersDiv>
+
+          <BrowseHitsDiv>
+            <CustomSearchBox />
+            <CustomStats />
+            <FlexContainer filtering={filtering}>
+              <CustomHits hitComponent={Hit} />
+            </FlexContainer>
+          </BrowseHitsDiv>
+      </InstantSearch>
+    </BrowseWrapper>
   )
 }
 
+const CustomClearRefinements = connectCurrentRefinements(({ items, refine }) => {
+  return (
+    <ClearRefinementsButton onClick={() => refine(items)} disabled={!items.length}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="11"
+        height="11"
+        viewBox="0 0 11 11"
+      >
+        <g fill="none" fillRule="evenodd" opacity=".4">
+          <path d="M0 0h11v11H0z" />
+          <path
+            fill="#000"
+            fillRule="nonzero"
+            d="M8.26 2.75a3.896 3.896 0 1 0 1.102 3.262l.007-.056a.49.49 0 0 1 .485-.456c.253 0 .451.206.437.457 0 0 .012-.109-.006.061a4.813 4.813 0 1 1-1.348-3.887v-.987a.458.458 0 1 1 .917.002v2.062a.459.459 0 0 1-.459.459H7.334a.458.458 0 1 1-.002-.917h.928z"
+          />
+        </g>
+      </svg>
+      Clear filters
+    </ClearRefinementsButton>
+  )
+})
+
+const CustomClearRefinementsMobile = connectCurrentRefinements(({ items, refine }) => {
+  return (
+    <MobileFiltersButtonWrapper>
+      <ClearRefinementsButtonMobile onClick={() => refine(items)}>Reset Filters</ClearRefinementsButtonMobile>
+    </MobileFiltersButtonWrapper>
+  )
+})
+
+const SaveFiltersMobile = connectStats(({ nbHits, onClick }) => (
+  <MobileFiltersButtonWrapper>
+    <SaveFiltersButtonMobile onClick={onClick}>
+      View {nbHits} coffees
+    </SaveFiltersButtonMobile>
+  </MobileFiltersButtonWrapper>
+))
+
 const CustomCurrentRefinements = connectCurrentRefinements(({ items, refine }) => (
   <div>
-    <AlgoliaStyledUl>
+    <AlgoliaStyledUl current={true}>
       {items.map(item => (
         <li key={item.label}>
           {item.items ? (
@@ -110,8 +176,11 @@ const CustomCurrentRefinements = connectCurrentRefinements(({ items, refine }) =
   </div>
 ))
 
-const CustomRefinementList = connectRefinementList(({ items, refine }) => (
-  <div>
+const CustomRefinementList = connectRefinementList(({ header, items, refine }) => (
+  <AlgoliaRefinementListWrapper>
+    <AlgoliaRefinementHeader>
+      {header}
+    </AlgoliaRefinementHeader>
     <AlgoliaStyledUl>
       {items.map(item => (
           <AlgoliaStyledLi key={item.label}>
@@ -129,7 +198,7 @@ const CustomRefinementList = connectRefinementList(({ items, refine }) => (
           </AlgoliaStyledLi> 
       ))}
     </AlgoliaStyledUl>
-  </div>
+  </AlgoliaRefinementListWrapper>
 ))
 
 const CustomStats = connectStats(({ processingTimeMS, nbHits }) => (

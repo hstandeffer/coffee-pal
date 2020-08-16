@@ -14,7 +14,7 @@ export const StyledLink = styled(Link)`
 const Nav = styled.nav`
   width: 100%;
   height: 65px;
-  padding: 0 5em;
+  padding: 0 2.5em;
   display: flex;
   justify-content: space-between;
   align-items: center;
