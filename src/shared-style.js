@@ -24,7 +24,7 @@ export const StyledDiv = styled.div`
 	border: 1px solid #d9e7ea;
 
 	@media (max-width: 600px) {
-		padding: 24px 0;
+		padding: 24px;
 		border-radius: 0;
 	}
 `
@@ -35,7 +35,7 @@ export const Input = styled.input`
 	padding: 10px;
 	background: transparent;
 	border: none;
-	width: 90%;
+	width: 100%;
 	background: #f7f7f7;
 	font-family: inherit;
 	font-size: 20px;

@@ -12,6 +12,8 @@ import ProfilePage from '../Profile';
 import SearchPage from '../Search'
 import BrowsePage from '../Browse'
 import TastingPage from '../Tasting'
+import ProductTastingPage from '../Tasting/ProductTasting'
+import ProductPage from '../Product'
 
 import * as ROUTES from '../../constants/routes';
 import { withAuthentication } from '../Session'
@@ -33,20 +35,20 @@ class App extends React.Component {
     }
     return (
       <Router>
-        <div>
-          <Navigation /> 
+        <Navigation /> 
 
-          <Route exact path={ROUTES.LANDING} component={LandingPage} />
-          <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
-          <Route path={ROUTES.SIGN_IN} component={SignInPage} />
-          <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
-          <Route path={ROUTES.ACCOUNT} component={AccountPage} />
-          <Route path={ROUTES.PROFILE} component={ProfilePage} />
-          <Route path={ROUTES.ADMIN} component={AdminPage} />
-          <Route exact path={ROUTES.BROWSE} component={BrowsePage} />
-          <Route path={ROUTES.SEARCH} component={SearchPage} />
-          <Route path={ROUTES.TASTING} component={TastingPage} />
-        </div>
+        <Route exact path={ROUTES.LANDING} component={LandingPage} />
+        <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
+        <Route path={ROUTES.SIGN_IN} component={SignInPage} />
+        <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+        <Route path={ROUTES.ACCOUNT} component={AccountPage} />
+        <Route path={ROUTES.PROFILE} component={ProfilePage} />
+        <Route path={ROUTES.ADMIN} component={AdminPage} />
+        <Route path={ROUTES.BROWSE} component={BrowsePage} />
+        <Route path={ROUTES.PRODUCT} component={ProductPage} />
+        <Route path={ROUTES.SEARCH} component={SearchPage} />
+        <Route exact path={ROUTES.TASTING} component={TastingPage} />
+        <Route path={ROUTES.PRODUCT_TASTING} component={ProductTastingPage} />
       </Router>
     )
   }

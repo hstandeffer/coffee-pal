@@ -43,7 +43,8 @@ import {
   BrowseFiltersDiv,
   BrowseHitsDiv,
   ClearRefinementsButton,
-  BrowseFiltersHeaderDiv
+  BrowseFiltersHeaderDiv,
+  ProductLink
 } from './style'
 
 const searchClient = algoliasearch(
@@ -215,23 +216,20 @@ const CustomHits = connectHits(({ hits }) => {
 
 const Hit = ({ hit }) => (
   <FlexProductDiv>
-    <ImageContainer>
-      <ImageContentContainer>
-        <img src={hit.imageUrl} alt={hit.title} />
-      </ImageContentContainer>
-    </ImageContainer>
-    <InfoContainer>
-      <div style={{height: '40px', overflow: 'hidden', fontWeight: 'bold'}}>{hit.title}</div>
-      <div style={{margin: '5px 0'}}>${hit.price}</div>
-      <div style={{margin: '5px 0', textTransform: 'capitalize'}}>{hit.roastType} roast</div>
-      <div>
-        {/* <button onClick={() => onFavoriteClick(hit.uid)}>Favorite</button> */}
-      </div>
-    </InfoContainer>
+    <ProductLink to={`/coffee/${hit.title.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${hit.objectID}`}>
+      <ImageContainer>
+        <ImageContentContainer>
+          <img src={hit.imageUrl} alt={hit.title} />
+        </ImageContentContainer>
+      </ImageContainer>
+      <InfoContainer>
+        <div style={{height: '40px', overflow: 'hidden', fontWeight: 'bold'}}>{hit.title}</div>
+        <div style={{margin: '5px 0'}}>${hit.price}</div>
+        {hit.roastType && <div style={{margin: '5px 0', textTransform: 'capitalize'}}>{hit.roastType} roast</div>}
+      </InfoContainer>
+    </ProductLink>
   </FlexProductDiv>
 )
-
-// const CustomSearchBox = connectSearchBox(SearchBox);
 
 const CustomSearchBox = connectSearchBox(({ currentRefinement, isSearchStalled, refine }) => {
   const [val, setVal] = useState('')

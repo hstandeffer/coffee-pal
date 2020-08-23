@@ -18,6 +18,7 @@ export const Input = styled.input`
 
 export const Ul = styled.ul`
 	list-style-type: none;
+	padding-left: 0;
 `
 
 export const StyledDiv = styled.div`

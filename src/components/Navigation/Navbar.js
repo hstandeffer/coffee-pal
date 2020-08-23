@@ -24,6 +24,8 @@ const Nav = styled.nav`
   .logo {
     padding: 15px 0;
     color: #fff;
+    font-size: 1.5rem;
+    /* font-family: 'Do Hyeon', sans-serif */
   }
 
   @media (max-width: 768px) {
@@ -36,7 +38,7 @@ const Navbar = ({ authUser }) => {
     <Nav>
       <div className="logo">
         <StyledLink to={ROUTES.LANDING}>
-          Coffee Buddy
+          baroasta
         </StyledLink>
       </div>
       <Burger authUser={authUser} />

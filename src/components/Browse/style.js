@@ -1,4 +1,11 @@
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
+
+export const ProductLink = styled(Link)`
+  text-decoration: none;
+  outline: none;
+  color: black;
+`
 
 export const BrowseWrapper = styled.div`
   width: 100%;
@@ -118,12 +125,12 @@ export const BrowseFiltersHeaderDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 1.75rem;
+  min-height: 1.5rem;
   margin-bottom: 20px;
 
   h2 {
     margin: 0;
-    font-size: 1.75rem;
+    font-size: 1.5rem;
   }
 
   @media(max-width: 960px) {
