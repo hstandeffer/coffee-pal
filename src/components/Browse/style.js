@@ -34,6 +34,8 @@ export const BrowseHitsDiv = styled.div`
 export const TestDiv = styled.div`
   max-width: 260px;
   flex: 1;
+  position: sticky;
+  top: 25px;
   
   @media(max-width: 960px) {
     background: #fff;
@@ -131,6 +133,7 @@ export const BrowseFiltersHeaderDiv = styled.div`
   h2 {
     margin: 0;
     font-size: 1.5rem;
+    color: #626262;
   }
 
   @media(max-width: 960px) {

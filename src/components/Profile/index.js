@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { withAuthorization } from '../Session';
 import { withFirebase } from '../Firebase';
-import { compose } from "recompose";
+import { compose } from 'recompose';
 import { withRouter } from 'react-router-dom';
 
 import { StyledDiv, Ul } from './style'

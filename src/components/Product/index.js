@@ -47,6 +47,8 @@ const Product = ({ firebase }) => {
           <p>{`Fair Trade: ${coffee.fairTrade ? 'Yes' : 'No'}`}</p>
           <p>{`Organic: ${coffee.organic ? 'Yes' : 'No'}`}</p>
           <p>{`Shade Grown: ${coffee.shadeGrown ? 'Yes' : 'No'}`}</p>
+          <p>{`Single Origin: ${coffee.singleOrigin ? 'Yes' : 'No'}`}</p>
+          <p>{`Blend: ${coffee.blend ? 'Yes' : 'No'}`}</p>
           <button onClick={() => onFavoriteClick(coffee.uid)}>Add To List</button>
           <a href={`${coffee.url}`}>
             <button>Buy on {coffee.siteName}</button>

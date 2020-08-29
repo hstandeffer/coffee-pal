@@ -48,6 +48,26 @@ export const Input = styled.input`
 	}
 `
 
+export const Textarea = styled.textarea`
+	display: block;
+	margin: 15px auto;
+	padding: 10px;
+	background: transparent;
+	border: none;
+	width: 100%;
+	background: #f7f7f7;
+	font-family: inherit;
+	font-size: 20px;
+	border: 1px solid #d9e7ea;
+	border-radius: 4px;
+	outline: none;
+	resize: vertical;
+
+	&:focus {
+		outline-color: #73777d;
+	}
+`
+
 export const StyledButton = styled.button`
 	font-size: 20px;
 	margin-top: 10px;
@@ -55,7 +75,7 @@ export const StyledButton = styled.button`
 	border: none;
 	border-radius: 4px;
 	cursor: pointer;
-	width: 90%;
+	width: 100%;
 	background: #28445b;
 	color: #fff;
 

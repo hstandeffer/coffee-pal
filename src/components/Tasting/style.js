@@ -22,3 +22,7 @@ export const TastingDiv = styled.div`
 		border-radius: 0;
 	}
 `
+
+export const BoldLabel = styled.label`
+	font-weight: bold;
+`

@@ -74,7 +74,7 @@ const RightNav = ({ open, authUser, onClick, closeMenu }) => {
           <StyledLink open={open} onClick={closeMenu} to={obj.route}>{obj.text}</StyledLink>
         </li>
       ))}
-      {authUser ? <li><StyledButton open={open} /></li> : null}
+      {authUser ? <li><StyledButton open={open} closeMenu={closeMenu} /></li> : null}
     </Ul>
   )
 }

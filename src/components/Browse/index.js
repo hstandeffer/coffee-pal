@@ -47,6 +47,8 @@ import {
   ProductLink
 } from './style'
 
+import { withAuthorization } from '../Session';
+
 const searchClient = algoliasearch(
   'BDTHKSA1TY',
   'd3b6a47c767eebf56ba2732462bf8875'
@@ -225,7 +227,7 @@ const Hit = ({ hit }) => (
       <InfoContainer>
         <div style={{height: '40px', overflow: 'hidden', fontWeight: 'bold'}}>{hit.title}</div>
         <div style={{margin: '5px 0'}}>${hit.price}</div>
-        {hit.roastType && <div style={{margin: '5px 0', textTransform: 'capitalize'}}>{hit.roastType} roast</div>}
+        {hit.roastType && <div style={{margin: '5px 0', textTransform: 'capitalize'}}>{`${hit.roastType} roast`}</div>}
       </InfoContainer>
     </ProductLink>
   </FlexProductDiv>
@@ -270,4 +272,6 @@ const CustomSearchBox = connectSearchBox(({ currentRefinement, isSearchStalled, 
   )
 })
 
-export default Browse
+const condition = authUser => !!authUser;
+
+export default withAuthorization(condition)(Browse)

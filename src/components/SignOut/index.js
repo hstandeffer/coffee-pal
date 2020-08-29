@@ -9,6 +9,7 @@ import { withFirebase } from '../Firebase'
 const handleSignout = async props => {
   await props.firebase.doSignOut()
   await props.history.push(ROUTES.LANDING)
+  await props.closeMenu()
 }
 
 const SignOutButton = (props) => (

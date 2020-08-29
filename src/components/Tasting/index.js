@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { withFirebase } from '../Firebase'
+import { compose } from 'recompose';
 
 import { TastingWrapper, TastingDiv } from './style'
 import { FlexProductDiv, ImageContainer, ImageContentContainer, InfoContainer } from '../Search/style'
 import { ProductLink, BrowseHitsDiv, BrowseWrapper, FlexContainer } from '../Browse/style'
+
+import { withAuthorization } from '../Session';
 
 const Tasting = ({ firebase }) => {
   // const [search, setSearch] = useState('')
@@ -35,13 +38,13 @@ const Tasting = ({ firebase }) => {
       <TastingDiv>
         <h1>Start a new tasting</h1>
         
-        <h2>Select from one of your saved coffees to begin</h2>
+        <h3>Select from one of your saved coffees to begin</h3>
         <BrowseWrapper>
           <BrowseHitsDiv>
             <FlexContainer>
             {!loading ? 
                 coffees.map(coffee => (
-                  <CoffeeItem coffee={coffee} />
+                  <CoffeeItem key={coffee.uid} coffee={coffee} />
                 ))
               : <h2>Loading Coffees...</h2>
             }
@@ -70,4 +73,8 @@ const CoffeeItem = ({ coffee }) => (
   </FlexProductDiv>
 )
 
-export default withFirebase(Tasting)
+const TastingPage = compose(withFirebase)(Tasting)
+
+const condition = authUser => !!authUser;
+
+export default withAuthorization(condition)(TastingPage)

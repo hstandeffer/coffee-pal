@@ -14,6 +14,8 @@ const Admin = ({ firebase }) => {
   const [search, setSearch] = useState('')
   const [info, setInfo] = useState('')
   const [roastInput, setRoastInput] = useState('')
+  const [singleOriginInput, setSingleOriginInput] = useState(false)
+  const [blendInput, setBlendInput] = useState(false)
 
   const getUsers = () => {
     setLoading(true)
@@ -94,7 +96,24 @@ const Admin = ({ firebase }) => {
       || title.toLowerCase().includes('organic') || title.toLowerCase().includes('organic') || null
     const shadeGrown = description.toLowerCase().includes('shade grown') || description.toLowerCase().includes('shade-grown')
       || title.toLowerCase().includes('shade grown') || title.toLowerCase().includes('shade-grown') || null
-    
+
+    let singleOrigin
+    if(!!singleOriginInput && singleOriginInput !== 'default') {
+      singleOrigin = singleOriginInput
+    }
+
+    if (!singleOrigin) {
+      singleOrigin = description.toLowerCase().includes('single origin') || description.toLowerCase().includes('single-origin')
+      || title.toLowerCase().includes('single origin') || title.toLowerCase().includes('single-origin') || null
+    }
+
+    let blend
+    if(!!blendInput) {
+      blend = blendInput || null
+    } else {
+      blend = null
+    }
+
 
     const metaCoffeeObj = {
       title,
@@ -108,7 +127,9 @@ const Admin = ({ firebase }) => {
       countries,
       organic,
       fairTrade,
-      shadeGrown
+      shadeGrown,
+      singleOrigin,
+      blend
     }
 
     // TODO: set this object to a useState value and then display the data it found and allow edits before uploading to db
@@ -151,6 +172,12 @@ const Admin = ({ firebase }) => {
         <option value="medium">Medium</option>
         <option value="dark">Dark</option>
       </select>
+      <div>
+        Single Origin?<input type="checkbox" checked={singleOriginInput} onChange={({ target }) => setSingleOriginInput(target.checked)} />
+      </div>
+      <div>
+        Blend?<input type="checkbox" checked={blendInput} onChange={({ target }) => setBlendInput(target.checked)} />
+      </div>
     </StyledDiv>
   )
 }

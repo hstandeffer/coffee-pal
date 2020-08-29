@@ -18,14 +18,12 @@ const Nav = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* background-color: #24676d; */
-  background-color: #424546;
+  background-color: #275e71;
 
   .logo {
     padding: 15px 0;
     color: #fff;
     font-size: 1.5rem;
-    /* font-family: 'Do Hyeon', sans-serif */
   }
 
   @media (max-width: 768px) {
