@@ -56,6 +56,10 @@ const authRoutes = [
     text: 'Browse'
   },
   {
+    route: ROUTES.TASTINGS,
+    text: 'Tastings'
+  },
+  {
     route: ROUTES.PROFILE,
     text: 'Profile'
   },

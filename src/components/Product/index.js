@@ -50,8 +50,8 @@ const Product = ({ firebase }) => {
   }
   return (
     <Wrapper style={{padding: '10px'}}>
-        <Grid container spacing={5} justify="center">
-          <Grid item sm={6} xs={12}>
+        <Grid container justify="space-around">
+          <Grid item sm={5} xs={12}>
             <Hidden smUp>
               <Typography variant="h4" component="p" align="center" gutterBottom m={0}>{coffee.title}</Typography>
             </Hidden>
@@ -61,19 +61,19 @@ const Product = ({ firebase }) => {
               </ImageContentContainer>
             </ImageContainer>
           </Grid>
-          <Grid item sm={6} xs={12}>
+          <Grid item sm={5} xs={12}>
             <Hidden xsDown>
-              {coffee.title && <Typography gutterBottom variant="h4" component="p" align="left" m={0}>{coffee.title}</Typography>}
+              {coffee.title && <Typography variant="h4" component="p" align="left" m={0}>{coffee.title}</Typography>}
             </Hidden>
-            {coffee.siteName && <Typography gutterBottom component="p"><strong>Brand: </strong>{coffee.siteName}</Typography>}
-            {coffee.price && <Typography gutterBottom component="p"><strong>Price: $</strong>{coffee.price}</Typography>}
-            {coffee.roastType && <Typography gutterBottom component="p" style={{textTransform: 'capitalize'}}><strong>Roast Type: </strong>{coffee.roastType}</Typography>}
+            {coffee.siteName && <Typography variant="h6" component="p" gutterBottom>{coffee.siteName}</Typography>}
+            {coffee.price && <Typography gutterBottom component="p">${coffee.price}</Typography>}
+            {coffee.roastType && <Typography gutterBottom component="p" style={{textTransform: 'capitalize'}}>{coffee.roastType} Roast</Typography>}
             {coffee.countries && <Typography gutterBottom component="p"><strong>Countries: </strong>{coffee.countries.join(', ')}</Typography>}
             {coffee.fairTrade && <Typography gutterBottom component="p"><strong>Fair Trade? </strong>Yes</Typography>}
-            {coffee.organic && <Typography gutterBottom component="p"><strong>Organic? </strong>Yes</Typography>}
-            {coffee.shadeGrown && <Typography gutterBottom component="p"><strong>Shade Grown? </strong>Yes</Typography>}
-            {coffee.singleOrigin && <Typography gutterBottom component="p"><strong>Single Origin? </strong>Yes</Typography>}
-            {coffee.blend && <Typography gutterBottom component="p"><strong>Blend? </strong>Yes</Typography>}
+            {coffee.organic && <Typography gutterBottom component="p">Organic</Typography>}
+            {coffee.shadeGrown && <Typography gutterBottom component="p">Shade Grown</Typography>}
+            {coffee.singleOrigin && <Typography gutterBottom component="p">Single Origin</Typography>}
+            {coffee.blend && <Typography gutterBottom component="p"></Typography>}
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Button fullWidth variant="outlined" color="primary" onClick={() => onFavoriteClick(coffee.uid)}>Add To List</Button>
