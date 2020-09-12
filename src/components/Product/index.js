@@ -3,18 +3,34 @@ import { useParams } from "react-router-dom";
 import { withFirebase } from '../Firebase/context'
 
 import { Wrapper } from './style'
-import { Image } from '../Search/style'
+import { ImageContainer, ImageContentContainer } from '../Search/style'
 
-import { Grid } from '@material-ui/core'
+import { Grid, Hidden, Button, Typography, Link } from '@material-ui/core'
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const Product = ({ firebase }) => {
   let { id } = useParams()
   const [coffee, setCoffee] = useState()
   const [loading, setLoading] = useState(false)
+  const [open, setOpen] = useState(false);
 
   const onFavoriteClick = (coffeeId) => {
     firebase.userCoffees(firebase.auth.currentUser.uid, coffeeId).set(true)
+    setOpen(true);
   }
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
   
   useEffect(() => {
     setLoading(true)
@@ -33,29 +49,53 @@ const Product = ({ firebase }) => {
     return <p>Loading...</p>
   }
   return (
-    <Wrapper>
-      <Grid container>
-        <Grid item md={7} sm={12}>
-          <Image src={coffee.imageUrl} />
+    <Wrapper style={{padding: '10px'}}>
+        <Grid container spacing={5} justify="center">
+          <Grid item sm={6} xs={12}>
+            <Hidden smUp>
+              <Typography variant="h4" component="p" align="center" gutterBottom m={0}>{coffee.title}</Typography>
+            </Hidden>
+            <ImageContainer>
+              <ImageContentContainer>
+                <img onError={(e) => e.target.src = "https://freepikpsd.com/wp-content/uploads/2019/10/coffee-bag-png-7-Transparent-Images.png"} src={coffee.imageUrl} alt={coffee.title} />
+              </ImageContentContainer>
+            </ImageContainer>
+          </Grid>
+          <Grid item sm={6} xs={12}>
+            <Hidden xsDown>
+              {coffee.title && <Typography gutterBottom variant="h4" component="p" align="left" m={0}>{coffee.title}</Typography>}
+            </Hidden>
+            {coffee.siteName && <Typography gutterBottom component="p"><strong>Brand: </strong>{coffee.siteName}</Typography>}
+            {coffee.price && <Typography gutterBottom component="p"><strong>Price: $</strong>{coffee.price}</Typography>}
+            {coffee.roastType && <Typography gutterBottom component="p" style={{textTransform: 'capitalize'}}><strong>Roast Type: </strong>{coffee.roastType}</Typography>}
+            {coffee.countries && <Typography gutterBottom component="p"><strong>Countries: </strong>{coffee.countries.join(', ')}</Typography>}
+            {coffee.fairTrade && <Typography gutterBottom component="p"><strong>Fair Trade? </strong>Yes</Typography>}
+            {coffee.organic && <Typography gutterBottom component="p"><strong>Organic? </strong>Yes</Typography>}
+            {coffee.shadeGrown && <Typography gutterBottom component="p"><strong>Shade Grown? </strong>Yes</Typography>}
+            {coffee.singleOrigin && <Typography gutterBottom component="p"><strong>Single Origin? </strong>Yes</Typography>}
+            {coffee.blend && <Typography gutterBottom component="p"><strong>Blend? </strong>Yes</Typography>}
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Button fullWidth variant="outlined" color="primary" onClick={() => onFavoriteClick(coffee.uid)}>Add To List</Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Link underline="none" href={`${coffee.url}`}>
+                  <Button fullWidth variant="outlined" color="primary">Buy on {coffee.siteName}</Button>
+                </Link>
+              </Grid>
+              <Grid item xs={12}>
+                <Link underline="none" href={`/tasting/${coffee.title.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${coffee.uid}`}>
+                  <Button fullWidth variant="outlined" color="primary">Begin Tasting</Button>
+                </Link>
+              </Grid>
+            </Grid>
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+              <Alert onClose={handleClose} severity="success">
+                {coffee.title} has been added to your list!
+              </Alert>
+            </Snackbar>
+          </Grid>
         </Grid>
-        <Grid style={{padding: '0 20px'}} item md={5} sm={12}>
-          <p style={{fontWeight: 'bold', padding: '10px 0', margin: '0', fontSize: '2.5rem'}}>{coffee.title}</p>
-          <p style={{fontSize: '1rem'}}>{coffee.siteName}</p>
-          <p>{`Price: $${coffee.price}`}</p>
-          <p style={{textTransform: 'capitalize'}}>{coffee.roastType && `${coffee.roastType} roast`}</p>
-          <p>{coffee.countries && `Countries: ${coffee.countries.join(',')}`}</p>
-          <p>{`Fair Trade: ${coffee.fairTrade ? 'Yes' : 'No'}`}</p>
-          <p>{`Organic: ${coffee.organic ? 'Yes' : 'No'}`}</p>
-          <p>{`Shade Grown: ${coffee.shadeGrown ? 'Yes' : 'No'}`}</p>
-          <p>{`Single Origin: ${coffee.singleOrigin ? 'Yes' : 'No'}`}</p>
-          <p>{`Blend: ${coffee.blend ? 'Yes' : 'No'}`}</p>
-          <button onClick={() => onFavoriteClick(coffee.uid)}>Add To List</button>
-          <a href={`${coffee.url}`}>
-            <button>Buy on {coffee.siteName}</button>
-          </a>
-          {console.log(JSON.stringify(coffee))}
-        </Grid>
-      </Grid>
     </Wrapper>
   )
 }

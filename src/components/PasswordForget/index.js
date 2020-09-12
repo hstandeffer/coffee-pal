@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 import { Input, StyledDiv, StyledButton, StyledLink } from '../../shared-style';
+import Box from '@material-ui/core/Box';
 
 const PasswordForgetPage = () => (
   <StyledDiv>
@@ -41,19 +42,22 @@ class PasswordForgetFormBase extends Component {
     const { email, error } = this.state;
     const isInvalid = email === '';
     return (
-      <form onSubmit={this.onSubmit}>
-        <Input
-          name="email"
-          value={this.state.email}
-          onChange={this.onChange}
-          type="text"
-          placeholder="Email Address"
-        />
-        <StyledButton disabled={isInvalid} type="submit">
-          Reset Password
-        </StyledButton>
-        {error && <p>{error.message}</p>}
-      </form>
+      <Box p="1rem" border={1} borderColor='#ededed'>
+        <h3>Reset Password</h3>
+        <form onSubmit={this.onSubmit}>
+          <Input
+            name="email"
+            value={this.state.email}
+            onChange={this.onChange}
+            type="text"
+            placeholder="Email Address"
+          />
+          <StyledButton disabled={isInvalid} type="submit">
+            Reset Password
+          </StyledButton>
+          {error && <p>{error.message}</p>}
+        </form>
+      </Box>
     );
   }
 }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Input, StyledButton } from '../../shared-style';
 
 import { withFirebase } from '../Firebase';
+import { Box } from '@material-ui/core';
 
 const INITIAL_STATE = {
   passwordOne: '',
@@ -42,26 +43,29 @@ class PasswordChangeForm extends Component {
       passwordOne !== passwordTwo || passwordOne === '';
     
     return (
-      <form onSubmit={this.onSubmit}>
-        <Input
-          name="passwordOne"
-          value={passwordOne}
-          onChange={this.onChange}
-          type="password"
-          placeholder="New Password"
-        />
-        <Input
-          name="passwordTwo"
-          value={passwordTwo}
-          onChange={this.onChange}
-          type="password"
-          placeholder="Confirm New Password"
-        />
-        <StyledButton disabled={isInvalid} type="submit">
-          Change Password
-        </StyledButton>
-        {error && <p>{error.message}</p>}
-      </form>
+      <Box p="1rem" border={1} borderColor='#ededed'>
+        <h3>Change Password</h3>
+        <form onSubmit={this.onSubmit}>
+          <Input
+            name="passwordOne"
+            value={passwordOne}
+            onChange={this.onChange}
+            type="password"
+            placeholder="New Password"
+          />
+          <Input
+            name="passwordTwo"
+            value={passwordTwo}
+            onChange={this.onChange}
+            type="password"
+            placeholder="Confirm New Password"
+          />
+          <StyledButton disabled={isInvalid} type="submit">
+            Change Password
+          </StyledButton>
+          {error && <p>{error.message}</p>}
+        </form>
+      </Box>
     )
   }
 }

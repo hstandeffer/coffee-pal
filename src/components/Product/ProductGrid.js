@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { withFirebase } from '../Firebase'
-import { compose } from 'recompose';
 
-import { TastingWrapper, TastingDiv } from './style'
 import { FlexProductDiv, ImageContainer, ImageContentContainer, InfoContainer } from '../Search/style'
 import { ProductLink, BrowseHitsDiv, BrowseWrapper, FlexContainer } from '../Browse/style'
+import { TastingWrapper, TastingDiv } from '../Tasting/style'
 
-import { withAuthorization } from '../Session';
-
-const Tasting = ({ firebase }) => {
+const ProductGrid = ({ firebase, route, heading, subheading }) => {
   // const [search, setSearch] = useState('')
   const [coffees, setCoffees] = useState([])
   const [loading, setLoading] = useState(false)
@@ -34,14 +31,17 @@ const Tasting = ({ firebase }) => {
   }, [firebase])
 
   return (
-      <TastingWrapper>
+    <TastingWrapper>
       <TastingDiv>
+        <h1>{heading}</h1>
+        
+        <h3>{subheading}</h3>
         <BrowseWrapper>
           <BrowseHitsDiv>
             <FlexContainer>
-            {!loading ? 
+            {!loading && coffees ? 
                 coffees.map(coffee => (
-                  <CoffeeItem key={coffee.uid} coffee={coffee} />
+                  <CoffeeItem key={coffee.uid} coffee={coffee} route={route} />
                 ))
               : <h2>Loading Coffees...</h2>
             }
@@ -53,25 +53,24 @@ const Tasting = ({ firebase }) => {
   )
 }
 
-export const CoffeeItem = ({ coffee, route }) => (
-  <FlexProductDiv>
-    <ProductLink to={`/${route ? route : 'tasting'}/${coffee.title.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${coffee.uid}`}>
-      <ImageContainer>
-        <ImageContentContainer>
-          <img src={coffee.imageUrl} alt={coffee.title} />
-        </ImageContentContainer>
-      </ImageContainer>
-      <InfoContainer>
-        <div style={{height: '40px', overflow: 'hidden', fontWeight: 'bold'}}>{coffee.title}</div>
-        <div style={{margin: '5px 0'}}>${coffee.price}</div>
-        {coffee.roastType && <div style={{margin: '5px 0', textTransform: 'capitalize'}}>{coffee.roastType} roast</div>}
-      </InfoContainer>
-    </ProductLink>
-  </FlexProductDiv>
-)
+export const CoffeeItem = ({ coffee, route }) => {
+  return (
+    <FlexProductDiv>
+      <ProductLink to={`/${route ? route : 'tasting'}/${coffee.title.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${coffee.uid}`}>
+        <ImageContainer>
+          <ImageContentContainer>
+            <img src={coffee.imageUrl} alt={coffee.title} />
+          </ImageContentContainer>
+        </ImageContainer>
+        <InfoContainer>
+          <div style={{height: '40px', overflow: 'hidden', fontWeight: 'bold'}}>{coffee.title}</div>
+          <div style={{margin: '5px 0'}}>${coffee.price}</div>
+          {coffee.roastType && <div style={{margin: '5px 0', textTransform: 'capitalize'}}>{coffee.roastType} roast</div>}
+        </InfoContainer>
+      </ProductLink>
+    </FlexProductDiv>
+  )
+}
 
-const TastingPage = compose(withFirebase)(Tasting)
 
-const condition = authUser => !!authUser;
-
-export default withAuthorization(condition)(TastingPage)
+export default withFirebase(ProductGrid)

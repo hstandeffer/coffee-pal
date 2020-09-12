@@ -47,7 +47,7 @@ class App extends React.Component {
         <Route path={ROUTES.BROWSE} component={BrowsePage} />
         <Route path={ROUTES.PRODUCT} component={ProductPage} />
         <Route path={ROUTES.SEARCH} component={SearchPage} />
-        <Route exact path={ROUTES.TASTING} component={TastingPage} />
+        <Route exact path={ROUTES.TASTINGS} component={TastingPage} />
         <Route path={ROUTES.PRODUCT_TASTING} component={ProductTastingPage} />
       </Router>
     )

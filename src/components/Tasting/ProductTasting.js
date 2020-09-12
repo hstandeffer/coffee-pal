@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { withFirebase } from '../Firebase/context'
 import { StyledDiv, Wrapper, Input, StyledButton, Textarea } from '../../shared-style';
 import { BoldLabel } from './style';
+import Rating from '@material-ui/lab/rating'
 
 const ProductTasting = ({ firebase }) => {
   let { id } = useParams()
@@ -29,9 +30,19 @@ const ProductTasting = ({ firebase }) => {
     })
   }, [firebase, id])
 
-  const handleSubmit = async event => {
+  const handleSubmit = coffeeId => event => {
     event.preventDefault()
-    
+    const coffeeObj = {
+      brewMethod,
+      coffeeTemperature,
+      grindSize,
+      brewTime,
+      coffeeWeight,
+      waterWeight,
+      notes
+    }
+
+    firebase.userTastings(firebase.auth.currentUser.uid, coffeeId).push().set(coffeeObj)
   }
 
   if (loading || !coffee) {
@@ -42,9 +53,10 @@ const ProductTasting = ({ firebase }) => {
       <StyledDiv>
       <h2 style={{padding: '0 10px 40px', margin: 0}}>Tasting - {coffee.title}</h2>
         <div style={{textAlign: 'left'}}>
-          <form onSubmit={handleSubmit}>
+          {/* <form onSubmit={() => handleSubmit(coffee.uid)}> */}
+          <form onSubmit={handleSubmit(coffee.uid)}>
             <BoldLabel htmlFor="brewMethod">Brew Method</BoldLabel>
-            <Input id="brewMethod" placeholder="e.g. Aeropress, French press etc." value={brewMethod} onChange={({ target }) => setBrewMethod(target.value)} />
+            <Input id="brewMethod" required placeholder="e.g. Aeropress, French press etc." value={brewMethod} onChange={({ target }) => setBrewMethod(target.value)} />
 
             <BoldLabel htmlFor="coffeeTemperature">Coffee Temperature (F)</BoldLabel>
             <Input id="coffeeTemperature" placeholder="e.g. 205" value={coffeeTemperature} onChange={({ target }) => setCoffeeTemperature(target.value)} />
@@ -60,6 +72,8 @@ const ProductTasting = ({ firebase }) => {
 
             <BoldLabel htmlFor="waterWeight">Water Weight (g)</BoldLabel>
             <Input id="waterWeight" type="number" placeholder="e.g. 300" value={waterWeight} onChange={({ target }) => setWaterWeight(target.value)} />
+
+            <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
 
             <BoldLabel htmlFor="notes">Additional Notes</BoldLabel>
             <Textarea id="notes" value={notes} onChange={({ target }) => setNotes(target.value)} />
