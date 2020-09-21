@@ -5,8 +5,10 @@ import { compose } from 'recompose';
 import { TastingWrapper, TastingDiv } from './style'
 import { FlexProductDiv, ImageContainer, ImageContentContainer, InfoContainer } from '../Search/style'
 import { ProductLink, BrowseHitsDiv, BrowseWrapper, FlexContainer } from '../Browse/style'
+import Typography from '@material-ui/core/Typography';
 
 import { withAuthorization } from '../Session';
+import { Box } from '@material-ui/core';
 
 const Tasting = ({ firebase }) => {
   // const [search, setSearch] = useState('')
@@ -36,6 +38,10 @@ const Tasting = ({ firebase }) => {
   return (
       <TastingWrapper>
       <TastingDiv>
+        <Box p={4}>
+          <Typography variant="h3" component="h3">Coffee Tasting</Typography>
+          <Typography variant="h5" component="h5">Select from your saved coffees to get started</Typography>
+        </Box>
         <BrowseWrapper>
           <BrowseHitsDiv>
             <FlexContainer>

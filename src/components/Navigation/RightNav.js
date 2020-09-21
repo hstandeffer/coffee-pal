@@ -57,7 +57,7 @@ const authRoutes = [
   },
   {
     route: ROUTES.TASTINGS,
-    text: 'Tastings'
+    text: 'Tasting'
   },
   {
     route: ROUTES.PROFILE,

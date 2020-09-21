@@ -4,6 +4,10 @@ import { withFirebase } from '../Firebase'
 import { FlexProductDiv, ImageContainer, ImageContentContainer, InfoContainer } from '../Search/style'
 import { ProductLink, BrowseHitsDiv, BrowseWrapper, FlexContainer } from '../Browse/style'
 import { TastingWrapper, TastingDiv } from '../Tasting/style'
+import Typography from '@material-ui/core/Typography'
+import { Box, Button, Link } from '@material-ui/core'
+
+import * as ROUTES from '../../constants/routes'
 
 const ProductGrid = ({ firebase, route, heading, subheading }) => {
   // const [search, setSearch] = useState('')
@@ -33,9 +37,15 @@ const ProductGrid = ({ firebase, route, heading, subheading }) => {
   return (
     <TastingWrapper>
       <TastingDiv>
-        <h1>{heading}</h1>
-        
+        <Box pt={4}>
+          <Typography variant="h3" component="h1">{heading}</Typography>
+        </Box>
         <h3>{subheading}</h3>
+        <Box textAlign="center">
+          <Link to={ROUTES.ADD_COFFEE}>
+            <Button variant="contained" size="large" color="primary">Add New Coffee</Button>
+          </Link>
+        </Box>
         <BrowseWrapper>
           <BrowseHitsDiv>
             <FlexContainer>
