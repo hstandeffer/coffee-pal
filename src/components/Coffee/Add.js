@@ -6,8 +6,9 @@ import { Input, StyledButton } from '../../shared-style'
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import { withFirebase } from '../Firebase'
 
-const Add = () => {
+const Add = ({ firebase }) => {
   const [title, setTitle] = useState('')
   const [siteName, setSiteName] = useState('')
   const [countries, setCountries] = useState('')
@@ -20,7 +21,24 @@ const Add = () => {
   const [roastType, setRoastType] = useState('light')
 
   const handleSubmit = () => {
+    const addedBy = firebase.auth.currentUser.uid
+    const verified = false
+    const coffeeObj = {
+      title,
+      siteName,
+      countries,
+      fairTrade,
+      organic,
+      shadeGrown,
+      url,
+      imageUrl,
+      price,
+      roastType,
+      addedBy,
+      verified
+    }
 
+    firebase.coffees().push().set(coffeeObj)
   }
 
   return (
@@ -90,4 +108,4 @@ const Add = () => {
   )
 }
 
-export default Add
+export default withFirebase(Add)

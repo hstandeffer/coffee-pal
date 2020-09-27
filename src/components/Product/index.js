@@ -19,7 +19,7 @@ const Product = ({ firebase }) => {
   const [open, setOpen] = useState(false);
 
   const onFavoriteClick = (coffeeId) => {
-    firebase.userCoffees(firebase.auth.currentUser.uid, coffeeId).set(true)
+    firebase.userCoffees(firebase.auth.currentUser.uid).child(coffeeId).set(true)
     setOpen(true);
   }
 

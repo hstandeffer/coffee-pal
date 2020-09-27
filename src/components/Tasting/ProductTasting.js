@@ -6,7 +6,11 @@ import { BoldLabel } from './style';
 import Rating from '@material-ui/lab/rating'
 import { Box, Typography } from '@material-ui/core';
 
-const ProductTasting = ({ firebase }) => {
+import { withRouter } from 'react-router-dom'
+import { compose } from 'recompose'
+import * as ROUTES from '../../constants/routes'
+
+const ProductTasting = ({ history, firebase }) => {
   let { id } = useParams()
   const [coffee, setCoffee] = useState()
   const [loading, setLoading] = useState(false)
@@ -16,7 +20,7 @@ const ProductTasting = ({ firebase }) => {
   const [brewTime, setBrewTime] = useState('')
   const [coffeeWeight, setCoffeeWeight] = useState('')
   const [waterWeight, setWaterWeight] = useState('')
-  const [rating, setRating] = useState()
+  const [rating, setRating] = useState(2.5)
   const [notes, setNotes] = useState('')
   
   useEffect(() => {
@@ -35,6 +39,7 @@ const ProductTasting = ({ firebase }) => {
   const handleSubmit = coffeeId => event => {
     event.preventDefault()
     const coffeeObj = {
+      coffeeId,
       brewMethod,
       coffeeTemperature,
       grindSize,
@@ -44,8 +49,8 @@ const ProductTasting = ({ firebase }) => {
       rating,
       notes
     }
-
-    firebase.userTastings(firebase.auth.currentUser.uid, coffeeId).push().set(coffeeObj)
+    firebase.userTastings(firebase.auth.currentUser.uid).push().set(coffeeObj)
+    history.push(ROUTES.BROWSE);
   }
 
   if (loading || !coffee) {
@@ -76,7 +81,7 @@ const ProductTasting = ({ firebase }) => {
 
           <BoldLabel htmlFor="rating">Rating</BoldLabel>
           <Box my={2}>
-            <Rating id="rating" value={rating} onChange={({ value }) => setRating(value)} name="half-rating" defaultValue={2.5} precision={0.5} />
+            <Rating id="rating" value={rating} onChange={({ target }) => setRating(Number(target.value))} name="half-rating" defaultValue={2.5} precision={0.5} />
           </Box>
 
           <BoldLabel htmlFor="notes">Additional Notes</BoldLabel>
@@ -89,4 +94,9 @@ const ProductTasting = ({ firebase }) => {
   )
 }
 
-export default withFirebase(ProductTasting)
+const ProductTastingPage = compose(
+  withRouter,
+  withFirebase,
+)(ProductTasting)
+
+export default ProductTastingPage

@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography';
 
 import { withAuthorization } from '../Session';
 import { Box } from '@material-ui/core';
+import { Link } from 'react-router-dom'
+import * as ROUTES from '../../constants/routes'
 
 const Tasting = ({ firebase }) => {
   // const [search, setSearch] = useState('')
@@ -20,17 +22,19 @@ const Tasting = ({ firebase }) => {
     
     firebase.userCoffees(firebase.auth.currentUser.uid).once('value')
       .then((snapshot) => {
-        const coffeeIdsObject = snapshot.val()
-        const coffeeIdsList = Object.keys(coffeeIdsObject).map(key => ({
-          ...coffeeIdsObject[key],
-          uid: key,
-        }))
-        coffeeIdsList.forEach((item) => {
-          firebase.coffee(item.uid).once('value')
-            .then((snapshot) => {
-              setCoffees(c => c.concat({...snapshot.val(), uid: item.uid})) // functional update using previous value to update
-            })
-        })
+        if (snapshot.exists()) {
+          const coffeeIdsObject = snapshot.val()
+          const coffeeIdsList = Object.keys(coffeeIdsObject).map(key => ({
+            ...coffeeIdsObject[key],
+            uid: key,
+          }))
+          coffeeIdsList.forEach((item) => {
+            firebase.coffee(item.uid).once('value')
+              .then((snapshot) => {
+                setCoffees(c => c.concat({...snapshot.val(), uid: item.uid})) // functional update using previous value to update
+              })
+          })
+        }
         setLoading(false)
       })
   }, [firebase])
@@ -45,11 +49,15 @@ const Tasting = ({ firebase }) => {
         <BrowseWrapper>
           <BrowseHitsDiv>
             <FlexContainer>
-            {!loading ? 
-                coffees.map(coffee => (
-                  <CoffeeItem key={coffee.uid} coffee={coffee} />
-                ))
-              : <h2>Loading Coffees...</h2>
+            {!loading ?
+                coffees.length === 0 ?
+                  <Box width="100%" align="center">
+                    <Typography variant="h5">No saved coffees, try adding one from the <Link to={ROUTES.BROWSE}>browse page</Link>!</Typography>
+                  </Box> :
+                  coffees.map(coffee => (
+                    <CoffeeItem key={coffee.uid} coffee={coffee} />
+                  ))
+                : <h2>Loading Coffees...</h2>
             }
             </FlexContainer>
           </BrowseHitsDiv>

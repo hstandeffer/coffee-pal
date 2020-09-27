@@ -183,7 +183,7 @@ const SearchBase = ({ firebase, filters }) => {
   }, [firebase])
 
   const onFavoriteClick = (coffeeId) => {
-    firebase.userCoffees(firebase.auth.currentUser.uid, coffeeId).set(true)
+    firebase.userCoffees(firebase.auth.currentUser.uid).child(coffeeId).set(true)
   }
 
   if (loading) {

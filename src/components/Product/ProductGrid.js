@@ -20,17 +20,19 @@ const ProductGrid = ({ firebase, route, heading, subheading }) => {
     
     firebase.userCoffees(firebase.auth.currentUser.uid).once('value')
       .then((snapshot) => {
-        const coffeeIdsObject = snapshot.val()
-        const coffeeIdsList = Object.keys(coffeeIdsObject).map(key => ({
-          ...coffeeIdsObject[key],
-          uid: key,
-        }))
-        coffeeIdsList.forEach((item) => {
-          firebase.coffee(item.uid).once('value')
-            .then((snapshot) => {
-              setCoffees(c => c.concat({...snapshot.val(), uid: item.uid})) // functional update using previous value to update
-            })
-        })
+        if (snapshot.exists()) {
+          const coffeeIdsObject = snapshot.val()
+          const coffeeIdsList = Object.keys(coffeeIdsObject).map(key => ({
+            ...coffeeIdsObject[key],
+            uid: key,
+          }))
+          coffeeIdsList.forEach((item) => {
+            firebase.coffee(item.uid).once('value')
+              .then((snapshot) => {
+                setCoffees(c => c.concat({...snapshot.val(), uid: item.uid})) // functional update using previous value to update
+              })
+          })
+        }
         setLoading(false)
       })
   }, [firebase])
@@ -50,11 +52,15 @@ const ProductGrid = ({ firebase, route, heading, subheading }) => {
         <BrowseWrapper>
           <BrowseHitsDiv>
             <FlexContainer>
-            {!loading && coffees ? 
-                coffees.map(coffee => (
-                  <CoffeeItem key={coffee.uid} coffee={coffee} route={route} />
-                ))
-              : <h2>Loading Coffees...</h2>
+            {!loading ?
+                coffees.length === 0 ?
+                  <Box width="100%" align="center">
+                    <Typography variant="h5">No saved coffees, try adding one from the <Link to={ROUTES.BROWSE}>browse page</Link>!</Typography>
+                  </Box> :
+                  coffees.map(coffee => (
+                    <CoffeeItem key={coffee.uid} coffee={coffee} route={route} />
+                  ))
+                : <h2>Loading Coffees...</h2>
             }
             </FlexContainer>
           </BrowseHitsDiv>
