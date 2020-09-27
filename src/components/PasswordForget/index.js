@@ -3,6 +3,7 @@ import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 import { Input, StyledDiv, StyledButton, StyledLink } from '../../shared-style';
 import Box from '@material-ui/core/Box';
+import { Typography } from '@material-ui/core';
 
 const PasswordForgetPage = () => (
   <StyledDiv>
@@ -43,7 +44,7 @@ class PasswordForgetFormBase extends Component {
     const isInvalid = email === '';
     return (
       <Box p="1rem" border={1} borderColor='#ededed'>
-        <h3>Reset Password</h3>
+        <Typography variant="h6" component="p">Reset Password</Typography>
         <form onSubmit={this.onSubmit}>
           <Input
             name="email"

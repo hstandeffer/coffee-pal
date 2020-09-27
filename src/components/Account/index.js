@@ -1,5 +1,5 @@
 import React from 'react';
-import { Wrapper, StyledDiv } from '../../shared-style';
+import { Wrapper } from '../../shared-style';
 import { PasswordForgetForm } from '../PasswordForget';
 import PasswordChangeForm from '../PasswordChange';
 import { withAuthorization, AuthUserContext } from '../Session';
@@ -10,16 +10,15 @@ const AccountPage = () => (
   <AuthUserContext.Consumer>
     {authUser => (
       <Wrapper>
-        <StyledDiv>
+        <Box maxWidth="480px" py="1rem" px="2.5rem" mb="2.5rem" mx="auto" textAlign="center" border="1px solid #d9e7ea" borderRadius="4px">
           <Typography variant="h4" component="h2">Account Settings</Typography>
-          <Typography variant="h5" component="p">{authUser.email}</Typography>
-          <Box mt="1rem" mb='3rem'>
+          <Box mt="1rem" mb='2rem'>
             <PasswordForgetForm />
           </Box>
-          <Box mt="1rem" mb='3rem'>
+          <Box mt="1rem">
             <PasswordChangeForm />
           </Box>
-        </StyledDiv>
+        </Box>
       </Wrapper>
     )}
   </AuthUserContext.Consumer>  

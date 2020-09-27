@@ -5,7 +5,8 @@ import { FlexProductDiv, ImageContainer, ImageContentContainer, InfoContainer } 
 import { ProductLink, BrowseHitsDiv, BrowseWrapper, FlexContainer } from '../Browse/style'
 import { TastingWrapper, TastingDiv } from '../Tasting/style'
 import Typography from '@material-ui/core/Typography'
-import { Box, Button, Link } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
+import { Link } from 'react-router-dom';
 
 import * as ROUTES from '../../constants/routes'
 
@@ -42,8 +43,8 @@ const ProductGrid = ({ firebase, route, heading, subheading }) => {
         </Box>
         <h3>{subheading}</h3>
         <Box textAlign="center">
-          <Link to={ROUTES.ADD_COFFEE}>
-            <Button variant="contained" size="large" color="primary">Add New Coffee</Button>
+          <Link style={{textDecoration: 'none'}} to={ROUTES.ADD_COFFEE}>
+            <Button variant="outlined" size="large" color="primary">Add New Coffee</Button>
           </Link>
         </Box>
         <BrowseWrapper>

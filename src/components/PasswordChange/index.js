@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Input, StyledButton } from '../../shared-style';
 
 import { withFirebase } from '../Firebase';
-import { Box } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 
 const INITIAL_STATE = {
   passwordOne: '',
@@ -44,7 +44,7 @@ class PasswordChangeForm extends Component {
     
     return (
       <Box p="1rem" border={1} borderColor='#ededed'>
-        <h3>Change Password</h3>
+      <Typography variant="h6" component="p">Update Password</Typography>
         <form onSubmit={this.onSubmit}>
           <Input
             name="passwordOne"
