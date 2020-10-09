@@ -38,7 +38,7 @@ const Add = ({ firebase }) => {
       verified
     }
 
-    firebase.coffees().push().set(coffeeObj)
+    firebase.userAddedCoffees().push().set(coffeeObj)
   }
 
   return (
