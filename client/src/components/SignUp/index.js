@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import { withRouter, Redirect } from 'react-router-dom';
-import { compose } from 'recompose';
+import React, { useState, useContext } from 'react';
+import { Redirect } from 'react-router-dom';
 import { withAuthorization } from '../Session';
 import { StyledH1, Wrapper, Input, StyledDiv, StyledButton, StyledLink } from '../../shared-style';
+import AuthUserContext from '../Session/context'
 
 import axios from 'axios'
 
-import { withFirebase } from '../Firebase'
 import * as ROUTES from '../../constants/routes';
 
 const SignUpPage = () => (
@@ -18,7 +17,9 @@ const SignUpPage = () => (
   </Wrapper>
 );
 
-const SignUpFormBase = (props) => {
+const SignUpForm = () => {
+  const authUserContext = useContext(AuthUserContext)
+
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -37,9 +38,8 @@ const SignUpFormBase = (props) => {
 
     axios.post('/api/users', newUser)
       .then(authUser => {
-        console.log(authUser)
-        props.setUser(authUser)
-        return <Redirect to={ROUTES.BROWSE} />
+        authUserContext.login(authUser.data.token)
+        return (<Redirect to={ROUTES.BROWSE} />)
       })
       .catch(error => {
         setError(error)
@@ -69,14 +69,14 @@ const SignUpFormBase = (props) => {
         placeholder="Email Address"
       />
       <Input
-        name="passwordOne"
+        name="password"
         value={password}
         onChange={({ target }) => setPassword(target.value)}
         type="password"
         placeholder="Password"
       />
       <Input
-        name="passwordTwo"
+        name="confirmPassword"
         value={confirmPassword}
         onChange={({ target }) => setConfirmPassword(target.value)}
         type="password"
@@ -93,13 +93,8 @@ const SignUpLink = () => (
   <p>Don't have an account? <StyledLink to={ROUTES.SIGN_UP}>Sign Up</StyledLink></p>
 )
 
-const SignUpForm = compose(
-  withRouter,
-  withFirebase,
-)(SignUpFormBase);
-
 const condition = () => 'public'
 
 export default withAuthorization(condition)(SignUpPage)
 
-export { SignUpForm, SignUpLink }
+export { SignUpLink }

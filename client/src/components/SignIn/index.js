@@ -1,96 +1,74 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import { compose } from 'recompose';
-import { withAuthorization } from '../Session';
+import React, { useState, useContext } from 'react';
+import { Redirect } from 'react-router-dom';
+import { withAuthorization, AuthUserContext } from '../Session';
 import { StyledH1, Wrapper, Input, StyledDiv, StyledButton } from '../../shared-style';
 
 import { SignUpLink } from '../SignUp'
-import { PasswordForgetLink } from '../PasswordForget';
-import { withFirebase } from '../Firebase'
+// import { PasswordForgetLink } from '../PasswordForget';
 import * as ROUTES from '../../constants/routes';
+import axios from 'axios';
 
 const SignInPage = () => (
   <Wrapper>
     <StyledDiv>
       <StyledH1>Login</StyledH1>
       <SignInForm />
-      <PasswordForgetLink />
+      {/* <PasswordForgetLink /> */}
       <SignUpLink />
     </StyledDiv>
   </Wrapper>
-);
+)
 
-const INITIAL_STATE = {
-  email: '',
-  password: '',
-  error: null, 
-};
+const SignInForm = () => {
+  const authUserContext = useContext(AuthUserContext)
 
-class SignInFormBase extends Component {
-  constructor(props) {
-    super(props);
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState(null)
 
-    this.state = { ...INITIAL_STATE };
-  }
+  const handleSubmit = event => {
+    event.preventDefault()
 
-  onSubmit = event => {
-    const { email, password } = this.state;
+    const user = {
+      email,
+      password
+    }
 
-    this.props.firebase
-      .doSignInWithEmailAndPassword(email, password)
-      .then(() => {
-        this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.BROWSE);
+    axios.post('/api/auth', user)
+      .then(authUser => {
+        authUserContext.login(authUser.data.token)
+        return (<Redirect to={ROUTES.BROWSE} />)
       })
       .catch(error => {
-        this.setState({ error });
-      });
-
-    event.preventDefault();
-  };
-
-  onChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  render() {
-    const {
-      email,
-      password,
-      error
-    } = this.state;
-
-    const isInvalid = password === '' || email === '';
-
-    return (
-      <form onSubmit={this.onSubmit}>
-        <Input
-          name="email"
-          value={email}
-          onChange={this.onChange}
-          type="text"
-          placeholder="Email Address"
-        />
-        <Input
-          name="password"
-          value={password}
-          onChange={this.onChange}
-          type="password"
-          placeholder="Password"
-        />
-        <StyledButton disabled={isInvalid} type="submit">Sign In</StyledButton>
-
-        {error && <p>{error.message}</p>}
-      </form>
-    );
+        setError(error)
+      })
   }
+
+  const isInvalid = password === '' || email === ''
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <Input
+        name="email"
+        value={email}
+        onChange={({ target }) => setEmail(target.value)}
+        type="text"
+        placeholder="Email Address"
+      />
+      <Input
+        name="password"
+        value={password}
+        onChange={({ target }) => setPassword(target.value)}
+        type="password"
+        placeholder="Password"
+      />
+      <StyledButton disabled={isInvalid} type="submit">Sign In</StyledButton>
+
+      {error && <p className={{ color: 'red' }}>{error.message}</p>}
+    </form>
+  )
+
 }
-
-
-const SignInForm = compose(
-  withRouter,
-  withFirebase,
-)(SignInFormBase);
   
 const condition = () => 'public'
 

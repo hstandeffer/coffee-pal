@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import * as ROUTES from '../../constants/routes'
 import { Link } from 'react-router-dom'
 import StyledButton from '../SignOut'
+import AuthUserContext from '../Session/context'
 
 const StyledLink = styled(Link)`
   text-decoration: none;
@@ -69,8 +70,9 @@ const authRoutes = [
   }
 ]
 
-const RightNav = ({ open, authUser, onClick, closeMenu }) => {
-  const routeList = authUser ? authRoutes : nonAuthRoutes
+const RightNav = ({ open, closeMenu }) => {
+  const authContext = useContext(AuthUserContext)
+  const routeList = authContext.isLoggedIn ? authRoutes : nonAuthRoutes
   return (
     <Ul open={open}>
       {routeList.map((obj) => (
@@ -78,7 +80,7 @@ const RightNav = ({ open, authUser, onClick, closeMenu }) => {
           <StyledLink open={open} onClick={closeMenu} to={obj.route}>{obj.text}</StyledLink>
         </li>
       ))}
-      {authUser ? <li><StyledButton open={open} closeMenu={closeMenu} /></li> : null}
+      {authContext.isLoggedIn ? <li><StyledButton open={open} closeMenu={closeMenu} /></li> : null}
     </Ul>
   )
 }

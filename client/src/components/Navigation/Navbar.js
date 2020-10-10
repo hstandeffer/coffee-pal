@@ -31,7 +31,7 @@ const Nav = styled.nav`
   }
 `
 
-const Navbar = ({ authUser }) => {
+const Navbar = () => {
   return (
     <Nav>
       <div className="logo">
@@ -39,7 +39,7 @@ const Navbar = ({ authUser }) => {
           baroasta
         </StyledLink>
       </div>
-      <Burger authUser={authUser} />
+      <Burger />
     </Nav>
   )
 }

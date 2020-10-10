@@ -26,25 +26,19 @@ usersRouter.post('/', (request, response) => {
           if (err) throw err
 
           newUser.password = hash
-          console.log(newUser)
           newUser.save()
           .then(user => {
-            jwt.sign(
-              { id: user.id },
-              config.JWT_SECRET,
-              { expiresIn: 3600 },
-              (err, token) => {
-                if (err) throw err;
-                return response.json({
-                  token,
-                  user: {
-                    id: user.id,
-                    name: user.username,
-                    email: user.email
-                  }
-                })
-              }
-            )
+            jwt.sign({ id: user.id }, config.JWT_SECRET, { expiresIn: 3600 }, (err, token) => {
+              if (err) throw err;
+              response.json({
+                token,
+                user: {
+                  id: user.id,
+                  name: user.username,
+                  email: user.email
+                }
+              })
+            })
           })
         })
       })
