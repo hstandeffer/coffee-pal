@@ -1,49 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react'
 
-import AuthUserContext from './context';
-import { withFirebase } from '../Firebase';
+import AuthUserContext from './context'
 
-const withAuthentication = Component => {
-  class withAuthentication extends React.Component {
-    constructor(props) {
-      super(props);
-  
-      this.state = {
-        authUser: null,
-        loaded: false
-      };
-    }
+const withAuthentication = Component => props => {
+  const [authUser, setAuthUser] = useState(null)
 
-    componentDidMount() {
-      this.listener = this.props.firebase.onAuthUserListener(
-        authUser => { // this is the "next" callback function passed to the firebase class, passing in authUser when state changes
-          this.setState({ authUser })
-          this.setState({ loaded: true})
-        },
-        () => { // this is the "fallback" callback function passed to the firebase class, setting authUser to null when state changes
-          this.setState({ authUser: null })
-          this.setState({ loaded: true})
-        }
-      )
-    }
-  
-    componentWillUnmount() {
-      this.listener();
-    }
-
-    render() {
-      if (!this.state.loaded) {
-        return null
-      }
-      
-      return (
-        <AuthUserContext.Provider value={this.state.authUser}>
-          <Component {...this.props} />
-        </AuthUserContext.Provider>
-      );
-    }
+  const setUser = (newUser) => {
+    setAuthUser(newUser)
   }
-  return withFirebase(withAuthentication);
+    
+  return (
+    <AuthUserContext.Provider value={authUser}>
+      <Component {...props} setUser={(newUser) => setUser(newUser)} />
+    </AuthUserContext.Provider>
+  )
 }
 
-export default withAuthentication;
+export default withAuthentication

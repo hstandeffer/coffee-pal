@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import React, { useState } from 'react';
+import { withRouter, Redirect } from 'react-router-dom';
 import { compose } from 'recompose';
 import { withAuthorization } from '../Session';
-import { Wrapper, Input, StyledDiv, StyledButton, StyledLink } from '../../shared-style';
+import { StyledH1, Wrapper, Input, StyledDiv, StyledButton, StyledLink } from '../../shared-style';
+
+import axios from 'axios'
 
 import { withFirebase } from '../Firebase'
 import * as ROUTES from '../../constants/routes';
@@ -10,115 +12,81 @@ import * as ROUTES from '../../constants/routes';
 const SignUpPage = () => (
   <Wrapper>
     <StyledDiv>
-      <h1>Sign Up</h1>
+      <StyledH1>Sign Up</StyledH1>
       <SignUpForm />
     </StyledDiv>
   </Wrapper>
 );
 
-const INITIAL_STATE = {
-  username: '',
-  email: '',
-  passwordOne: '',
-  passwordTwo: '',
-  experience: '',
-  favoriteBrewingMethod: '',
-  favoriteRoastType: '',
-  drinkOfChoice: '',
-  error: null,
-};
+const SignUpFormBase = (props) => {
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [error, setError] = useState('')
+  
 
-class SignUpFormBase extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = { ...INITIAL_STATE };
-  }
-
-  onSubmit = event => {
-    const { username, email, passwordOne } = this.state;
-
-    this.props.firebase
-      .doCreateUserWithEmailAndPassword(email, passwordOne)
-      .then(authUser => {
-        return this.props.firebase
-          .user(authUser.user.uid)
-          .set({
-            username,
-            email,
-          });
-      })
-      .then(() => {
-        this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.BROWSE);
-      })
-      .catch(error => {
-        this.setState({ error });
-      });
-      
-
+  const handleSubmit = event => {
     event.preventDefault();
-  };
 
-  onChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  onChangeCheckbox = event => {
-    this.setState({ [event.target.name]: event.target.checked });
-  };
-
-  render() {
-    const {
+    const newUser = {
       username,
       email,
-      passwordOne,
-      passwordTwo,
-      error
-    } = this.state;
+      password
+    }
 
-    const isInvalid = 
-      passwordOne !== passwordTwo ||
-      passwordOne === '' ||
-      email === '' ||
-      username === ''
+    axios.post('/api/users', newUser)
+      .then(authUser => {
+        console.log(authUser)
+        props.setUser(authUser)
+        return <Redirect to={ROUTES.BROWSE} />
+      })
+      .catch(error => {
+        setError(error)
+      })  
+  };
 
-    return (
-      <form onSubmit={this.onSubmit}>
-        <Input
-          name="username"
-          value={username}
-          onChange={this.onChange}
-          type="text"
-          placeholder="Username"
-        />
-        <Input
-          name="email"
-          value={email}
-          onChange={this.onChange}
-          type="text"
-          placeholder="Email Address"
-        />
-        <Input
-          name="passwordOne"
-          value={passwordOne}
-          onChange={this.onChange}
-          type="password"
-          placeholder="Password"
-        />
-        <Input
-          name="passwordTwo"
-          value={passwordTwo}
-          onChange={this.onChange}
-          type="password"
-          placeholder="Confirm Password"
-        />
-        <StyledButton disabled={isInvalid} type="submit">Sign Up</StyledButton> 
+  const isInvalid = 
+    password !== confirmPassword ||
+    password === '' ||
+    email === '' ||
+    username === ''
 
-        {error && <p>{error.message}</p>}
-      </form>
-    );
-  }
+  return (
+    <form onSubmit={handleSubmit}>
+      <Input
+        name="username"
+        value={username}
+        onChange={({ target }) => setUsername(target.value)}
+        type="text"
+        placeholder="Username"
+      />
+      <Input
+        name="email"
+        value={email}
+        onChange={({ target }) => setEmail(target.value)}
+        type="text"
+        placeholder="Email Address"
+      />
+      <Input
+        name="passwordOne"
+        value={password}
+        onChange={({ target }) => setPassword(target.value)}
+        type="password"
+        placeholder="Password"
+      />
+      <Input
+        name="passwordTwo"
+        value={confirmPassword}
+        onChange={({ target }) => setConfirmPassword(target.value)}
+        type="password"
+        placeholder="Confirm Password"
+      />
+      <StyledButton disabled={isInvalid} type="submit">Sign Up</StyledButton> 
+
+      {error && <p>{error.message}</p>}
+    </form>
+  );
 }
 
 const SignUpLink = () => (
