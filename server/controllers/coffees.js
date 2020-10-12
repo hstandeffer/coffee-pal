@@ -1,0 +1,40 @@
+const coffeesRouter = require('express').Router()
+const Coffee = require('../models/user')
+
+coffeesRouter.get('/', (request, response) => {
+  Coffee.find({})
+    .then(coffees => {
+      return response.json(coffees)
+    })
+})
+
+coffeesRouter.get('/:id', (request, resoonse) => {
+  Coffee.findById(request.params.id)
+    .then(coffee => {
+      response.json(coffee.toJSON())
+    })
+    .catch(err => {
+      response.status(404).json({ msg: err })
+    })
+})
+
+coffeesRouter.post('/', (request, response) => {
+  const newCoffee = new Coffee({
+    countries: request.body.countries,
+    currency: request.body.currency,
+    description: request.body.description,
+    fairTrade: request.body.fairTrade,
+    imageUrl: request.body.imageUrl,
+    organic: request.body.organic,
+    price: request.body.price,
+    roastType: request.body.roastType,
+    shadeGrown: request.body.shadeGrown,
+    siteName: request.body.siteName,
+    title: request.body.title,
+    url: request.body.url,
+  })
+
+  newCoffee.save().then(coffee => response.json(coffee.toJSON()))
+})
+
+module.exports = coffeesRouter
