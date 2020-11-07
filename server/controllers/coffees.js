@@ -1,14 +1,14 @@
 const coffeesRouter = require('express').Router()
-const Coffee = require('../models/user')
+const Coffee = require('../models/Coffee')
 
 coffeesRouter.get('/', (request, response) => {
   Coffee.find({})
     .then(coffees => {
-      return response.json(coffees)
+      return response.json(coffees.map(coffee => coffee.toJSON()))
     })
 })
 
-coffeesRouter.get('/:id', (request, resoonse) => {
+coffeesRouter.get('/:id', (request, response) => {
   Coffee.findById(request.params.id)
     .then(coffee => {
       response.json(coffee.toJSON())

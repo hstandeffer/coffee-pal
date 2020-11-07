@@ -10,6 +10,9 @@ import { withRouter } from 'react-router-dom'
 import { compose } from 'recompose'
 import * as ROUTES from '../../constants/routes'
 
+import coffeeService from '../../services/coffee'
+import tastingService from '../../services/tasting'
+
 const ProductTasting = ({ history, firebase }) => {
   let { id } = useParams()
   const [coffee, setCoffee] = useState()
@@ -24,19 +27,16 @@ const ProductTasting = ({ history, firebase }) => {
   const [notes, setNotes] = useState('')
   
   useEffect(() => {
-    setLoading(true)
-    firebase.coffee(id).once('value', snapshot => {
-      if (snapshot.val()) {
-        const coffeeObject = snapshot.val()
-        coffeeObject['uid'] = snapshot.key
-        
-        setCoffee(coffeeObject)
-        setLoading(false)
-      }
-    })
-  }, [firebase, id])
+    const fetchCoffee = async () => {
+      setLoading(true)
+      const coffeeObject = await coffeeService.get(id)
+      setCoffee(coffeeObject)
+      setLoading(false)
+    }
+    fetchCoffee()
+  }, [id])
 
-  const handleSubmit = coffeeId => event => {
+  const handleSubmit = async (coffeeId, event) => {
     event.preventDefault()
     const coffeeObj = {
       coffeeId,
@@ -49,7 +49,9 @@ const ProductTasting = ({ history, firebase }) => {
       rating,
       notes
     }
-    firebase.userTastings(firebase.auth.currentUser.uid).push().set(coffeeObj)
+
+    tastingService.add(coffeeObj)
+
     history.push(ROUTES.BROWSE);
   }
 

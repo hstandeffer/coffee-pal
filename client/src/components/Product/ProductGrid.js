@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { withFirebase } from '../Firebase'
+import userService from '../../services/user'
+import withAuthorization from '../Session/withAuthorization'
 
 import { FlexProductDiv, ImageContainer, ImageContentContainer, InfoContainer } from '../Search/style'
 import { ProductLink, BrowseHitsDiv, BrowseWrapper, FlexContainer } from '../Browse/style'
@@ -13,12 +14,16 @@ import * as ROUTES from '../../constants/routes'
 const ProductGrid = ({ route, heading, subheading }) => {
   // const [search, setSearch] = useState('')
   const [coffees, setCoffees] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    setLoading(true)
-
-    setLoading(false)
+    const getSavedCoffees = async () => {
+      setLoading(true)
+      const response = await userService.getSavedCoffees()
+      setCoffees(response)
+      setLoading(false)
+    }
+    getSavedCoffees() // needs to instead call the coffee service and only get ones with matching user id
   }, [])
 
   return (
@@ -31,13 +36,13 @@ const ProductGrid = ({ route, heading, subheading }) => {
         <BrowseWrapper>
           <BrowseHitsDiv>
             <FlexContainer>
-            {!loading ?
+            {!loading && coffees ?
                 coffees.length === 0 ?
                   <Box width="100%" align="center">
                     <Typography variant="h5">No saved coffees, try adding one from the <Link to={ROUTES.BROWSE}>browse page</Link>!</Typography>
                   </Box> :
                   coffees.map(coffee => (
-                    <CoffeeItem key={coffee.uid} coffee={coffee} route={route} />
+                    <CoffeeItem key={coffee.id} coffee={coffee} route={route} />
                   ))
                 : <h2>Loading Coffees...</h2>
             }
@@ -52,7 +57,7 @@ const ProductGrid = ({ route, heading, subheading }) => {
 export const CoffeeItem = ({ coffee, route }) => {
   return (
     <FlexProductDiv>
-      <ProductLink to={`/${route ? route : 'tasting'}/${coffee.title.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${coffee.uid}`}>
+      {/* <ProductLink to={`/${route ? route : 'tasting'}/${coffee.title.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${coffee.id}`}>
         <ImageContainer>
           <ImageContentContainer>
             <img src={coffee.imageUrl} alt={coffee.title} />
@@ -63,10 +68,11 @@ export const CoffeeItem = ({ coffee, route }) => {
           <div style={{margin: '5px 0'}}>${coffee.price}</div>
           {coffee.roastType && <div style={{margin: '5px 0', textTransform: 'capitalize'}}>{coffee.roastType} roast</div>}
         </InfoContainer>
-      </ProductLink>
+      </ProductLink> */}
     </FlexProductDiv>
   )
 }
 
+const condition = authUser => !!authUser;
 
-export default withFirebase(ProductGrid)
+export default withAuthorization(condition)(ProductGrid)

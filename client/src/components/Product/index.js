@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from "react-router-dom";
-import { withFirebase } from '../Firebase/context'
+import coffeeService from '../../services/coffee'
+import userService from '../../services/user'
 
 import { ImageContainer, ImageContentContainer } from '../Search/style'
 
@@ -12,14 +13,14 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const Product = ({ firebase }) => {
+const Product = () => {
   let { id } = useParams()
   const [coffee, setCoffee] = useState()
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false);
 
   const onFavoriteClick = (coffeeId) => {
-    firebase.userCoffees(firebase.auth.currentUser.uid).child(coffeeId).set(true)
+    userService.saveCoffee(coffeeId)
     setOpen(true);
   }
 
@@ -32,17 +33,14 @@ const Product = ({ firebase }) => {
   };
   
   useEffect(() => {
-    setLoading(true)
-    firebase.coffee(id).once('value', snapshot => {
-      if (snapshot.val()) {
-        const coffeeObject = snapshot.val()
-        coffeeObject['uid'] = snapshot.key
-        
-        setCoffee(coffeeObject)
-        setLoading(false)
-      }
-    })
-  }, [firebase, id])
+    async function fetchCoffee() {
+      setLoading(true)
+      const coffeeObject = await coffeeService.get(id)
+      setCoffee(coffeeObject)
+      setLoading(false)
+    }
+    fetchCoffee()
+  }, [id])
 
   if (loading || !coffee) {
     return <p>Loading...</p>
@@ -99,4 +97,4 @@ const Product = ({ firebase }) => {
   )
 }
 
-export default withFirebase(Product);
+export default Product

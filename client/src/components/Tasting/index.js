@@ -12,32 +12,22 @@ import { Box } from '@material-ui/core';
 import { Link } from 'react-router-dom'
 import * as ROUTES from '../../constants/routes'
 
+import tastingService from '../../services/tasting'
+
 const Tasting = ({ firebase }) => {
   // const [search, setSearch] = useState('')
   const [coffees, setCoffees] = useState([])
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    setLoading(true)
-    
-    firebase.userCoffees(firebase.auth.currentUser.uid).once('value')
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          const coffeeIdsObject = snapshot.val()
-          const coffeeIdsList = Object.keys(coffeeIdsObject).map(key => ({
-            ...coffeeIdsObject[key],
-            uid: key,
-          }))
-          coffeeIdsList.forEach((item) => {
-            firebase.coffee(item.uid).once('value')
-              .then((snapshot) => {
-                setCoffees(c => c.concat({...snapshot.val(), uid: item.uid})) // functional update using previous value to update
-              })
-          })
-        }
-        setLoading(false)
-      })
-  }, [firebase])
+    const fetchTastings = async () => {
+      setLoading(true)
+      const tastings = await tastingService.getAll()
+      setCoffees(tastings)
+      setLoading(false)
+    }
+    fetchTastings()
+  }, [])
 
   return (
       <TastingWrapper>

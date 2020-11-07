@@ -17,7 +17,11 @@ const userSchema = new mongoose.Schema({
   register_date: {
     type: Date,
     default: Date.now
-  }
+  },
+  saved_coffees: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Coffee'
+  }]
 })
 
 userSchema.set('toJSON', {

@@ -13,7 +13,10 @@ import {
   ImageContainer,
   ImageContentContainer,
   InfoContainer
-} from './style';
+} from './style'
+
+import userService from '../../services/user'
+import coffeeService from '../../services/coffee'
 
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -167,23 +170,19 @@ const SearchBase = ({ firebase, filters }) => {
   }, [coffees, filters])
 
   useEffect(() => {
-    setLoading(true)
-    firebase.coffees().limitToFirst(1).once('value', snapshot => {
-      if (snapshot.exists()) {
-        const coffeeObject = snapshot.val()
-        const coffeesList = Object.keys(coffeeObject).map(key => ({
-          ...coffeeObject[key],
-          uid: key,
-        }))
-        
-        setCoffees(coffeesList)
-        setLoading(false)
-      }
-    })
-  }, [firebase])
+    const getCoffees = async () => {
+
+      setLoading(true)
+      const coffeeList = await coffeeService.getAll()
+      
+      setCoffees(coffeeList)
+      setLoading(false)
+    }
+    getCoffees()
+  }, [])
 
   const onFavoriteClick = (coffeeId) => {
-    firebase.userCoffees(firebase.auth.currentUser.uid).child(coffeeId).set(true)
+    userService.saveCoffee(coffeeId)
   }
 
   if (loading) {
@@ -199,7 +198,7 @@ const CoffeeList = ({ coffees, onFavoriteClick }) => {
   return (
     <FlexContainer>
       {coffees.map(coffee => (
-          <CoffeeItem coffee={coffee} key={coffee.uid} onFavoriteClick={onFavoriteClick} />
+          <CoffeeItem coffee={coffee} key={coffee.id} onFavoriteClick={onFavoriteClick} />
         ))}
     </FlexContainer>
   )
@@ -217,7 +216,7 @@ const CoffeeItem = ({ coffee, onFavoriteClick }) => (
       <div style={{margin: '5px 0'}}>${coffee.price}</div>
       <div style={{margin: '5px 0', textTransform: 'capitalize'}}>{coffee.roastType} roast</div>
       <div>
-        <button onClick={() => onFavoriteClick(coffee.uid)}>Favorite</button>
+        <button onClick={() => onFavoriteClick(coffee.id)}>Favorite</button>
       </div>
     </InfoContainer>
   </FlexProductDiv>
@@ -228,6 +227,6 @@ const Search = compose(
   withFirebase,
 )(SearchBase)
 
-const condition = authUser => !!authUser; //shorthand for if authUser DOES NOT EQUAL null
+const condition = authUser => !!authUser
 
 export default withAuthorization(condition)(SearchPage)

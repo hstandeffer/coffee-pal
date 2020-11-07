@@ -13,7 +13,7 @@ authRouter.post('/', (request, response) => {
 
   User.findOne({ email })
     .then(user => {
-      if (!user) return response.status(400).json({ msg: 'User does not exists' })
+      if (!user) return response.status(400).json({ msg: 'User does not exist' })
 
       bcrypt.compare(password, user.password)
         .then(isMatch => {
@@ -22,7 +22,8 @@ authRouter.post('/', (request, response) => {
           jwt.sign({ id: user.id }, config.JWT_SECRET, { expiresIn: 3600 }, (err, token) => {
             if (err) throw err
             response.json({
-              token, user: {
+              token,
+              user: {
                 id: user.id,
                 name: user.name,
                 email: user.email

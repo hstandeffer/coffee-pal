@@ -37,8 +37,8 @@ const SignUpForm = () => {
     }
 
     axios.post('/api/users', newUser)
-      .then(authUser => {
-        authUserContext.login(authUser.data.token)
+      .then(response => {
+        authUserContext.login(response.data.token)
         return (<Redirect to={ROUTES.BROWSE} />)
       })
       .catch(error => {

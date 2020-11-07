@@ -1,12 +1,12 @@
-import React, { useState, useContext } from 'react';
-import { Redirect } from 'react-router-dom';
-import { withAuthorization, AuthUserContext } from '../Session';
-import { StyledH1, Wrapper, Input, StyledDiv, StyledButton } from '../../shared-style';
+import React, { useState, useContext } from 'react'
+import { Redirect } from 'react-router-dom'
+import { withAuthorization, AuthUserContext } from '../Session'
+import { StyledH1, Wrapper, Input, StyledDiv, StyledButton } from '../../shared-style'
 
 import { SignUpLink } from '../SignUp'
-// import { PasswordForgetLink } from '../PasswordForget';
-import * as ROUTES from '../../constants/routes';
-import axios from 'axios';
+// import { PasswordForgetLink } from '../PasswordForget'
+import * as ROUTES from '../../constants/routes'
+import axios from 'axios'
 
 const SignInPage = () => (
   <Wrapper>
@@ -35,8 +35,8 @@ const SignInForm = () => {
     }
 
     axios.post('/api/auth', user)
-      .then(authUser => {
-        authUserContext.login(authUser.data.token)
+      .then(response => {
+        authUserContext.login(response.data.token)
         return (<Redirect to={ROUTES.BROWSE} />)
       })
       .catch(error => {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, Typography } from '@material-ui/core'
 import Checkbox from '@material-ui/core/Checkbox'
 import { BoldLabel } from './style'
@@ -6,9 +6,12 @@ import { Input, StyledButton } from '../../shared-style'
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import { withFirebase } from '../Firebase'
 
-const Add = ({ firebase }) => {
+import withAuthorization from '../Session/withAuthorization'
+import coffeeService from '../../services/coffee'
+import userService from '../../services/user'
+
+const Add = () => {
   const [title, setTitle] = useState('')
   const [siteName, setSiteName] = useState('')
   const [countries, setCountries] = useState('')
@@ -18,11 +21,19 @@ const Add = ({ firebase }) => {
   const [url, setUrl] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [price, setPrice] = useState('')
-  const [roastType, setRoastType] = useState('light')
+  const [roastType, setRoastType] = useState('')
 
-  const handleSubmit = () => {
-    const addedBy = firebase.auth.currentUser.uid
-    const verified = false
+  const [userId, setUserId] = useState(null)
+
+  useEffect(() => {
+    userService.getCurrentUser().then(response => {
+      setUserId(response.data)
+    }) 
+  }, [])
+
+  const handleSubmit = async event => {
+    event.preventDefault()
+    const addedBy = userId
     const coffeeObj = {
       title,
       siteName,
@@ -35,17 +46,16 @@ const Add = ({ firebase }) => {
       price,
       roastType,
       addedBy,
-      verified
     }
 
-    firebase.userAddedCoffees().push().set(coffeeObj)
+    coffeeService.add(coffeeObj)
   }
 
   return (
     <Box maxWidth="600px" p="2.5rem" my="2.5rem" mx="auto" textAlign="center" border="1px solid #d9e7ea" borderRadius="4px">
     <Typography variant="h4" component="h2" style={{padding: '0 10px 40px', margin: 0}}>Add Coffee</Typography>
       <Box textAlign="left">
-        <form onSubmit={handleSubmit()}>
+        <form onSubmit={handleSubmit}>
           <BoldLabel htmlFor="title">Coffee Name</BoldLabel>
           <Input id="title" required value={title} onChange={({ target }) => setTitle(target.value)} />
 
@@ -61,7 +71,7 @@ const Add = ({ firebase }) => {
               id="roastType"
               value={roastType}
               onChange={({ target }) => setRoastType(target.value)}
-              autoWidth
+              style={{width: '100%'}}
             >
               <MenuItem value="light">Light</MenuItem>
               <MenuItem value="medium">Medium</MenuItem>
@@ -87,14 +97,14 @@ const Add = ({ firebase }) => {
             />
 
             <FormControlLabel
-              control={<Checkbox id="organic" required checked={organic} onChange={({ target }) => setOrganic(target.checked)} />}
+              control={<Checkbox id="organic" checked={organic} onChange={({ target }) => setOrganic(target.checked)} />}
               label={"Organic"}
               labelPlacement="bottom"
               color="primary"
             />
 
             <FormControlLabel
-              control={<Checkbox id="shadeGrown" required checked={shadeGrown} onChange={({ target }) => setShadeGrown(target.checked)} />}
+              control={<Checkbox id="shadeGrown" checked={shadeGrown} onChange={({ target }) => setShadeGrown(target.checked)} />}
               label={"Shade Grown"}
               labelPlacement="bottom"
               color="primary"
@@ -108,4 +118,6 @@ const Add = ({ firebase }) => {
   )
 }
 
-export default withFirebase(Add)
+const condition = authUser => !!authUser;
+
+export default withAuthorization(condition)(Add)

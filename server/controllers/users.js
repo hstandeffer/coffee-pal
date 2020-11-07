@@ -3,6 +3,12 @@ const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const config = require('../utils/config')
 const jwt = require('jsonwebtoken')
+const { auth } = require('../utils/middleware')
+
+usersRouter.get('/', async (request, response) => {
+  const users = await User.find({})
+  return response.json(users)
+})
 
 usersRouter.post('/', (request, response) => {
   const { username, email, password } = request.body
@@ -43,6 +49,29 @@ usersRouter.post('/', (request, response) => {
         })
       })
     })
+})
+
+usersRouter.post('/save-coffee', auth, (request, response) => {
+  const id = request.user.id
+  const body = request.body
+  User.findById(id).then(user => {
+    user.saved_coffees.push(body.coffeeId)
+    user.save()
+  })
+})
+
+usersRouter.get('/current-user', auth, (request, response) => {
+  const user = request.user
+  return response.json(user.id)
+})
+
+usersRouter.get('/saved-coffees', auth, (request, response) => {
+  const id = request.user.id
+  User.findById(id).then(user => {
+    const savedCoffees = user.saved_coffees
+    console.log(savedCoffees)
+    return savedCoffees
+  })
 })
 
 module.exports = usersRouter
