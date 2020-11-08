@@ -37,4 +37,9 @@ coffeesRouter.post('/', (request, response) => {
   newCoffee.save().then(coffee => response.json(coffee.toJSON()))
 })
 
+coffeesRouter.post('/saved-coffees', async (request, response) => {
+  const coffees = await Coffee.find({ '_id': { $in: request.body.coffeeIds }})
+  return response.json(coffees)
+})
+
 module.exports = coffeesRouter

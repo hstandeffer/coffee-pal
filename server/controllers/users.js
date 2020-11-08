@@ -51,7 +51,7 @@ usersRouter.post('/', (request, response) => {
     })
 })
 
-usersRouter.post('/save-coffee', auth, (request, response) => {
+usersRouter.post('/save-coffee', auth, async (request, response) => {
   const id = request.user.id
   const body = request.body
   User.findById(id).then(user => {
@@ -60,18 +60,15 @@ usersRouter.post('/save-coffee', auth, (request, response) => {
   })
 })
 
-usersRouter.get('/current-user', auth, (request, response) => {
+usersRouter.get('/current-user', auth, async (request, response) => {
   const user = request.user
   return response.json(user.id)
 })
 
-usersRouter.get('/saved-coffees', auth, (request, response) => {
+usersRouter.get('/saved-coffee-ids', auth, async (request, response) => {
   const id = request.user.id
-  User.findById(id).then(user => {
-    const savedCoffees = user.saved_coffees
-    console.log(savedCoffees)
-    return savedCoffees
-  })
+  const user = await User.findById(id)
+  return response.json({ coffeeIds: user.saved_coffees })
 })
 
 module.exports = usersRouter

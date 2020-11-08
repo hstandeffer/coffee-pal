@@ -13,8 +13,8 @@ const saveCoffee = async (coffeeId) => {
   return response.data
 }
 
-const getSavedCoffees = async () => {
-  const response = await axios.get(`${baseUrl}/saved-coffees`, config)
+const getSavedIds = async () => {
+  const response = await axios.get(`${baseUrl}/saved-coffee-ids`, config)
   return response.data
 }
 
@@ -23,4 +23,4 @@ const getCurrentUser = async () => {
   return response.data
 }
 
-export default { saveCoffee, getSavedCoffees, getCurrentUser }
+export default { saveCoffee, getSavedIds, getCurrentUser }

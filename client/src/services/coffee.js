@@ -24,4 +24,9 @@ const add = async (coffeeObject) => {
   return response.data
 }
 
-export default { getAll, get, add }
+const getSavedCoffees = async (coffeeIds) => {
+  const response = await axios.post(`${baseUrl}/saved-coffees`, {coffeeIds: coffeeIds}, config)
+  return response.data
+}
+
+export default { getAll, get, add, getSavedCoffees }

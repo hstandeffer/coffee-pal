@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import userService from '../../services/user'
+import coffeeService from '../../services/coffee'
 import withAuthorization from '../Session/withAuthorization'
 
 import { FlexProductDiv, ImageContainer, ImageContentContainer, InfoContainer } from '../Search/style'
-import { ProductLink, BrowseHitsDiv, BrowseWrapper, FlexContainer } from '../Browse/style'
+import { BrowseHitsDiv, BrowseWrapper, FlexContainer, ProductLink } from '../Browse/style'
 import { TastingWrapper, TastingDiv } from '../Tasting/style'
 import Typography from '@material-ui/core/Typography'
 import { Box } from '@material-ui/core'
@@ -19,11 +20,13 @@ const ProductGrid = ({ route, heading, subheading }) => {
   useEffect(() => {
     const getSavedCoffees = async () => {
       setLoading(true)
-      const response = await userService.getSavedCoffees()
-      setCoffees(response)
+      const response = await userService.getSavedIds()
+      const coffeeIds = response.coffeeIds
+      const savedCoffees = await coffeeService.getSavedCoffees(coffeeIds)
+      setCoffees(savedCoffees)
       setLoading(false)
     }
-    getSavedCoffees() // needs to instead call the coffee service and only get ones with matching user id
+    getSavedCoffees()
   }, [])
 
   return (
@@ -57,7 +60,7 @@ const ProductGrid = ({ route, heading, subheading }) => {
 export const CoffeeItem = ({ coffee, route }) => {
   return (
     <FlexProductDiv>
-      {/* <ProductLink to={`/${route ? route : 'tasting'}/${coffee.title.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${coffee.id}`}>
+      <ProductLink to={`/${route ? route : 'tasting'}/${coffee.title.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${coffee.id}`}>
         <ImageContainer>
           <ImageContentContainer>
             <img src={coffee.imageUrl} alt={coffee.title} />
@@ -68,7 +71,7 @@ export const CoffeeItem = ({ coffee, route }) => {
           <div style={{margin: '5px 0'}}>${coffee.price}</div>
           {coffee.roastType && <div style={{margin: '5px 0', textTransform: 'capitalize'}}>{coffee.roastType} roast</div>}
         </InfoContainer>
-      </ProductLink> */}
+      </ProductLink>
     </FlexProductDiv>
   )
 }
