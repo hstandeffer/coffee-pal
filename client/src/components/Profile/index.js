@@ -10,7 +10,7 @@ import * as ROUTES from '../../constants/routes'
 const ProfilePage = () => {
   return (
     <Box>
-      <Box marginRight="2.5em" marginTop="2.5em" textAlign="right">
+      <Box marginRight="2.5em" marginTop="1.5em" textAlign="right">
         <Link style={{textDecoration: 'none'}} to={ROUTES.ADD_COFFEE}>
           <Button variant="outlined" size="large" color="primary">Submit New Coffee</Button>
         </Link>

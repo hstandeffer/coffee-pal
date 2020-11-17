@@ -9,7 +9,7 @@ const withAuthorization = condition => Component => props => {
   if (authContext.isLoggedIn && (condition() === 'public')) {
     return <Redirect to={ROUTES.BROWSE} />
   }
-  if (!authContext.isLoggedIn && (condition() !== 'public')) {
+  if (!authContext.isLoggedIn && (condition() !== 'public' && condition() !== 'all')) {
     return <Redirect to={ROUTES.SIGN_IN} />
   }
   return condition(authContext.isLoggedIn) ? <Component {...props} /> : null

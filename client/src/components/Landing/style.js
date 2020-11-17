@@ -2,59 +2,23 @@ import styled from 'styled-components'
 
 export const LandingBanner = styled.div`
   width: 100%;
-  padding: 5em 1em;
+  padding: 2.5em 1em 5em;
   text-align: center;
-  color: #36414a;
+  color: white;
+  background: #275e71;
 
   @media (max-width: 600px) {
     padding: 5em 30px;
   }
 `
 
-export const FullWidthWrapper = styled.div`
-  width: 100%;
-`
-
-export const FullWidthDiv = styled.div`
-  width: 100%;
-  background-color: '#fff';
-`
-
-export const FeaturesWrapper = styled.div`
-  padding: 5em 15em 10em;
-  text-align: center;
-  /* background: linear-gradient(287deg, #2795c7, #38b4c3); */
-  background: #00bcd4;
-  
-
-  @media (max-width: 960px) {
-    padding: 5em 5em 10em
-  }
-
-  @media (max-width: 600px) {
-    padding: 5em 1.5em 10em;
-  }
-`
-
-// export const FeaturesDiv = styled.div`
-//   padding: 
-// `
-
-export const FeaturesHeader = styled.h2`
-  color: #fff;
-`
-
-export const StyledH1 = styled.h1`
-  margin: 0;
-`
-
-export const GetStartedButton = styled.button`
+export const StyledButton = styled.button`
   font-size: 20px;
   padding: 0.5em 1.5em;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  color: #fff;
+  color: ${props => props.color ? props.color : '#fff'};
   background: #0a8c5d; 
 
   &:focus {

@@ -12,7 +12,7 @@ const AccountPage = () => (
       <Wrapper>
         <Box maxWidth="480px" py="1rem" px="2.5rem" mb="2.5rem" mx="auto" textAlign="center" border="1px solid #d9e7ea" borderRadius="4px">
           <Typography variant="h4" component="h2">Account Settings</Typography>
-          <Box mt="1rem" mb='2rem'>
+          <Box mt="2rem" mb='2rem'>
             <PasswordForgetForm />
           </Box>
           <Box mt="1rem">

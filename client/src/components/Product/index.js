@@ -73,7 +73,7 @@ const Product = () => {
           {coffee.blend && <Typography gutterBottom component="p"></Typography>}
           <Grid container spacing={2}>
             <Grid item xs={12} md={12}>
-              <Button style={{height: '100%'}} fullWidth variant="outlined" color="primary" onClick={() => onFavoriteClick(coffee.uid)}>Add To List</Button>
+              <Button style={{height: '100%'}} fullWidth variant="outlined" color="primary" onClick={() => onFavoriteClick(coffee.id)}>Add To List</Button>
             </Grid>
             <Grid item xs={12} md={12}>
               <Link underline="none" href={`${coffee.url}`}>
@@ -81,7 +81,7 @@ const Product = () => {
               </Link>
             </Grid>
             <Grid item xs={12} md={12}>
-              <Link underline="none" href={`/tasting/${coffee.title.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${coffee.uid}`}>
+              <Link underline="none" href={`/tasting/${coffee.title.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${coffee.id}`}>
                 <Button style={{height: '100%'}} fullWidth variant="outlined" color="primary">Begin Tasting</Button>
               </Link>
             </Grid>

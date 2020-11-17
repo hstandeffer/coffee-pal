@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from "react-router-dom";
-import { withFirebase } from '../Firebase/context'
 import { Input, StyledButton, Textarea } from '../../shared-style';
 import { BoldLabel } from './style';
 import Rating from '@material-ui/lab/rating'
@@ -13,7 +12,7 @@ import * as ROUTES from '../../constants/routes'
 import coffeeService from '../../services/coffee'
 import tastingService from '../../services/tasting'
 
-const ProductTasting = ({ history, firebase }) => {
+const ProductTasting = ({ history }) => {
   let { id } = useParams()
   const [coffee, setCoffee] = useState()
   const [loading, setLoading] = useState(false)
@@ -62,7 +61,7 @@ const ProductTasting = ({ history, firebase }) => {
     <Box maxWidth="600px" p="2.5rem" my="2.5rem" mx="auto" textAlign="center" border="1px solid #d9e7ea" borderRadius="4px">
     <Typography variant="h4" component="h2" style={{padding: '0 10px 40px', margin: 0}}>Tasting - {coffee.title}</Typography>
       <Box textAlign="left">
-        <form onSubmit={handleSubmit(coffee.uid)}>
+        <form onSubmit={() => handleSubmit(coffee.uid)}>
           <BoldLabel htmlFor="brewMethod">Brew Method</BoldLabel>
           <Input id="brewMethod" required placeholder="e.g. Aeropress, French press etc." value={brewMethod} onChange={({ target }) => setBrewMethod(target.value)} />
 
@@ -97,8 +96,7 @@ const ProductTasting = ({ history, firebase }) => {
 }
 
 const ProductTastingPage = compose(
-  withRouter,
-  withFirebase,
+  withRouter
 )(ProductTasting)
 
 export default ProductTastingPage

@@ -272,6 +272,6 @@ const CustomSearchBox = connectSearchBox(({ currentRefinement, isSearchStalled, 
   )
 })
 
-const condition = authUser => !!authUser;
+const condition = authUser => !!authUser
 
 export default withAuthorization(condition)(Browse)

@@ -32,10 +32,10 @@ const ProductGrid = ({ route, heading, subheading }) => {
   return (
     <TastingWrapper>
       <TastingDiv style={{marginTop: '1rem'}}>
-        <Box pt={4}>
-          <Typography variant="h3" component="h1">{heading}</Typography>
+        <Box my={2}>
+          <Typography variant="h4" component="h2">{heading}</Typography>
         </Box>
-        <h3>{subheading}</h3>
+        <Typography variant="h6">{subheading}</Typography>
         <BrowseWrapper>
           <BrowseHitsDiv>
             <FlexContainer>
