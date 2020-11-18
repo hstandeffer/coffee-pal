@@ -14,7 +14,7 @@ mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology
   })
 
 app.use(cors())
-app.use(express.static('../client/build'))
+app.use(express.static('build'))
 app.use(express.json())
 app.use('/api/coffees', require('./controllers/coffees'))
 app.use('/api/roasters', require('./controllers/roasters'))
