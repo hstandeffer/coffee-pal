@@ -9,8 +9,8 @@ import { Grid, Hidden, Button, Typography, Link, Box } from '@material-ui/core'
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
+const Alert = props => {
+  return <MuiAlert elevation={6} variant="filled" {...props} />
 }
 
 const Product = () => {
@@ -26,11 +26,11 @@ const Product = () => {
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
-      return;
+      return
     }
 
-    setOpen(false);
-  };
+    setOpen(false)
+  }
   
   useEffect(() => {
     async function fetchCoffee() {
