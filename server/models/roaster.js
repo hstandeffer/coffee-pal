@@ -3,19 +3,19 @@ const mongoose = require('mongoose')
 const roasterSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: false
+    required: true
   },
   city: {
     type: String,
-    required: false
+    required: true
   },
   state: {
     type: String,
-    required: false
+    required: true
   },
   country: {
     type: String,
-    required: false
+    required: true
   },
   updatedAt: {
     type: Date,

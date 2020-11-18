@@ -1,17 +1,32 @@
 const roastersRouter = require('express').Router()
 const Roaster = require('../models/roaster')
+
+const config = require('../utils/config')
+
+const aws = require('aws-sdk')
 const multer  = require('multer')
-const mime = require('mime')
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads')
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now() + '.' + mime.getExtension(file.mimetype))
-  }
-})
+const multerS3 = require('multer-s3')
+
+aws.config.update({
+  secretAccessKey: config.AWS_SECRET_KEY,
+  accessKeyId: config.AWS_ACCESS_KEY,
+  region: 'us-east-1'
+});
+
+const s3 = new aws.S3()
  
-const upload = multer({ storage: storage })
+const upload = multer({
+  storage: multerS3({
+      s3: s3,
+      acl: 'public-read',
+      bucket: 'baroasta',
+      key: function (req, file, cb) {
+          let newFileName = Date.now() + '-' + file.originalname
+          let fullPath = 'roasters/' + newFileName
+          cb(null, fullPath)
+      }
+  })
+})
 
 roastersRouter.get('/', async (request, response) => {
   const roasters = await Roaster.find({})
@@ -27,7 +42,7 @@ roastersRouter.post('/', upload.single('roasterImage'), async (request, response
     country: body.country,
     website: body.website,
     addedBy: body.addedBy,
-    imagePath: request.file.filename
+    imagePath: request.file.key
   })
 
   const roaster = await newRoaster.save()
