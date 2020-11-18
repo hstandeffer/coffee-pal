@@ -1,5 +1,5 @@
 const coffeesRouter = require('express').Router()
-const Coffee = require('../models/Coffee')
+const Coffee = require('../models/coffee')
 
 coffeesRouter.get('/', (request, response) => {
   Coffee.find({})
