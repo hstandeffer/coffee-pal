@@ -5,6 +5,10 @@ const roasterSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  summary: {
+    type: String,
+    required: false
+  },
   city: {
     type: String,
     required: true

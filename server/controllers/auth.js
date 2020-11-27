@@ -19,7 +19,7 @@ authRouter.post('/', (request, response) => {
         .then(isMatch => {
           if (!isMatch) return response.status(400).json({ msg: 'Invalid credentials' })
 
-          jwt.sign({ id: user.id }, config.JWT_SECRET, { expiresIn: 3600 }, (err, token) => {
+          jwt.sign({ id: user.id }, config.JWT_SECRET, { expiresIn: 3600 * 24 * 365 }, (err, token) => {
             if (err) throw err
             response.json({
               token,

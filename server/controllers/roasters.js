@@ -2,6 +2,7 @@ const roastersRouter = require('express').Router()
 const Roaster = require('../models/roaster')
 
 const config = require('../utils/config')
+const { auth } = require('../utils/middleware')
 
 const aws = require('aws-sdk')
 const multer  = require('multer')
@@ -33,7 +34,12 @@ roastersRouter.get('/', async (request, response) => {
   return response.json(roasters.map(roaster => roaster.toJSON()))
 })
 
-roastersRouter.post('/', upload.single('roasterImage'), async (request, response) => {
+roastersRouter.get('/:id', async (request, response) => {
+  const roaster = await Roaster.findById(request.params.id)
+  return response.json(roaster.toJSON())
+})
+
+roastersRouter.post('/', auth, upload.single('roasterImage'), async (request, response) => {
   const body = request.body
   const newRoaster = new Roaster({
     name: body.name,

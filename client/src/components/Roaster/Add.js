@@ -3,7 +3,7 @@ import { Box, Typography, FormLabel } from '@material-ui/core'
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
-import { Input, StyledButton } from '../../shared-style'
+import { Input, StyledButton, Textarea } from '../../shared-style'
 
 import axios from 'axios'
 
@@ -12,6 +12,7 @@ import userService from '../../services/user'
 
 const AddRoaster = () => {
   const [name, setName] = useState('')
+  const [summary, setSummary] = useState('')
   const [city, setCity] = useState('')
   const [state, setState] = useState('')
   const [country, setCountry] = useState('')
@@ -51,6 +52,7 @@ const AddRoaster = () => {
     const data = new FormData()
     data.append('roasterImage', image)
     data.append('name', name)
+    data.append('summary', summary)
     data.append('city', city)
     data.append('state', state)
     data.append('country', country)
@@ -60,6 +62,7 @@ const AddRoaster = () => {
     await axios.post('/api/roasters', data)
     setOpen(true)
     setName('')
+    setSummary('')
     setCity('')
     setState('')
     setCountry('')
@@ -70,12 +73,15 @@ const AddRoaster = () => {
   if (loading) return <p>Loading...</p>
 
   return (
-    <Box maxWidth="600px" p="2.5rem" my="2.5rem" mx="auto" textAlign="center" border="1px solid #d9e7ea" borderRadius="4px">
-    <Typography gutterBottom paragraph variant="h4" component="h2">Submit New Roaster</Typography>
+    <Box bgcolor="#fff" maxWidth="600px" p="2.5rem" my="2.5rem" mx="auto" textAlign="center" border="1px solid #d9e7ea" borderRadius="4px">
+    <Typography gutterBottom paragraph variant="h4" component="h2">Add New Roaster</Typography>
       <Box textAlign="left">
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <FormLabel required htmlFor="name">Roaster Name</FormLabel>
           <Input id="name" required value={name} onChange={({ target }) => setName(target.value)} />
+
+          <FormLabel required htmlFor="summary">Roaster Summary</FormLabel>
+          <Textarea placeholder="Started in Austin in 2001..." id="summary" required value={summary} onChange={({ target }) => setSummary(target.value)} />
 
           <FormLabel required htmlFor="city">City</FormLabel>
           <Input id="city" required value={city} onChange={({ target }) => setCity(target.value)} />

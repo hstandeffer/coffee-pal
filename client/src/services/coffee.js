@@ -3,10 +3,8 @@ import { getStoredAuthToken } from '../shared/utils/authToken'
 
 const baseUrl = '/api/coffees'
 
-let token = getStoredAuthToken()
-
 const config = {
-  headers: { Authorization: token ? token : null },
+  headers: { Authorization: getStoredAuthToken() ? `Bearer ${getStoredAuthToken()}` : undefined },
 }
 
 const getAll = async () => {
@@ -25,6 +23,7 @@ const add = async (coffeeObject) => {
 }
 
 const getSavedCoffees = async (coffeeIds) => {
+  console.log(config)
   const response = await axios.post(`${baseUrl}/saved-coffees`, {coffeeIds: coffeeIds}, config)
   return response.data
 }

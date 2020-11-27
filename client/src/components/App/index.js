@@ -17,6 +17,7 @@ import ProductPage from '../Product'
 import AddCoffeePage from '../Coffee/Add'
 import RoasterPage from '../Roaster'
 import AddRoasterPage from '../Roaster/Add'
+import ViewRoasterPage from '../Roaster/View'
 
 import * as ROUTES from '../../constants/routes';
 import { withAuthentication } from '../Session'
@@ -55,6 +56,7 @@ class App extends React.Component {
         <Route path={ROUTES.ADD_COFFEE} component={AddCoffeePage} />
         <Route exact path={ROUTES.ROASTERS} component={RoasterPage} />
         <Route path={ROUTES.ADD_ROASTERS} component={AddRoasterPage} />
+        <Route path={ROUTES.VIEW_ROASTER} component={ViewRoasterPage} />
       </Router>
     )
   }

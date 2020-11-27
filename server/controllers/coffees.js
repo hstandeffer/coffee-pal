@@ -1,5 +1,6 @@
 const coffeesRouter = require('express').Router()
 const Coffee = require('../models/coffee')
+const { auth } = require('../utils/middleware')
 
 coffeesRouter.get('/', (request, response) => {
   Coffee.find({})
@@ -27,12 +28,12 @@ coffeesRouter.post('/', (request, response) => {
   newCoffee.save().then(coffee => response.json(coffee.toJSON()))
 })
 
-coffeesRouter.post('/saved-coffees', async (request, response) => {
+coffeesRouter.post('/saved-coffees', auth, async (request, response) => {
   const coffees = await Coffee.find({ '_id': { $in: request.body.coffeeIds }})
   return response.json(coffees)
 })
 
-coffeesRouter.get('/recent-coffees', async (request, response) => {
+coffeesRouter.get('/recent-coffees', auth, async (request, response) => {
   const coffees = await Coffee.find().limit(4)
   return response.json(coffees)
 })
