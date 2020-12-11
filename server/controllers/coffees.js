@@ -33,7 +33,7 @@ coffeesRouter.post('/saved-coffees', auth, async (request, response) => {
   return response.json(coffees)
 })
 
-coffeesRouter.get('/recent-coffees', auth, async (request, response) => {
+coffeesRouter.get('/recent-coffees', async (request, response) => {
   const coffees = await Coffee.find().limit(4)
   return response.json(coffees)
 })

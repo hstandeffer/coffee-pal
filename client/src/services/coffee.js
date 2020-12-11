@@ -23,7 +23,6 @@ const add = async (coffeeObject) => {
 }
 
 const getSavedCoffees = async (coffeeIds) => {
-  console.log(config)
   const response = await axios.post(`${baseUrl}/saved-coffees`, {coffeeIds: coffeeIds}, config)
   return response.data
 }

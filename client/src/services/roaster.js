@@ -20,9 +20,13 @@ const get = async (roasterId) => {
 }
 
 const add = async (roasterObject) => {
-  console.log(roasterObject)
   const response = await axios.post(baseUrl, roasterObject, config)
   return response.data
 }
 
-export default { getAll, get, add }
+const getRecentRoasters = async () => {
+  const response = await axios.get(`${baseUrl}/recent-roasters`, config)
+  return response.data
+}
+
+export default { getAll, get, add, getRecentRoasters }

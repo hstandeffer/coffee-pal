@@ -9,10 +9,28 @@
 
 body {
   margin: 0;
-  background: #f2f2f7;
+  /* background: #f2f2f7; */
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+[data-reach-combobox-input] {
+  display: block;
+	margin: 5px auto 15px;
+	padding: 10px;
+	background: transparent;
+	border: none;
+	width: 100%;
+	background: #f7f7f7;
+	font-family: inherit;
+	border: 1px solid #d9e7ea;
+	border-radius: 4px;
+	outline: none;
+}
+
+[data-reach-combobox-input] :focus {
+  outline-color: #73777d;
 }

@@ -33,6 +33,10 @@ const coffeeSchema = new mongoose.Schema({
     type: String,
     required: false
   },
+  roasterId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Roaster'
+  },
   shadeGrown: {
     type: Boolean,
     required: false

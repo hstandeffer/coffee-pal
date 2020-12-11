@@ -221,7 +221,7 @@ const Hit = ({ hit }) => (
     <ProductLink to={`/coffee/${hit.title.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${hit.objectID}`}>
       <ImageContainer>
         <ImageContentContainer>
-          <img onError={(e) => e.target.src = "https://freepikpsd.com/wp-content/uploads/2019/10/coffee-bag-png-7-Transparent-Images.png"} src={hit.imageUrl} alt={hit.title} />
+          {/* <img onError={(e) => e.target.src = "https://freepikpsd.com/wp-content/uploads/2019/10/coffee-bag-png-7-Transparent-Images.png"} src={hit.imageUrl} alt={hit.title} /> */}
         </ImageContentContainer>
       </ImageContainer>
       <InfoContainer>

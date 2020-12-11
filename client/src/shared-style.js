@@ -87,3 +87,27 @@ export const StyledButton = styled.button`
 export const StyledLink = styled(Link)`
     text-decoration: none;
 `
+
+export const StyledAddressUl = styled.ul`
+	position: absolute;
+	margin: 0px;
+	padding: 0px;
+	border: 1px solid #d9e7ea;
+	border-top: none;
+	border-image: initial;
+	list-style-type: none;
+	text-align: left;
+	overflow-y: auto;
+	width: 100%;
+	background: white;
+`
+
+export const StyledAddressLi = styled.li`
+	cursor: pointer;
+	padding: 0.5rem;
+
+	&:hover {
+		background: black;
+		color: white;
+	}
+`

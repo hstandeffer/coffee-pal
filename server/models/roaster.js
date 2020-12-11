@@ -21,11 +21,19 @@ const roasterSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  dollarSigns: {
+    type: String,
+    required: false
+  },
   updatedAt: {
     type: Date,
     default: Date.now
   },
   addedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
@@ -36,6 +44,10 @@ const roasterSchema = new mongoose.Schema({
   imagePath: {
     type: String,
     required: false
+  },
+  coffees: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Coffee'
   }
 })
 
