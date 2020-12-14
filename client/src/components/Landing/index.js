@@ -18,12 +18,12 @@ const Landing = () => {
   useEffect(() => {
     setLoading(true)
     const getCoffees = async () => {
-      const recentCoffees = await coffeeService.getRecentCoffees()
+      const recentCoffees = await coffeeService.getRecent()
       setCoffees(recentCoffees)
     }
 
     const getRoasters = async () => {
-      const recentRoasters = await roasterService.getRecentRoasters()
+      const recentRoasters = await roasterService.getRecent()
       setRoasters(recentRoasters)
     }
 

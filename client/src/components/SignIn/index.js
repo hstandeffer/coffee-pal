@@ -7,6 +7,7 @@ import { SignUpLink } from '../SignUp'
 // import { PasswordForgetLink } from '../PasswordForget'
 import * as ROUTES from '../../constants/routes'
 import axios from 'axios'
+import { PasswordForgetLink } from '../PasswordForget'
 
 const SignInPage = () => (
   <Wrapper>
@@ -64,10 +65,10 @@ const SignInForm = () => {
       />
       <StyledButton disabled={isInvalid} type="submit">Sign In</StyledButton>
 
+      <PasswordForgetLink />
       {error && <p className={{ color: 'red' }}>{error.message}</p>}
     </form>
   )
-
 }
   
 const condition = () => 'public'

@@ -13,14 +13,15 @@ const saveCoffee = async (coffeeId) => {
   return response.data
 }
 
-const getSavedIds = async () => {
-  const response = await axios.get(`${baseUrl}/saved-coffee-ids`, config)
-  return response.data
-}
-
 const getCurrentUser = async () => {
   const response = await axios.get(`${baseUrl}/current-user`, config)
   return response.data
 }
 
-export default { saveCoffee, getSavedIds, getCurrentUser }
+const forgotPassword = async (email) => {
+  const emailObj = { email: email }
+  const response = await axios.post(`${baseUrl}/forgot-password`, emailObj, config)
+  return response.data
+}
+
+export default { saveCoffee, getCurrentUser, forgotPassword }

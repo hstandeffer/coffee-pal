@@ -4,7 +4,6 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import { Grid, Box, Container} from '@material-ui/core'
 import roasterService from '../../services/roaster'
-import coffeeService from '../../services/coffee'
 import { useParams } from "react-router-dom"
 import { RoasterImageBox } from './style'
 
@@ -57,17 +56,41 @@ const Roaster = () => {
       const roasterObj = await roasterService.get(id)
       setRoaster(roasterObj)
     }
-    const getCoffees = async () => {
-      const coffeeObj = await coffeeService.getSavedCoffees()
-    }
     getRoaster()
     setLoading(false)
   }, [])
 
   if (loading || !roaster) return <p>Loading...</p>
 
+  const Test = () => (
+    <div className={classes.heroContent}>
+      <Container>
+        <Grid container>
+          <Grid item xs={12} sm={3}>
+            <Box>
+              <RoasterImageBox width="8rem" className={classes.roastImage}>
+                {roaster.imagePath ? <img alt="roaster" src='https://picsum.photos/200'></img> : null }
+              </RoasterImageBox>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Box>
+              <Typography align="center" component="h1" variant="h3" color="textPrimary" gutterBottom>
+                {roaster.name}
+              </Typography>
+              <Typography variant="h5" color="textSecondary" paragraph>
+                {roaster.summary}
+              </Typography>
+            </Box>
+          </Grid>
+        </Grid>
+      </Container>
+    </div>
+  )
+
   return (
     <>
+      <Test />
       <div className={classes.heroContent}>
         <Container maxWidth="sm">
           <Box py={3}>
@@ -100,7 +123,7 @@ const Roaster = () => {
       <Container className={classes.cardGrid} maxWidth="md">
         {/* End hero unit */}
         <Grid container spacing={4}>
-          {coffees.map((card) => (
+          {coffees && coffees.map((card) => (
             <Grid item key={card} xs={12} sm={6} md={4}>
               <Card className={classes.card}>
                 <CardMedia
