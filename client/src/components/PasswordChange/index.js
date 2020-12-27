@@ -1,73 +1,64 @@
-import React, { Component } from 'react';
-import { Input, StyledButton } from '../../shared-style';
+import React, { useState, useContext, useEffect } from 'react'
+import { Redirect } from 'react-router-dom'
+import { withAuthorization } from '../Session'
+import { StyledH1, Wrapper, Input, StyledDiv, StyledButton } from '../../shared-style'
+import { useParams } from 'react-router-dom'
+import userService from '../../services/user'
+import axios from 'axios'
 
-import { withFirebase } from '../Firebase';
-import { Box, Typography } from '@material-ui/core';
+import * as ROUTES from '../../constants/routes'
+import Toast from '../../shared/components/Toast'
 
-const INITIAL_STATE = {
-  passwordOne: '',
-  passwordTwo: '',
-  error: null,
-}
+const PasswordReset = () => {
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [error, setError] = useState('')
+  const [open, setOpen] = useState(false)  
 
-class PasswordChangeForm extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = { ...INITIAL_STATE };
+  const handleSubmit = async event => {
+    event.preventDefault()
+    const dataObj = { password }
+    const response = await userService.changePassword(dataObj)
+    if (response.status === 200) {
+      setOpen(true)
+      setPassword('')
+      setConfirmPassword('')
+    } 
   }
 
-  onSubmit = event => {
-    const { passwordOne } = this.state;
+  const isInvalid = 
+    password !== confirmPassword ||
+    password === ''
 
-    this.props.firebase
-      .doPasswordUpdate(passwordOne)
-      .then(() => {
-        this.setState({ ...INITIAL_STATE });
-      })
-      .catch(error => {
-        this.setState({ error });
-      })
+  return (
+    <Wrapper>
+      <StyledDiv>
+        <StyledH1>Reset Password</StyledH1>
+        <form onSubmit={handleSubmit}>
+        <Input
+          name="password"
+          value={password}
+          onChange={({ target }) => setPassword(target.value)}
+          type="password"
+          placeholder="Password"
+        />
+        <Input
+          name="confirmPassword"
+          value={confirmPassword}
+          onChange={({ target }) => setConfirmPassword(target.value)}
+          type="password"
+          placeholder="Confirm Password"
+        />
+        <StyledButton disabled={isInvalid} type="submit">Update Password</StyledButton> 
 
-    event.preventDefault();
-  };
-
-  onChange = event => {
-    this.setState({ [event.target.name]: event.target.value })
-  };
-
-  render() {
-    const { passwordOne, passwordTwo, error } = this.state;
-
-    const isInvalid = 
-      passwordOne !== passwordTwo || passwordOne === '';
-    
-    return (
-      <Box p="1rem" border={1} borderColor='#ededed'>
-      <Typography variant="h6" component="p">Update Password</Typography>
-        <form onSubmit={this.onSubmit}>
-          <Input
-            name="passwordOne"
-            value={passwordOne}
-            onChange={this.onChange}
-            type="password"
-            placeholder="New Password"
-          />
-          <Input
-            name="passwordTwo"
-            value={passwordTwo}
-            onChange={this.onChange}
-            type="password"
-            placeholder="Confirm New Password"
-          />
-          <StyledButton disabled={isInvalid} type="submit">
-            Change Password
-          </StyledButton>
-          {error && <p>{error.message}</p>}
-        </form>
-      </Box>
-    )
-  }
+        {error && <p>{error.message}</p>}
+      </form>
+    </StyledDiv>
+    <Toast open={open} setOpen={setOpen} severity="success" message="Your password has been successfully changed!" />
+  </Wrapper> 
+  )
 }
 
-export default withFirebase(PasswordChangeForm);
+const condition = () => 'public'
+
+export default withAuthorization(condition)(PasswordReset)

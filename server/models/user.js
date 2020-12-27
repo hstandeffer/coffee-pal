@@ -21,7 +21,9 @@ const userSchema = new mongoose.Schema({
   saved_coffees: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Coffee'
-  }]
+  }],
+  reset_password_token: String,
+  reset_password_expires: Date
 })
 
 userSchema.set('toJSON', {

@@ -45,7 +45,7 @@ let upload = multer({
 })
 
 roastersRouter.get('/', async (request, response) => {
-  const roasters = await Roaster.find({})
+  const roasters = await Roaster.find({}).populate('coffees')
   return response.json(roasters.map(roaster => roaster.toJSON()))
 })
 
@@ -72,11 +72,11 @@ roastersRouter.post('/', auth, upload.single('roasterImage'), async (request, re
 
 roastersRouter.get('/recent-roasters', async (request, response) => {
   const roasters = await Roaster.find().limit(4)
-  return response.json(roasters)
+  return response.json(roasters.map(roaster => roaster.toJSON()))
 })
 
 roastersRouter.get('/:id', async (request, response) => {
-  const roaster = await Roaster.findById(request.params.id)
+  const roaster = await Roaster.findById(request.params.id).populate('coffees')
   return response.json(roaster.toJSON())
 })
 

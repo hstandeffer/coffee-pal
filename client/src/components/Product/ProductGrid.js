@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import userService from '../../services/user'
-import coffeeService from '../../services/coffee'
 import withAuthorization from '../Session/withAuthorization'
 
 import { imagePath } from '../../shared/utils/helpers'
@@ -15,17 +14,14 @@ import { Link } from 'react-router-dom';
 import * as ROUTES from '../../constants/routes'
 
 const ProductGrid = ({ route, heading, subheading }) => {
-  // const [search, setSearch] = useState('')
   const [coffees, setCoffees] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const getSavedCoffees = async () => {
       setLoading(true)
-      const response = await userService.getSavedIds()
-      const coffeeIds = response.coffeeIds
-      const savedCoffees = await coffeeService.getSavedCoffees(coffeeIds)
-      setCoffees(savedCoffees)
+      const currentUser = await userService.getCurrentUser()
+      setCoffees(currentUser.saved_coffees)
       setLoading(false)
     }
     getSavedCoffees()
@@ -33,7 +29,7 @@ const ProductGrid = ({ route, heading, subheading }) => {
 
   return (
     <TastingWrapper>
-      <TastingDiv style={{marginTop: '1rem'}}>
+      <TastingDiv style={{ marginTop: '1rem' }}>
         <Box my={2}>
           <Typography variant="h4" component="h2">{heading}</Typography>
         </Box>
@@ -69,9 +65,9 @@ export const CoffeeItem = ({ coffee, route }) => {
           </ImageContentContainer>
         </ImageContainer>
         <InfoContainer>
-          <div style={{height: '40px', overflow: 'hidden', fontWeight: 'bold'}}>{coffee.title}</div>
-          <div style={{margin: '5px 0'}}>${coffee.price}</div>
-          {coffee.roastType && <div style={{margin: '5px 0', textTransform: 'capitalize'}}>{coffee.roastType} roast</div>}
+          <Box height='40px' overflow="hidden" fontWeight="bold">{coffee.title}</Box>
+          <Box margin="5px 0">${coffee.price}</Box>
+          {coffee.roastType && <Box margin="5px 0" style={{ textTransform: 'capitalize'}}>{coffee.roastType} roast</Box>}
         </InfoContainer>
       </ProductLink>
     </FlexProductDiv>
@@ -88,9 +84,9 @@ export const RoasterItem = ({ roaster, route }) => {
           </ImageContentContainer>
         </ImageContainer>
         <InfoContainer>
-          <div style={{height: '40px', overflow: 'hidden', fontWeight: 'bold'}}>{roaster.name}</div>
-          <div style={{margin: '5px 0'}}>{roaster.summary}</div>
-          <div style={{margin: '5px 0', textTransform: 'capitalize'}}>{roaster.state}, {roaster.country}</div>
+        <Box height='40px' overflow="hidden" fontWeight="bold">{roaster.name}</Box>
+          <Box margin="5px 0">{roaster.summary}</Box>
+          <Box margin="5px 0" style={{ textTransform: 'capitalize'}}>{roaster.state}, {roaster.country}</Box>
         </InfoContainer>
       </ProductLink>
     </FlexProductDiv>

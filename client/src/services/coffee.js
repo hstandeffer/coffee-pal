@@ -22,14 +22,9 @@ const add = async (coffeeObject) => {
   return response.data
 }
 
-const getSavedCoffees = async (coffeeIds) => {
-  const response = await axios.post(`${baseUrl}/saved-coffees`, {coffeeIds: coffeeIds}, config)
+const getRecent = async () => {
+  const response = await axios.get(`${baseUrl}/recent`, config)
   return response.data
 }
 
-const getRecentCoffees = async () => {
-  const response = await axios.get(`${baseUrl}/recent-coffees`, config)
-  return response.data
-}
-
-export default { getAll, get, add, getSavedCoffees, getRecentCoffees }
+export default { getAll, get, add, getRecent }

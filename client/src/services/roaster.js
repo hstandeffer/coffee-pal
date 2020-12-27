@@ -24,9 +24,9 @@ const add = async (roasterObject) => {
   return response.data
 }
 
-const getRecentRoasters = async () => {
+const getRecent = async () => {
   const response = await axios.get(`${baseUrl}/recent-roasters`, config)
   return response.data
 }
 
-export default { getAll, get, add, getRecentRoasters }
+export default { getAll, get, add, getRecent }

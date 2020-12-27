@@ -9,15 +9,7 @@ const roasterSchema = new mongoose.Schema({
     type: String,
     required: false
   },
-  city: {
-    type: String,
-    required: true
-  },
-  state: {
-    type: String,
-    required: true
-  },
-  country: {
+  address: {
     type: String,
     required: true
   },
@@ -45,10 +37,10 @@ const roasterSchema = new mongoose.Schema({
     type: String,
     required: false
   },
-  coffees: {
+  coffees: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Coffee'
-  }
+  }]
 })
 
 roasterSchema.set('toJSON', {

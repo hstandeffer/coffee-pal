@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { withAuthorization } from '../Session'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
-import { Grid, Box, Container} from '@material-ui/core'
+import { Grid, Box, Container, Link} from '@material-ui/core'
 import roasterService from '../../services/roaster'
-import coffeeService from '../../services/coffee'
 import { useParams } from "react-router-dom"
 import { RoasterImageBox } from './style'
 
@@ -47,7 +46,6 @@ const Roaster = () => {
   const classes = useStyles()
 
   const [roaster, setRoaster] = useState()
-  const [coffees, setCoffees] = useState()
   const [loading, setLoading] = useState(true)
   let { id } = useParams()
 
@@ -57,12 +55,9 @@ const Roaster = () => {
       const roasterObj = await roasterService.get(id)
       setRoaster(roasterObj)
     }
-    const getCoffees = async () => {
-      const coffeeObj = await coffeeService.getSavedCoffees()
-    }
     getRoaster()
     setLoading(false)
-  }, [])
+  }, [id])
 
   if (loading || !roaster) return <p>Loading...</p>
 
@@ -84,9 +79,11 @@ const Roaster = () => {
           <div className={classes.heroButtons}>
             <Grid container spacing={2} justify="center">
               <Grid item>
-                <Button variant="contained" color="primary">
-                  View Website
-                </Button>
+                <Link color="textSecondary" href={roaster.website}>
+                  <Button variant="contained" color="primary">
+                    Visit Site
+                  </Button>
+                </Link>
               </Grid>
               <Grid item>
                 <Button variant="outlined" color="primary">
@@ -100,7 +97,7 @@ const Roaster = () => {
       <Container className={classes.cardGrid} maxWidth="md">
         {/* End hero unit */}
         <Grid container spacing={4}>
-          {coffees.map((card) => (
+          {roaster.coffees && roaster.coffees.map((card) => (
             <Grid item key={card} xs={12} sm={6} md={4}>
               <Card className={classes.card}>
                 <CardMedia

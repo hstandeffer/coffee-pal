@@ -1,14 +1,15 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import React from 'react'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
-import Navigation from '../Navigation';
-import LandingPage from '../Landing';
-import SignUpPage from '../SignUp';
-import SignInPage from '../SignIn';
-import PasswordForgetPage from '../PasswordForget';
-import AccountPage from '../Account';
-import AdminPage from '../Admin';
-import ProfilePage from '../Profile';
+import Navigation from '../Navigation'
+import LandingPage from '../Landing'
+import SignUpPage from '../SignUp'
+import SignInPage from '../SignIn'
+import PasswordForget from '../PasswordForget'
+import PasswordReset from '../PasswordReset'
+import AccountPage from '../Account'
+import AdminPage from '../Admin'
+import ProfilePage from '../Profile'
 import SearchPage from '../Search'
 import BrowsePage from '../Browse'
 import TastingPage from '../Tasting'
@@ -19,7 +20,7 @@ import RoasterPage from '../Roaster'
 import AddRoasterPage from '../Roaster/Add'
 import ViewRoasterPage from '../Roaster/View'
 
-import * as ROUTES from '../../constants/routes';
+import * as ROUTES from '../../constants/routes'
 import { withAuthentication } from '../Session'
 
 class App extends React.Component {
@@ -44,7 +45,8 @@ class App extends React.Component {
           <Route exact path={ROUTES.LANDING} component={LandingPage} />
           <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
           <Route path={ROUTES.SIGN_IN} component={SignInPage} />
-          <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+          <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForget} />
+          <Route path={ROUTES.PASSWORD_RESET} component={PasswordReset} />
           <Route path={ROUTES.ACCOUNT} component={AccountPage} />
           <Route path={ROUTES.PROFILE} component={ProfilePage} />
           <Route path={ROUTES.ADMIN} component={AdminPage} />
