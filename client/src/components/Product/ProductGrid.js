@@ -84,7 +84,7 @@ export const RoasterItem = ({ roaster, route }) => {
           </ImageContentContainer>
         </ImageContainer>
         <InfoContainer>
-        <Box height='40px' overflow="hidden" fontWeight="bold">>{roaster.name}</Box>
+        <Box height='40px' overflow="hidden" fontWeight="bold">{roaster.name}</Box>
           <Box margin="5px 0">{roaster.summary}</Box>
           <Box margin="5px 0" style={{ textTransform: 'capitalize'}}>{roaster.state}, {roaster.country}</Box>
         </InfoContainer>

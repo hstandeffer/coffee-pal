@@ -24,4 +24,14 @@ const forgotPassword = async (email) => {
   return response.data
 }
 
-export default { saveCoffee, getCurrentUser, forgotPassword }
+const updatePassword = async (dataObj) => {
+  const response = await axios.put(`${baseUrl}/update-password`, dataObj, config)
+  return response
+}
+
+const changePassword = async (dataObj) => {
+  const response = await axios.put(`${baseUrl}/change-password`, dataObj, config)
+  return response
+}
+
+export default { saveCoffee, getCurrentUser, forgotPassword, updatePassword, changePassword }

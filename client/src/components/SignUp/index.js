@@ -7,17 +7,10 @@ import AuthUserContext from '../Session/context'
 import axios from 'axios'
 
 import * as ROUTES from '../../constants/routes';
+import { Typography, Box } from '@material-ui/core';
+import { SignInLink } from '../SignIn';
 
-const SignUpPage = () => (
-  <Wrapper>
-    <StyledDiv>
-      <StyledH1>Sign Up</StyledH1>
-      <SignUpForm />
-    </StyledDiv>
-  </Wrapper>
-);
-
-const SignUpForm = () => {
+const SignUp = () => {
   const authUserContext = useContext(AuthUserContext)
 
   const [username, setUsername] = useState('')
@@ -53,48 +46,54 @@ const SignUpForm = () => {
     username === ''
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Input
-        name="username"
-        value={username}
-        onChange={({ target }) => setUsername(target.value)}
-        type="text"
-        placeholder="Username"
-      />
-      <Input
-        name="email"
-        value={email}
-        onChange={({ target }) => setEmail(target.value)}
-        type="text"
-        placeholder="Email Address"
-      />
-      <Input
-        name="password"
-        value={password}
-        onChange={({ target }) => setPassword(target.value)}
-        type="password"
-        placeholder="Password"
-      />
-      <Input
-        name="confirmPassword"
-        value={confirmPassword}
-        onChange={({ target }) => setConfirmPassword(target.value)}
-        type="password"
-        placeholder="Confirm Password"
-      />
-      <StyledButton disabled={isInvalid} type="submit">Sign Up</StyledButton> 
+    <Wrapper>
+      <StyledDiv>
+        <StyledH1>Sign Up</StyledH1>
+        <form onSubmit={handleSubmit}>
+          <Input
+            name="username"
+            value={username}
+            onChange={({ target }) => setUsername(target.value)}
+            type="text"
+            placeholder="Username"
+          />
+          <Input
+            name="email"
+            value={email}
+            onChange={({ target }) => setEmail(target.value)}
+            type="text"
+            placeholder="Email Address"
+          />
+          <Input
+            name="password"
+            value={password}
+            onChange={({ target }) => setPassword(target.value)}
+            type="password"
+            placeholder="Password"
+          />
+          <Input
+            name="confirmPassword"
+            value={confirmPassword}
+            onChange={({ target }) => setConfirmPassword(target.value)}
+            type="password"
+            placeholder="Confirm Password"
+          />
+          <StyledButton disabled={isInvalid} type="submit">Sign Up</StyledButton> 
+          {error && <p>{error.message}</p>}
 
-      {error && <p>{error.message}</p>}
-    </form>
-  );
+          <Box mt={2}>
+            <SignInLink />
+          </Box>
+        </form>
+      </StyledDiv>
+    </Wrapper>
+  )
 }
 
-const SignUpLink = () => (
-  <p>Don't have an account? <StyledLink to={ROUTES.SIGN_UP}>Sign Up</StyledLink></p>
+export const SignUpLink = () => (
+  <Typography component="p" color="textSecondary">Don't have an account? <StyledLink to={ROUTES.SIGN_UP}>Sign Up</StyledLink></Typography>
 )
 
 const condition = () => 'public'
 
-export default withAuthorization(condition)(SignUpPage)
-
-export { SignUpLink }
+export default withAuthorization(condition)(SignUp)

@@ -1,31 +1,21 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
-import { withAuthorization } from '../Session';
-import { StyledH1, Wrapper, Input, StyledDiv, StyledButton } from '../../shared-style';
-import AuthUserContext from '../Session/context'
+import React, { useState, useContext, useEffect } from 'react'
+import { Redirect } from 'react-router-dom'
+import { withAuthorization } from '../Session'
+import { StyledH1, Wrapper, Input, StyledDiv, StyledButton } from '../../shared-style'
 import { useParams } from 'react-router-dom'
-
+import userService from '../../services/user'
 import axios from 'axios'
 
-import * as ROUTES from '../../constants/routes';
+import * as ROUTES from '../../constants/routes'
+import Toast from '../../shared/components/Toast'
 
-const SignUpPage = () => (
-  <Wrapper>
-    <StyledDiv>
-      <StyledH1>Reset Password</StyledH1>
-      <SignUpForm />
-    </StyledDiv>
-  </Wrapper>
-);
-
-const SignUpForm = () => {
-  const authUserContext = useContext(AuthUserContext)
-
+const PasswordReset = () => {
   const [loading, setLoading] = useState(true)
   const [invalid, setInvalid] = useState(false)
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
+  const [open, setOpen] = useState(false)
 
   let { token } = useParams()
 
@@ -45,19 +35,16 @@ const SignUpForm = () => {
   }, [token])
   
 
-  const handleSubmit = event => {
-    event.preventDefault();
-    const newPassword = { password }
-
-    axios.post('/api/users/update-password', newPassword)
-      .then(response => {
-        authUserContext.login(response.data.token)
-        return (<Redirect to={ROUTES.BROWSE} />)
-      })
-      .catch(error => {
-        setError(error)
-      })  
-  };
+  const handleSubmit = async event => {
+    event.preventDefault()
+    const dataObj = { password, token }
+    const response = await userService.updatePassword(dataObj)
+    if (response.status === 200) {
+      setOpen(true)
+      setPassword('')
+      setConfirmPassword('')
+    } 
+  }
 
   const isInvalid = 
     password !== confirmPassword ||
@@ -70,28 +57,34 @@ const SignUpForm = () => {
   if (loading) return <p>Loading...</p>
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Input
-        name="password"
-        value={password}
-        onChange={({ target }) => setPassword(target.value)}
-        type="password"
-        placeholder="Password"
-      />
-      <Input
-        name="confirmPassword"
-        value={confirmPassword}
-        onChange={({ target }) => setConfirmPassword(target.value)}
-        type="password"
-        placeholder="Confirm Password"
-      />
-      <StyledButton disabled={isInvalid} type="submit">Update Password</StyledButton> 
+    <Wrapper>
+      <StyledDiv>
+        <StyledH1>Reset Password</StyledH1>
+        <form onSubmit={handleSubmit}>
+        <Input
+          name="password"
+          value={password}
+          onChange={({ target }) => setPassword(target.value)}
+          type="password"
+          placeholder="Password"
+        />
+        <Input
+          name="confirmPassword"
+          value={confirmPassword}
+          onChange={({ target }) => setConfirmPassword(target.value)}
+          type="password"
+          placeholder="Confirm Password"
+        />
+        <StyledButton disabled={isInvalid} type="submit">Update Password</StyledButton> 
 
-      {error && <p>{error.message}</p>}
-    </form>
-  );
+        {error && <p>{error.message}</p>}
+      </form>
+    </StyledDiv>
+    <Toast open={open} setOpen={setOpen} severity="success" message="Your password has been successfully reset! You may now login using the new password." />
+  </Wrapper> 
+  )
 }
 
 const condition = () => 'public'
 
-export default withAuthorization(condition)(SignUpPage)
+export default withAuthorization(condition)(PasswordReset)

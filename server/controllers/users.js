@@ -118,8 +118,52 @@ usersRouter.get('/password-reset/:token', async (request, response) => {
   }
 })
 
-usersRouter.post('/update-password', async (request, response) => {
-  
+usersRouter.put('/update-password', async (request, response) => {
+  // this could instead use JWT to decode rather than searching by the token, but should work well too
+  const { password, token } = request.body
+  const user = await User.findOne({ reset_password_token: token, reset_password_expires: { $gt: Date.now() } })
+  if (user === null || !user) {
+    response.status(403).json({ msg: 'Password reset link is invalid or has expired' })
+  }
+
+  if (!password) {
+    response.status(400).json({ msg: 'Please enter a new password.' })
+  }
+
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(password, salt, (err, hash) => {
+      if (err) throw err
+      user.password = hash
+      user.reset_password_token = null
+      user.reset_password_expires = null
+      // could automatically log user in here if you want
+      user.save().then(() => {
+        response.status(200).json({ msg: 'Password successfully updated' })
+      })
+    })
+  })
+})
+
+usersRouter.put('/change-password', auth, async (request, response) => {
+  const { password } = request.body
+  const user = User.findById(request.user.id)
+
+  if (!password) {
+    response.status(400).json({ msg: 'Please enter a new password.' })
+  }
+
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(password, salt, (err, hash) => {
+      if (err) throw err
+      user.password = hash
+      user.reset_password_token = null
+      user.reset_password_expires = null
+      // could automatically log user in here if you want
+      user.save().then(() => {
+        response.status(200).json({ msg: 'Password successfully updated' })
+      })
+    })
+  })
 })
 
 usersRouter.get('/current-user', auth, async (request, response) => {

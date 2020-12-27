@@ -8,6 +8,8 @@ import Box from '@material-ui/core/Box'
 import { Typography } from '@material-ui/core'
 
 import userService from '../../services/user'
+import { SignInLink } from '../SignIn'
+import { SignUpLink } from '../SignUp'
 
 const PasswordForget = () => {
   const [email, setEmail] = useState('')
@@ -22,7 +24,7 @@ const PasswordForget = () => {
       setOpen(true)
     }
     catch (err) {
-      console.error(err)
+      setError(err)
     }
   }
 
@@ -30,8 +32,7 @@ const PasswordForget = () => {
     <Wrapper>
       <StyledDiv>
         <StyledH1>Forgot your password?</StyledH1>
-        <Box p="1rem" border={1} borderColor='#ededed'>
-          <Typography variant="h6" component="p">Reset Password</Typography>
+        <div>
           <form onSubmit={handleSubmit}>
             <Input
               name="email"
@@ -43,9 +44,13 @@ const PasswordForget = () => {
             <StyledButton disabled={email === ''} type="submit">
               Reset Password
             </StyledButton>
-            {error && <p>{error.message}</p>}
           </form>
-        </Box>
+          {error && <p>{error.message}</p>}
+          <Box mt={2}>
+            <SignUpLink />
+            <SignInLink />
+          </Box>
+        </div>
       </StyledDiv>
       <Toast open={open} setOpen={setOpen} severity="success" message="If an account exists, a password reset link will be sent to the submitted email." />
     </Wrapper>
@@ -53,7 +58,7 @@ const PasswordForget = () => {
 }
 
 export const PasswordForgetLink = () => (
-  <p><StyledLink to={ROUTES.PASSWORD_FORGET}>Forgot Password?</StyledLink></p>
+  <Typography component="p" color="textSecondary"><StyledLink to={ROUTES.PASSWORD_FORGET}>Forgot Password?</StyledLink></Typography>
 )
 
 export default PasswordForget

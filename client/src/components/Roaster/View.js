@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { withAuthorization } from '../Session'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
-import { Grid, Box, Container} from '@material-ui/core'
+import { Grid, Box, Container, Link} from '@material-ui/core'
 import roasterService from '../../services/roaster'
 import { useParams } from "react-router-dom"
 import { RoasterImageBox } from './style'
@@ -46,7 +46,6 @@ const Roaster = () => {
   const classes = useStyles()
 
   const [roaster, setRoaster] = useState()
-  const [coffees, setCoffees] = useState()
   const [loading, setLoading] = useState(true)
   let { id } = useParams()
 
@@ -58,39 +57,12 @@ const Roaster = () => {
     }
     getRoaster()
     setLoading(false)
-  }, [])
+  }, [id])
 
   if (loading || !roaster) return <p>Loading...</p>
 
-  const Test = () => (
-    <div className={classes.heroContent}>
-      <Container>
-        <Grid container>
-          <Grid item xs={12} sm={3}>
-            <Box>
-              <RoasterImageBox width="8rem" className={classes.roastImage}>
-                {roaster.imagePath ? <img alt="roaster" src='https://picsum.photos/200'></img> : null }
-              </RoasterImageBox>
-            </Box>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Box>
-              <Typography align="center" component="h1" variant="h3" color="textPrimary" gutterBottom>
-                {roaster.name}
-              </Typography>
-              <Typography variant="h5" color="textSecondary" paragraph>
-                {roaster.summary}
-              </Typography>
-            </Box>
-          </Grid>
-        </Grid>
-      </Container>
-    </div>
-  )
-
   return (
     <>
-      <Test />
       <div className={classes.heroContent}>
         <Container maxWidth="sm">
           <Box py={3}>
@@ -107,9 +79,11 @@ const Roaster = () => {
           <div className={classes.heroButtons}>
             <Grid container spacing={2} justify="center">
               <Grid item>
-                <Button variant="contained" color="primary">
-                  View Website
-                </Button>
+                <Link color="textSecondary" href={roaster.website}>
+                  <Button variant="contained" color="primary">
+                    Visit Site
+                  </Button>
+                </Link>
               </Grid>
               <Grid item>
                 <Button variant="outlined" color="primary">
@@ -123,7 +97,7 @@ const Roaster = () => {
       <Container className={classes.cardGrid} maxWidth="md">
         {/* End hero unit */}
         <Grid container spacing={4}>
-          {coffees && coffees.map((card) => (
+          {roaster.coffees && roaster.coffees.map((card) => (
             <Grid item key={card} xs={12} sm={6} md={4}>
               <Card className={classes.card}>
                 <CardMedia
