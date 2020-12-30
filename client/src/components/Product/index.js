@@ -50,19 +50,19 @@ const Product = () => {
       <Grid container justify="flex-start" spacing={8}>
         <Grid item sm={4} xs={12}>
           <Hidden smUp>
-            <Typography variant="h4" component="p" align="center" gutterBottom m={0}>{coffee.title}</Typography>
+            <Typography variant="h4" component="p" align="center" gutterBottom m={0}>{coffee.coffeeName}</Typography>
           </Hidden>
           <ImageContainer>
             <ImageContentContainer>
-              <img onError={(e) => e.target.src = "https://freepikpsd.com/wp-content/uploads/2019/10/coffee-bag-png-7-Transparent-Images.png"} src={coffee.imageUrl} alt={coffee.title} />
+              <img onError={(e) => e.target.src = "https://freepikpsd.com/wp-content/uploads/2019/10/coffee-bag-png-7-Transparent-Images.png"} src={coffee.imageUrl} alt={coffee.coffeeName} />
             </ImageContentContainer>
           </ImageContainer>
         </Grid>
         <Grid item sm={4} xs={12}>
           <Hidden xsDown>
-            {coffee.title && <Typography variant="h4" component="p" align="left" m={0}>{coffee.title}</Typography>}
+            {coffee.coffeeName && <Typography variant="h4" component="p" align="left" m={0}>{coffee.coffeeName}</Typography>}
           </Hidden>
-          {coffee.siteName && <Typography variant="h6" component="p" gutterBottom>{coffee.siteName}</Typography>}
+          {coffee.brand && <Typography variant="h6" component="p" gutterBottom>{coffee.brand}</Typography>}
           {coffee.price && <Typography gutterBottom component="p">${coffee.price}</Typography>}
           {coffee.roastType && <Typography gutterBottom component="p" style={{textTransform: 'capitalize'}}>{coffee.roastType} Roast</Typography>}
           {coffee.countries && <Typography gutterBottom component="p"><strong>Countries: </strong>{coffee.countries.join(', ')}</Typography>}
@@ -81,14 +81,14 @@ const Product = () => {
               </Link>
             </Grid>
             <Grid item xs={12} md={12}>
-              <Link underline="none" href={`/tasting/${coffee.title.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${coffee.id}`}>
+              <Link underline="none" href={`/tasting/${coffee.coffeeName.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${coffee.id}`}>
                 <Button style={{height: '100%'}} fullWidth variant="outlined" color="primary">Begin Tasting</Button>
               </Link>
             </Grid>
           </Grid>
           <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
             <Alert onClose={handleClose} severity="success">
-              {coffee.title} has been added to your list!
+              {coffee.coffeeName} has been added to your list!
             </Alert>
           </Snackbar>
         </Grid>

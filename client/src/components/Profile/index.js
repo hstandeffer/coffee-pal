@@ -20,6 +20,6 @@ const ProfilePage = () => {
   )
 }
 
-const condition = authUser => !!authUser;
+const condition = authUser => !!authUser
 
 export default withAuthorization(condition)(ProfilePage)

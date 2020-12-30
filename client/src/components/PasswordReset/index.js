@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 import { withAuthorization } from '../Session'
 import { StyledH1, Wrapper, Input, StyledDiv, StyledButton } from '../../shared-style'
@@ -29,6 +29,7 @@ const PasswordReset = () => {
     })
     .catch((err) => {
       if (err.response.status === 403) {
+        setError('Invalid Token')
         setInvalid(true)
       }
     })

@@ -29,4 +29,9 @@ const getRecent = async () => {
   return response.data
 }
 
-export default { getAll, get, add, getRecent }
+const getList = async () => {
+  const response = await axios.get(`${baseUrl}/list`, config)
+  return response.data
+}
+
+export default { getAll, get, add, getRecent, getList }

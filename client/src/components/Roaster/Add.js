@@ -19,6 +19,8 @@ const AddRoaster = () => {
     headers: { Authorization: getStoredAuthToken() ? `Bearer ${getStoredAuthToken()}` : undefined },
   }
 
+  const ref = React.useRef()
+
   const [name, setName] = useState('')
   const [summary, setSummary] = useState('')
   const [address, setAddress] = useState('')
@@ -54,7 +56,7 @@ const AddRoaster = () => {
   }
 
   const handleSubmit = async event => {
-    await event.preventDefault()
+    event.preventDefault()
     const data = new FormData()
     data.append('roasterImage', image)
     data.append('name', name)
@@ -67,15 +69,15 @@ const AddRoaster = () => {
     setOpen(true)
     setName('')
     setSummary('')
-    setWebsite('')
-    setImage('')
     setAddress('')
+    setWebsite('')
+    ref.current.value = ''
   }
 
   if (loading) return <p>Loading...</p>
 
   return (
-    <Box bgcolor="#fff" maxWidth="600px" p="2.5rem" my="2.5rem" mx="auto" textAlign="center">
+    <Box bgcolor="#fff" maxWidth="600px" p="2.5rem" my="2.5rem" border="1px solid #d9e7ea" borderRadius="4px" mx="auto" textAlign="center">
     <Typography gutterBottom paragraph variant="h4" component="h2">Add New Roaster</Typography>
       <Box textAlign="left">
         <form onSubmit={handleSubmit} encType="multipart/form-data">
@@ -89,16 +91,16 @@ const AddRoaster = () => {
           <Input id="website" value={website} onChange={({ target }) => setWebsite(target.value)} />
 
           <FormLabel htmlFor="address">Address</FormLabel>
-          <PlacesAutocomplete setAddress={setAddress} />
+          <PlacesAutocomplete address={address} setAddress={setAddress} />
 
           <FormLabel color="primary" htmlFor="roasterImage">Logo Image</FormLabel>
-          <Input type="file" name="roasterImage" id="roasterImage" onChange={handleUpload} />
+          <Input type="file" ref={ref} name="roasterImage" id="roasterImage" onChange={handleUpload} />
 
           <StyledButton type="submit">Submit</StyledButton>
         </form>
         <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
           <Alert onClose={handleClose} severity="success">
-            {name} has been successfully added!
+            Roaster has been successfully added!
           </Alert>
         </Snackbar>
       </Box>

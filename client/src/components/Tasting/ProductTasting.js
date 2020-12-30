@@ -59,7 +59,7 @@ const ProductTasting = ({ history }) => {
   }
   return (
     <Box maxWidth="600px" p="2.5rem" my="2.5rem" mx="auto" textAlign="center" border="1px solid #d9e7ea" borderRadius="4px">
-    <Typography variant="h4" component="h2" style={{padding: '0 10px 40px', margin: 0}}>Tasting - {coffee.title}</Typography>
+    <Typography variant="h4" component="h2" style={{padding: '0 10px 40px', margin: 0}}>Tasting - {coffee.coffeeName}</Typography>
       <Box textAlign="left">
         <form onSubmit={() => handleSubmit(coffee.uid)}>
           <BoldLabel htmlFor="brewMethod">Brew Method</BoldLabel>
