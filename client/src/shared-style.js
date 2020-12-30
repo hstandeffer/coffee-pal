@@ -57,15 +57,20 @@ export const Textarea = styled.textarea`
 	width: 100%;
 	background: #f7f7f7;
 	font-family: inherit;
-	font-size: 20px;
-	border: 1px solid #d9e7ea;
+	font-size: 16px;
+	border: 1px solid rgba(0, 0, 0, 0.23);
 	border-radius: 4px;
 	outline: none;
 	resize: vertical;
 
 	&:focus {
-		outline-color: #73777d;
-	}
+    border-bottom-color: #3F51B5;
+    box-shadow: 0 1px 0 0 #3F51B5
+  }
+
+  &:hover {
+    border: 1px solid black;
+  }
 `
 
 export const StyledButton = styled.button`

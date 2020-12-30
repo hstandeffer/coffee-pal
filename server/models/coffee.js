@@ -5,19 +5,11 @@ const coffeeSchema = new mongoose.Schema({
     type: Array,
     required: false
   },
-  currency: {
-    type: String,
-    required: false
-  },
-  description: {
-    type: String,
-    required: false
-  },
   fairTrade: {
     type: Boolean,
     required: false
   },
-  imageUrl: {
+  imagePath: {
     type: String,
     required: false
   },
@@ -41,11 +33,11 @@ const coffeeSchema = new mongoose.Schema({
     type: Boolean,
     required: false
   },
-  siteName: {
+  brand: {
     type: String,
     required: true
   },
-  title: {
+  coffeeName: {
     type: String,
     required: true
   },

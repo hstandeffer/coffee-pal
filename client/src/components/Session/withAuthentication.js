@@ -5,6 +5,7 @@ import AuthUserContext from './context'
 
 const withAuthentication = Component => props => {
   const [token, setToken] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   const login = (tokenVal) => {
     setToken(tokenVal)
@@ -16,10 +17,12 @@ const withAuthentication = Component => props => {
   }
 
   useEffect(() => {
+    setLoading(true)
     const tokenVal = getStoredAuthToken()
     if (tokenVal) {
       login(tokenVal)
     }
+    setLoading(false)
   }, [])
     
   return (

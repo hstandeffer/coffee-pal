@@ -34,7 +34,7 @@ if (config.NODE_ENV === 'production') {
     bucket: 'baroasta',
     key: function (req, file, cb) {
       let newFileName = Date.now() + '-' + file.originalname
-      let fullPath = 'roasters/' + newFileName
+      let fullPath = 'images/' + newFileName
       cb(null, fullPath)
     }
   })
@@ -49,20 +49,29 @@ roastersRouter.get('/', async (request, response) => {
   return response.json(roasters.map(roaster => roaster.toJSON()))
 })
 
+roastersRouter.get('/list', async (request, response) => {
+  const roasters = await Roaster.find({})
+  let roasterMap = []
+  roasters.forEach((roaster) => {
+    let roasterObj = { 'id': roaster._id, 'name': roaster.name }
+    roasterMap.push(roasterObj)
+  })
+
+  return response.send(roasterMap)
+})
+
 roastersRouter.post('/', auth, upload.single('roasterImage'), async (request, response) => {
   const body = request.body
-  if (request.file.filename) {
+  if (request.file && request.file.filename) {
     request.file.key = request.file.filename
   }
 
   const newRoaster = new Roaster({
     name: body.name,
     summary: body.summary,
-    city: body.city,
-    state: body.state,
-    country: body.country,
+    address: body.address,
     website: body.website,
-    addedBy: body.addedBy,
+    addedBy: request.user.id,
     imagePath: request.file.key
   })
 

@@ -208,11 +208,11 @@ const CoffeeItem = ({ coffee, onFavoriteClick }) => (
   <FlexProductDiv>
     <ImageContainer>
       <ImageContentContainer>
-        <img src={coffee.imageUrl} alt={coffee.title} />
+        <img src={coffee.imageUrl} alt={coffee.coffeeName} />
       </ImageContentContainer>
     </ImageContainer>
     <InfoContainer>
-      <div style={{height: '40px', overflow: 'hidden', fontWeight: 'bold'}}>{coffee.title}</div>
+      <div style={{height: '40px', overflow: 'hidden', fontWeight: 'bold'}}>{coffee.coffeeName}</div>
       <div style={{margin: '5px 0'}}>${coffee.price}</div>
       <div style={{margin: '5px 0', textTransform: 'capitalize'}}>{coffee.roastType} roast</div>
       <div>

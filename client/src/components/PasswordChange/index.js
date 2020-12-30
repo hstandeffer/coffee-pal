@@ -1,12 +1,8 @@
-import React, { useState, useContext, useEffect } from 'react'
-import { Redirect } from 'react-router-dom'
+import React, { useState } from 'react'
 import { withAuthorization } from '../Session'
 import { StyledH1, Wrapper, Input, StyledDiv, StyledButton } from '../../shared-style'
-import { useParams } from 'react-router-dom'
 import userService from '../../services/user'
-import axios from 'axios'
 
-import * as ROUTES from '../../constants/routes'
 import Toast from '../../shared/components/Toast'
 
 const PasswordReset = () => {
@@ -23,7 +19,10 @@ const PasswordReset = () => {
       setOpen(true)
       setPassword('')
       setConfirmPassword('')
-    } 
+    }
+    else {
+      setError('Something went wrong, please try again.')
+    }
   }
 
   const isInvalid = 

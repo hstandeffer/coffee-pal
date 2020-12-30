@@ -58,14 +58,14 @@ const ProductGrid = ({ route, heading, subheading }) => {
 export const CoffeeItem = ({ coffee, route }) => {
   return (
     <FlexProductDiv>
-      <ProductLink to={`/${route ? route : 'tasting'}/${coffee.title.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${coffee.id}`}>
+      <ProductLink to={`/${route ? route : 'tasting'}/${coffee.coffeeName.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${coffee.id}`}>
         <ImageContainer>
           <ImageContentContainer>
-            <img src={`${coffee.imageUrl}`} alt={coffee.title} />
+            <img src={`${coffee.imageUrl}`} alt={coffee.coffeeName} />
           </ImageContentContainer>
         </ImageContainer>
         <InfoContainer>
-          <Box height='40px' overflow="hidden" fontWeight="bold">{coffee.title}</Box>
+          <Box height='40px' overflow="hidden" fontWeight="bold">{coffee.coffeeName}</Box>
           <Box margin="5px 0">${coffee.price}</Box>
           {coffee.roastType && <Box margin="5px 0" style={{ textTransform: 'capitalize'}}>{coffee.roastType} roast</Box>}
         </InfoContainer>
