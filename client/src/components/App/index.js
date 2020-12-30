@@ -42,23 +42,23 @@ class App extends React.Component {
       <Router>
         <Navigation /> 
         <Switch>
-          {/* <Route exact path={ROUTES.LANDING} component={LandingPage} />
+          <Route exact path={ROUTES.LANDING} component={LandingPage} />
           <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
           <Route path={ROUTES.SIGN_IN} component={SignInPage} />
           <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForget} />
-          <Route path={ROUTES.PASSWORD_RESET} component={PasswordReset} /> */}
+          <Route path={ROUTES.PASSWORD_RESET} component={PasswordReset} />
           <Route path={ROUTES.ACCOUNT} component={AccountPage} />
-          {/* <Route path={ROUTES.PROFILE} component={ProfilePage} />
-          <Route path={ROUTES.ADMIN} component={AdminPage} /> */}
+          <Route path={ROUTES.PROFILE} component={ProfilePage} />
+          <Route path={ROUTES.ADMIN} component={AdminPage} />
           <Route path={ROUTES.BROWSE} component={BrowsePage} />
-          {/* <Route path={ROUTES.PRODUCT} component={ProductPage} />
+          <Route path={ROUTES.PRODUCT} component={ProductPage} />
           <Route path={ROUTES.SEARCH} component={SearchPage} />
           <Route exact path={ROUTES.TASTINGS} component={TastingPage} />
           <Route path={ROUTES.PRODUCT_TASTING} component={ProductTastingPage} />
           <Route path={ROUTES.ADD_COFFEE} component={AddCoffeePage} />
           <Route exact path={ROUTES.ROASTERS} component={RoasterPage} />
           <Route path={ROUTES.ADD_ROASTERS} component={AddRoasterPage} />
-          <Route path={ROUTES.VIEW_ROASTER} component={ViewRoasterPage} /> */}
+          <Route path={ROUTES.VIEW_ROASTER} component={ViewRoasterPage} />
         </Switch>
       </Router>
     )
