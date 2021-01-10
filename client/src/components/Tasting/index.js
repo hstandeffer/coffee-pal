@@ -15,7 +15,7 @@ const Tasting = () => {
           <Button variant="outlined" size="large" color="primary">Submit New Coffee</Button>
         </Link>
       </Box>
-      <ProductGrid route={'tasting'} heading={'Your Saved Coffees'} subheading={'Select one of your saved coffees to begin a tasting'}/>
+      <ProductGrid route={'tastings'} heading={'Your Saved Coffees'} subheading={'Select one of your saved coffees to begin a tasting'}/>
     </Box>
   )
 }

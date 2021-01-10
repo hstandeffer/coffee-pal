@@ -57,9 +57,15 @@ usersRouter.post('/save-coffee', auth, async (request, response) => {
   try {
     const id = request.user.id
     const user = await User.findById(id)
-    user.saved_coffees.push(request.body.coffeeId)
-    const savedUser = await user.save()
-    response.json(savedUser.toJSON())
+    const isFavorited = user.saved_coffees.some((c) => {
+      return c.equals(id)
+    })
+    if (isFavorited) {
+      user.saved_coffees.push(request.body.coffeeId)
+      const savedUser = await user.save()
+      response.json(savedUser.toJSON())
+    }
+    response.json(user.toJSON())
   }
   catch (err) {
     response.status(404).json({ msg: err })
@@ -146,7 +152,7 @@ usersRouter.put('/update-password', async (request, response) => {
 
 usersRouter.put('/change-password', auth, async (request, response) => {
   const { password } = request.body
-  const user = User.findById(request.user.id)
+  const user = await User.findById(request.user.id)
 
   if (!password) {
     response.status(400).json({ msg: 'Please enter a new password.' })
@@ -168,7 +174,15 @@ usersRouter.put('/change-password', auth, async (request, response) => {
 
 usersRouter.get('/current-user', auth, async (request, response) => {
   try {
-    const user = await User.findById(request.user.id).populate('saved_coffees')
+    const user = await User.findById(request.user.id, '-password')
+      .populate({
+        path: 'saved_coffees',
+        model: 'Coffee',
+        populate: {
+          path: 'roaster',
+          model: 'Roaster'
+        }
+      })
     response.json(user.toJSON())
   }
   catch (err) {

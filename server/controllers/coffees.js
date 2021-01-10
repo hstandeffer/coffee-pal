@@ -46,12 +46,26 @@ let upload = multer({
 
 coffeesRouter.get('/', async (request, response) => {
   try {
-    const coffees = await Coffee.find({})
+    const coffees = await Coffee.find({}).populate('roaster')
     response.json(coffees.map(coffee => coffee.toJSON()))
   }
   catch (err) {
     response.status(404).json({ msg: err })
   }
+})
+
+coffeesRouter.get('/query', async (request, response) => {
+  const query = request.query
+
+  // check is an object and empty: will be true if empty and false otherwise
+  if (Object.keys(query).length === 0 && query.constructor === Object) {
+    const noQueryCoffees = await Coffee.find().limit(4).populate('roaster')
+    return response.json(noQueryCoffees)
+  }
+
+  const coffees = await Coffee.find({ 'roastType': { $in: query.roastType } }).limit(5).populate('roaster')
+
+  return response.json(coffees)
 })
 
 coffeesRouter.post('/', auth, upload.single('coffeeImage'), async (request, response) => {
@@ -70,7 +84,7 @@ coffeesRouter.post('/', auth, upload.single('coffeeImage'), async (request, resp
       price: body.price,
       roastType: body.roastType,
       shadeGrown: body.shadeGrown,
-      roasterId: body.selectedBrand,
+      roaster: body.selectedBrand,
       coffeeName: body.coffeeName,
       url: body.url,
       addedBy: request.user.id
@@ -87,7 +101,7 @@ coffeesRouter.post('/', auth, upload.single('coffeeImage'), async (request, resp
 
 coffeesRouter.get('/recent', async (request, response) => {
   try {
-    const coffees = await Coffee.find().limit(4)
+    const coffees = await Coffee.find().limit(4).populate('roaster')
     response.json(coffees)
   }
   catch (err) {
@@ -98,7 +112,7 @@ coffeesRouter.get('/recent', async (request, response) => {
 // keep at bottom so wildcard doesnt catch above routes
 coffeesRouter.get('/:id', async (request, response) => {
   try {
-    const coffee = Coffee.findById(request.params.id)
+    const coffee = await Coffee.findById(request.params.id).populate('roaster', { name: 1, _id: 1, imagePath: 1 })
     response.json(coffee.toJSON())
   }
   catch (err) {

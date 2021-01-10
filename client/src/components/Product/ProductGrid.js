@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react'
 import userService from '../../services/user'
 import withAuthorization from '../Session/withAuthorization'
 
-import { imagePath } from '../../shared/utils/helpers'
-
 import { FlexProductDiv, ImageContainer, ImageContentContainer, InfoContainer } from '../Search/style'
 import { BrowseHitsDiv, BrowseWrapper, FlexContainer, ProductLink } from '../Browse/style'
 import { TastingWrapper, TastingDiv } from '../Tasting/style'
@@ -58,10 +56,10 @@ const ProductGrid = ({ route, heading, subheading }) => {
 export const CoffeeItem = ({ coffee, route }) => {
   return (
     <FlexProductDiv>
-      <ProductLink to={`/${route ? route : 'tasting'}/${coffee.coffeeName.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${coffee.id}`}>
+      <ProductLink to={`/${route ? route : 'tastings'}/${coffee.id}`}>
         <ImageContainer>
           <ImageContentContainer>
-            <img src={`${coffee.imageUrl}`} alt={coffee.coffeeName} />
+            <img src={`${process.env.REACT_APP_IMAGE_PATH}/${coffee.imagePath ? coffee.imagePath : coffee.roaster.imagePath}`} alt={coffee.coffeeName} />
           </ImageContentContainer>
         </ImageContainer>
         <InfoContainer>
@@ -74,13 +72,13 @@ export const CoffeeItem = ({ coffee, route }) => {
   )
 }
 
-export const RoasterItem = ({ roaster, route }) => {
+export const RoasterItem = ({ roaster }) => {
   return (
     <FlexProductDiv>
-      <ProductLink to={`/${route ? route : 'tasting'}/${roaster.name.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${roaster.id}`}>
+      <ProductLink to={`roasters/${roaster.id}`}>
         <ImageContainer>
           <ImageContentContainer>
-            <img src={`${imagePath}/${roaster.imagePath}`} alt={roaster.name} />
+            <img src={`${process.env.REACT_APP_IMAGE_PATH}/${roaster.imagePath}`} alt={roaster.name} />
           </ImageContentContainer>
         </ImageContainer>
         <InfoContainer>

@@ -218,7 +218,7 @@ const CustomHits = connectHits(({ hits }) => {
 
 const Hit = ({ hit }) => (
   <FlexProductDiv>
-    <ProductLink to={`/coffee/${hit.title.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${hit.objectID}`}>
+    <ProductLink to={`/coffees/${hit.title.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${hit.objectID}`}>
       <ImageContainer>
         <ImageContentContainer>
           {/* <img onError={(e) => e.target.src = "https://freepikpsd.com/wp-content/uploads/2019/10/coffee-bag-png-7-Transparent-Images.png"} src={hit.imageUrl} alt={hit.title} /> */}

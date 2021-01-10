@@ -49,7 +49,7 @@ const Landing = () => {
             </Box>
             <Grid container justify="center" alignItems="center">
               {coffees && !loading ? coffees.map((coffee) => (
-                <CoffeeItem key={coffee.id} coffee={coffee} route={'coffee'}/>
+                <CoffeeItem key={coffee.id} coffee={coffee} route={'coffees'}/>
               )) : <Typography variant="h6">Loading...</Typography> }
             </Grid>
             <Box my={1}>

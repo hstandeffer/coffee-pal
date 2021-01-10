@@ -1,231 +1,209 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { withAuthorization } from '../Session';
-import { withFirebase } from '../Firebase';
-import { compose } from "recompose";
-import { withRouter } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { withAuthorization } from '../Session'
 import {
   FlexContainer,
   FlexProductDiv,
-  FiltersWrapper,
-  FiltersDiv,
-  StyledH2,
-  ItemsDiv,
   ImageContainer,
   ImageContentContainer,
   InfoContainer
 } from './style'
+import axios from 'axios'
+import Typography from '@material-ui/core/Typography'
+import Slider from '@material-ui/core/Slider'
 
-import userService from '../../services/user'
-import coffeeService from '../../services/coffee'
-
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid'
 import Hidden from '@material-ui/core/Hidden'
-
-import TemporaryDrawer from './TemporaryDrawer'
-
-export const Filters = ({ filters, setFilters }) => {
-  // TODO: add range slider component for price filter
-
-  const handleChange = (event) => {
-    setFilters({
-      ...filters,
-      [event.target.name]: event.target.checked
-    })
-  }
-
-  const { fairTrade, shadeGrown, organic, lightRoast, mediumRoast, darkRoast } = filters
-
-  return (
-    <FiltersWrapper>
-      <StyledH2>Filters</StyledH2>
-   
-      <FormGroup>
-        <Typography component="h2">
-          <strong>Growing Methods</strong>
-        </Typography>
-        <Divider />
-        <FormControlLabel 
-          control={
-            <Checkbox name="fairTrade" color="primary" value={fairTrade} onChange={handleChange} />
-          }
-          label="Fair Trade"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox name="shadeGrown" color="primary" value={shadeGrown} onChange={handleChange} />
-          }
-          label="Shade Grown" />
-        <FormControlLabel
-          control={
-            <Checkbox name="organic" color="primary" value={organic} onChange={handleChange} />
-          }
-          label="Organic" />
-      </FormGroup>
-      <br/>
-      <FormGroup>
-        <Typography component="h2">
-          <strong>Roast Type</strong>
-        </Typography>
-        <Divider />
-        <FormControlLabel
-          control={
-            <Checkbox name="lightRoast" color="primary" value={lightRoast} onChange={handleChange} />
-          }
-          label="Light" />
-        <FormControlLabel
-          control={
-            <Checkbox name="mediumRoast" color="primary" value={mediumRoast} onChange={handleChange} />
-          }
-          label="Medium" />
-        <FormControlLabel
-          control={
-            <Checkbox name="darkRoast" color="primary" value={darkRoast} onChange={handleChange} />
-          }
-          label="Dark" />
-      </FormGroup>
-    </FiltersWrapper>
-  )
-}
+import { BrowseWrapper, BrowseFiltersDiv, TestDiv, BrowseFiltersHeaderDiv, ClearRefinementsButton, AlgoliaStyledUl, AlgoliaAllRefinementListsWrapper, AlgoliaRefinementListWrapper, AlgoliaStyledLi, AlgoliaStyledOuterRefinementListSpan, AlgoliaStyledRefinementListCountSpan, AlgoliaRefinementHeader, BrowseHitsDiv, ProductLink, TestButton, MobileFiltersButtonWrapper, ClearRefinementsButtonMobile, SaveFiltersButtonMobile, TestFooter } from '../Browse/style'
+import { Box } from '@material-ui/core'
 
 const SearchPage = () => {
-  const [filters, setFilters] = useState({})
+  const [filters, setFilters] = useState([])
+  const [roastTypes, setRoastTypes] = useState([{ label: 'Light Roast', value: 'light', isRefined: false}, { label: 'Medium Roast', value: 'medium', isRefined: false}, { label: 'Dark Roast', value: 'dark', isRefined: false}])
+  const [filtering, setFiltering] = useState(false)
+  const [priceRange, setPriceRange] = useState([1, 20])
+  
+  const minPrice = 1
+  const maxPrice = 20
+
+  const handleChange = async (event) => {
+    if (filters.includes(event.target.value)) {
+      setFilters(filters.filter(f => f !== event.target.value))
+    }
+    else {
+      setFilters(filters.concat(event.target.value))
+    }
+    setRoastTypes(roastTypes.map(roast => roast.value === event.target.value ? {...roast, isRefined: !roast.isRefined } : roast))
+  }
+
+  const handlePriceChange = async (newValue) => {
+    setPriceRange(newValue)
+  }
+
+  const clearFiltersAndRefinements = async (event) => {
+    setFilters([])
+    setRoastTypes(roastTypes.map(roast => ({...roast, isRefined: false})))
+    setPriceRange([minPrice, maxPrice])
+  }
 
   return (
-    <>
-      <Grid container direction="row" justify="center">
-        <Hidden smDown>
-          <Grid item md={3}>
-            <FiltersDiv>              
-              <Filters filters={filters} setFilters={setFilters} />
-            </FiltersDiv>
-          </Grid>
-        </Hidden>
-        <Grid item md={9} sm={12}>
-          <ItemsDiv>
-            <Hidden mdUp>
-              <TemporaryDrawer filters={filters} setFilters={setFilters} />
-            </Hidden>
-            <Search filters={filters} />
-          </ItemsDiv>
-        </Grid>
-      </Grid>
-    </>
+    <BrowseWrapper>
+      <Hidden mdUp>
+        <TestButton filtering={filtering} onClick={() => setFiltering(!filtering)}>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 14"><path d="M15 1H1l5.6 6.3v4.37L9.4 13V7.3z" stroke="#fff" strokeWidth="1.29" fill="none" fillRule="evenodd" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+          Show Filters
+        </TestButton>
+      </Hidden>
+      <BrowseFiltersDiv>
+        <TestDiv filtering={filtering}>
+          <BrowseFiltersHeaderDiv>
+            <h2>Filters</h2>
+            <ClearFilters filters={filters} clearFiltersAndRefinements={clearFiltersAndRefinements} />
+          </BrowseFiltersHeaderDiv>
+          {/* Insert current filters here later - will require restructuring */}
+          <AlgoliaAllRefinementListsWrapper>
+            <FilterList header={'Roast Type'} roastTypes={roastTypes} handleChange={handleChange} />
+            <PriceFilter minPrice={minPrice} maxPrice={maxPrice} header={'Price'} priceRange={priceRange} handlePriceChange={handlePriceChange} />
+          </AlgoliaAllRefinementListsWrapper>
+          <TestFooter filtering={filtering}>
+            <ClearFiltersMobile />
+            <SaveFiltersMobile onClick={() => setFiltering(false)} />
+          </TestFooter>
+        </TestDiv>
+      </BrowseFiltersDiv>
+
+      <BrowseHitsDiv>
+        <Search filters={filters} filtering={filtering} />
+      </BrowseHitsDiv>
+    </BrowseWrapper>
   )
 }
 
-const SearchBase = ({ firebase, filters }) => {
+const PriceFilter = ({ minPrice, maxPrice, header, priceRange, handlePriceChange }) => (
+  <AlgoliaRefinementListWrapper>
+    <AlgoliaRefinementHeader>
+      {header}
+    </AlgoliaRefinementHeader>
+    <Slider
+      value={priceRange}
+      onChange={(event, newValue) => handlePriceChange(newValue)}
+      valueLabelDisplay="auto"
+      marks={[{value: minPrice, label: `$${minPrice}`}, {value: maxPrice, label: `$${maxPrice}`}]}
+      min={1}
+      max={20}
+    />
+  </AlgoliaRefinementListWrapper>
+)
+
+const FilterList = ({ header, handleChange, roastTypes }) => (
+  <AlgoliaRefinementListWrapper>
+    <AlgoliaRefinementHeader>
+      {header}
+    </AlgoliaRefinementHeader>
+    <AlgoliaStyledUl>
+      {roastTypes.map(roast => (
+        <AlgoliaStyledLi key={roast.label}>
+          <label>
+            <input type="checkbox" checked={roast.isRefined} value={roast.value} onChange={handleChange} />
+            <AlgoliaStyledOuterRefinementListSpan>
+              <span style={{fontWeight: roast.isRefined ? '700' : ''}}>
+                {roast.label}
+              </span>
+            </AlgoliaStyledOuterRefinementListSpan>
+            {/* <AlgoliaStyledRefinementListCountSpan>
+              {roast.count}
+            </AlgoliaStyledRefinementListCountSpan> */}
+          </label>
+        </AlgoliaStyledLi>
+      ))}
+    </AlgoliaStyledUl>
+  </AlgoliaRefinementListWrapper>
+)
+
+const ClearFilters = ({ clearFiltersAndRefinements, filters }) => (
+  <ClearRefinementsButton onClick={clearFiltersAndRefinements} disabled={!filters.length}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="11"
+      height="11"
+      viewBox="0 0 11 11"
+    >
+      <g fill="none" fillRule="evenodd" opacity=".4">
+        <path d="M0 0h11v11H0z" />
+        <path
+          fill="#000"
+          fillRule="nonzero"
+          d="M8.26 2.75a3.896 3.896 0 1 0 1.102 3.262l.007-.056a.49.49 0 0 1 .485-.456c.253 0 .451.206.437.457 0 0 .012-.109-.006.061a4.813 4.813 0 1 1-1.348-3.887v-.987a.458.458 0 1 1 .917.002v2.062a.459.459 0 0 1-.459.459H7.334a.458.458 0 1 1-.002-.917h.928z"
+        />
+      </g>
+    </svg>
+    Clear filters
+  </ClearRefinementsButton>
+)
+
+const ClearFiltersMobile = ({ clearFiltersAndRefinements }) => (
+  <MobileFiltersButtonWrapper>
+    <ClearRefinementsButtonMobile onClick={clearFiltersAndRefinements}>Reset Filters</ClearRefinementsButtonMobile>
+  </MobileFiltersButtonWrapper>
+)
+
+const SaveFiltersMobile = ({ onClick }) => (
+  <MobileFiltersButtonWrapper>
+    <SaveFiltersButtonMobile onClick={onClick}>
+      View coffees
+    </SaveFiltersButtonMobile>
+  </MobileFiltersButtonWrapper>
+)
+
+// this is kept separate so when loading, it'll only hide the products being shown, not the entire page
+// might make more sense to rename as Products
+const Search = ({ filters, filtering }) => {
   // const [searchQuery, setSearchQuery] = useState('') // TODO: ADD SEARCH QUERY TO FILTERS
   const [loading, setLoading] = useState(false)
   const [coffees, setCoffees] = useState([])
 
-  const filteredCoffees = useMemo(() => {
-    const trueFilters = {}
-    Object.keys(filters).forEach(k => {
-      if (filters[k] === true) {
-        trueFilters[k] = filters[k]
-      }
-    })
-    return coffees.filter((coffee) => {
-      let roastFound = false
-
-      if (coffee.roastType === 'light' && trueFilters.lightRoast) {
-        roastFound = true
-      }
-
-      if (coffee.roastType === 'medium' && trueFilters.mediumRoast) {
-        roastFound = true
-      }
-
-      if (coffee.roastType === 'dark' && trueFilters.darkRoast) {
-        roastFound = true
-      }
-
-      if (!trueFilters.organic && !trueFilters.shadeGrown && !trueFilters.fairTrade) {
-        return roastFound
-      }
-      else {
-        if (trueFilters.organic && !coffee.organic) {
-          return false
-        }
-        if (trueFilters.fairTrade && !coffee.fairTrade) {
-          return false
-        }
-        if (trueFilters.shadeGrown && !coffee.shadeGrown) {
-          return false
-        }
-
-        if (!trueFilters.lightRoast && !trueFilters.mediumRoast && !trueFilters.darkRoast) {
-          return true
-        }
-        else {
-          return roastFound
-        }
-      }
-    })
-  }, [coffees, filters])
-
   useEffect(() => {
-    const getCoffees = async () => {
-
+    const getQuery = async () => {
       setLoading(true)
-      const coffeeList = await coffeeService.getAll()
-      
-      setCoffees(coffeeList)
+      const response = await axios.get('/api/coffees/query', { params: { roastType: filters } })
+      setCoffees(response.data)
       setLoading(false)
     }
-    getCoffees()
-  }, [])
-
-  const onFavoriteClick = (coffeeId) => {
-    userService.saveCoffee(coffeeId)
-  }
+    getQuery()
+  }, [filters])
 
   if (loading) {
-    return <div>Loading...</div>
+    return <p>Loading...</p>
+  }
+
+  // this hides the products so they aren't shown behind the mobile filter view
+  if (filtering) {
+    return null
   }
 
   return (
-    <CoffeeList coffees={filteredCoffees.length > 0 ? filteredCoffees : coffees} onFavoriteClick={onFavoriteClick} />
-  )
-}
-
-const CoffeeList = ({ coffees, onFavoriteClick }) => {
-  return (
     <FlexContainer>
-      {coffees.map(coffee => (
-          <CoffeeItem coffee={coffee} key={coffee.id} onFavoriteClick={onFavoriteClick} />
+      {coffees.filter(coffee => filters.length !== 0 ? filters.includes(coffee.roastType) : coffee).map(coffee => (
+          <CoffeeItem coffee={coffee} key={coffee.id} />
         ))}
     </FlexContainer>
   )
 }
 
-const CoffeeItem = ({ coffee, onFavoriteClick }) => (
+const CoffeeItem = ({ coffee }) => (
   <FlexProductDiv>
-    <ImageContainer>
-      <ImageContentContainer>
-        <img src={coffee.imageUrl} alt={coffee.coffeeName} />
-      </ImageContentContainer>
-    </ImageContainer>
-    <InfoContainer>
-      <div style={{height: '40px', overflow: 'hidden', fontWeight: 'bold'}}>{coffee.coffeeName}</div>
-      <div style={{margin: '5px 0'}}>${coffee.price}</div>
-      <div style={{margin: '5px 0', textTransform: 'capitalize'}}>{coffee.roastType} roast</div>
-      <div>
-        <button onClick={() => onFavoriteClick(coffee.id)}>Favorite</button>
-      </div>
-    </InfoContainer>
+    <ProductLink to={`/coffees/${coffee.id}`}>
+      <ImageContainer>
+        <ImageContentContainer>
+          <img src={`${process.env.REACT_APP_IMAGE_PATH}/${coffee.imagePath ? coffee.imagePath : coffee.roaster.imagePath}`} alt={coffee.coffeeName} />
+        </ImageContentContainer>
+      </ImageContainer>
+      <InfoContainer>
+        <Box height='40px' overflow='hidden' fontWeight='bold'>{coffee.coffeeName}</Box>
+        <Box margin='5px 0'>${coffee.price}</Box>
+        <Box margin='5px 0' style={{textTransform: 'capitalize'}}>{coffee.roastType} roast</Box>
+      </InfoContainer>
+    </ProductLink>
   </FlexProductDiv>
 )
-
-const Search = compose(
-  withRouter,
-  withFirebase,
-)(SearchBase)
 
 const condition = authUser => !!authUser
 

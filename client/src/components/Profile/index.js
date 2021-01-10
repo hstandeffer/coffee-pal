@@ -15,7 +15,7 @@ const ProfilePage = () => {
           <Button variant="outlined" size="large" color="primary">Submit New Coffee</Button>
         </Link>
       </Box>
-      <ProductGrid route={'coffee'} heading={'Your Saved Coffees'}/>
+      <ProductGrid route={'coffees'} heading={'Your Saved Coffees'}/>
     </Box>
   )
 }

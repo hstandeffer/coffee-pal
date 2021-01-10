@@ -6,7 +6,7 @@ import { StyledInput, StyledTextField } from './style'
 import Input from '@material-ui/core/Input'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Autocomplete from '@material-ui/lab/Autocomplete'
-
+import { useParams } from "react-router-dom"
 import { getStoredAuthToken } from '../../shared/utils/authToken'
 import axios from 'axios'
 
@@ -20,6 +20,7 @@ import Alert from '@material-ui/lab/Alert'
 
 import withAuthorization from '../Session/withAuthorization'
 import roasterService from '../../services/roaster'
+import coffeeService from '../../services/coffee'
 
 import Toast from '../../shared/components/Toast'
 
@@ -56,12 +57,13 @@ const MenuProps = {
   },
 }
 
-const Add = () => {
+const Edit = () => {
   const config = {
     headers: { Authorization: getStoredAuthToken() ? `Bearer ${getStoredAuthToken()}` : undefined },
   }
 
   const classes = useStyles()
+  let { id } = useParams()
 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState()
@@ -85,8 +87,20 @@ const Add = () => {
     roasterService.getList().then(roasters => {
       setBrands(roasters)
     })
+    coffeeService.get(id).then(coffee => {
+      setCoffeeName(coffee.coffeeName)
+      setSelectedBrand(coffee.roaster)
+      setSelectedCountry(coffee.countries)
+      setFairTrade(coffee.fairTrade)
+      setOrganic(coffee.organic)
+      setShadeGrown(coffee.shadeGrown)
+      setUrl(coffee.url)
+      setImage(coffee.imagePath)
+      setPrice(coffee.price)
+      setRoastType(coffee.roastType)
+    })
     setLoading(false)
-  }, [])
+  }, [id])
 
   const handleUpload = async event => {
     setImage(event.target.files[0])
@@ -127,7 +141,7 @@ const Add = () => {
 
   return (
     <Box maxWidth="600px" p="2.5rem" my="2.5rem" mx="auto" border="1px solid #d9e7ea" borderRadius="4px" textAlign="center">
-      <Typography gutterBottom paragraph variant="h4" component="h2">Add New Coffee</Typography>
+      <Typography gutterBottom paragraph variant="h4" component="h2">Edit Coffee</Typography>
       <Box textAlign="left">
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <FormLabel htmlFor="coffeeName">Coffee Name</FormLabel>
@@ -137,7 +151,9 @@ const Add = () => {
           <Autocomplete
             id="brand"
             options={brands}
-            getOptionLabel={(option) => option.name}
+            value={selectedBrand || null}
+            getOptionSelected={(option, value) => option.name === value.name}
+            getOptionLabel={(option) => option.name ? option.name : ''}
             style={{ width: '100%' }}
             onChange={(event, newValue, reason) => {
               if (reason === 'clear') {
@@ -194,8 +210,12 @@ const Add = () => {
           <FormLabel htmlFor="url">Product URL</FormLabel>
           <StyledInput id="url" value={url} onChange={({ target }) => setUrl(target.value)} />
 
-          <FormLabel color="primary" htmlFor="roasterImage">Product Image</FormLabel>
+          <FormLabel color="primary" htmlFor="roasterImage">Add New Image</FormLabel>
           <StyledInput type="file" name="roasterImage" id="roasterImage" onChange={handleUpload} />
+
+          <FormLabel color="primary" htmlFor="currentImage">Current Image</FormLabel>
+          {image ? <img height="50" src={`${process.env.REACT_APP_IMAGE_PATH}/${image}`} alt={coffeeName} /> : ' None'}
+          
 
           <Box display="flex" flexDirection="row" justifyContent="space-around">
             <FormControlLabel
@@ -225,7 +245,7 @@ const Add = () => {
             </Box>
           }
 
-          <StyledButton type="submit">Submit</StyledButton>
+          <StyledButton type="submit">Update</StyledButton>
         </form>
       </Box>
       <Toast open={open} setOpen={setOpen} severity="success" message="Coffee has been successfully added" />
@@ -235,4 +255,4 @@ const Add = () => {
 
 const condition = authUser => !!authUser
 
-export default withAuthorization(condition)(Add)
+export default withAuthorization(condition)(Edit)
