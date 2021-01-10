@@ -111,7 +111,7 @@ const Add = () => {
         setOpen(true)
         setCoffeeName('')
         setSelectedBrand('')
-        setSelectedCountry('')
+        setSelectedCountry([])
         setFairTrade('')
         setOrganic('')
         setShadeGrown('')

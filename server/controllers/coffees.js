@@ -63,7 +63,7 @@ coffeesRouter.get('/query', async (request, response) => {
     return response.json(noQueryCoffees)
   }
 
-  const coffees = await Coffee.find({ 'roastType': { $in: query.roastType } }).limit(5).populate('roaster')
+  const coffees = await Coffee.find({ roastType: { $in: query.roastType }, price: { $gte: query.priceLow, $lte: query.priceHigh } }).limit(5).populate('roaster')
 
   return response.json(coffees)
 })

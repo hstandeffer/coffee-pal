@@ -16,32 +16,32 @@ import { BrowseWrapper, BrowseFiltersDiv, TestDiv, BrowseFiltersHeaderDiv, Clear
 import { Box } from '@material-ui/core'
 
 const SearchPage = () => {
-  const [filters, setFilters] = useState([])
-  const [roastTypes, setRoastTypes] = useState([{ label: 'Light Roast', value: 'light', isRefined: false}, { label: 'Medium Roast', value: 'medium', isRefined: false}, { label: 'Dark Roast', value: 'dark', isRefined: false}])
-  const [filtering, setFiltering] = useState(false)
-  const [priceRange, setPriceRange] = useState([1, 20])
-  
   const minPrice = 1
-  const maxPrice = 20
+  const maxPrice = 50
+  const initialFilters = {roastType: [], price: {min: minPrice, max: maxPrice}}
+  const initialItems = {roastTypes: [{ label: 'Light Roast', value: 'light', isRefined: false}, { label: 'Medium Roast', value: 'medium', isRefined: false}, { label: 'Dark Roast', value: 'dark', isRefined: false}], priceRange: [minPrice, maxPrice]}
 
-  const handleChange = async (event) => {
-    if (filters.includes(event.target.value)) {
-      setFilters(filters.filter(f => f !== event.target.value))
+  const [filtering, setFiltering] = useState(false)
+  const [filters, setFilters] = useState(initialFilters)
+  const [items, setItems] = useState(initialItems)  
+
+  const handleRoastChange = async (event) => {
+    if (filters.roastType.includes(event.target.value)) {
+      setFilters({...filters, roastType: filters.roastType.filter(f => f !== event.target.value)})
     }
     else {
-      setFilters(filters.concat(event.target.value))
+      setFilters({...filters, roastType: filters.roastType.concat(event.target.value)})
     }
-    setRoastTypes(roastTypes.map(roast => roast.value === event.target.value ? {...roast, isRefined: !roast.isRefined } : roast))
+    setItems({...items, roastTypes: items.roastTypes.map(roast => roast.value === event.target.value ? {...roast, isRefined: !roast.isRefined } : roast)})
   }
 
   const handlePriceChange = async (newValue) => {
-    setPriceRange(newValue)
+    setFilters({...filters, price: {min: newValue[0], max: newValue[1]}})
   }
 
   const clearFiltersAndRefinements = async (event) => {
-    setFilters([])
-    setRoastTypes(roastTypes.map(roast => ({...roast, isRefined: false})))
-    setPriceRange([minPrice, maxPrice])
+    setFilters(initialFilters)
+    setItems(initialItems)
   }
 
   return (
@@ -60,8 +60,8 @@ const SearchPage = () => {
           </BrowseFiltersHeaderDiv>
           {/* Insert current filters here later - will require restructuring */}
           <AlgoliaAllRefinementListsWrapper>
-            <FilterList header={'Roast Type'} roastTypes={roastTypes} handleChange={handleChange} />
-            <PriceFilter minPrice={minPrice} maxPrice={maxPrice} header={'Price'} priceRange={priceRange} handlePriceChange={handlePriceChange} />
+            <FilterList header={'Roast Type'} roastTypes={items.roastTypes} handleChange={handleRoastChange} />
+            <PriceFilter items={items} minPrice={minPrice} maxPrice={maxPrice} setItems={setItems} header={'Price'} priceRange={items.priceRange} handlePriceChange={handlePriceChange} />
           </AlgoliaAllRefinementListsWrapper>
           <TestFooter filtering={filtering}>
             <ClearFiltersMobile />
@@ -77,18 +77,19 @@ const SearchPage = () => {
   )
 }
 
-const PriceFilter = ({ minPrice, maxPrice, header, priceRange, handlePriceChange }) => (
+const PriceFilter = ({ minPrice, maxPrice, header, items, setItems, priceRange, handlePriceChange }) => (
   <AlgoliaRefinementListWrapper>
     <AlgoliaRefinementHeader>
       {header}
     </AlgoliaRefinementHeader>
     <Slider
       value={priceRange}
-      onChange={(event, newValue) => handlePriceChange(newValue)}
+      onChange={(event, newValue) => setItems({...items, priceRange: newValue})}
+      onChangeCommitted={(event, newValue) => handlePriceChange(newValue)}
       valueLabelDisplay="auto"
       marks={[{value: minPrice, label: `$${minPrice}`}, {value: maxPrice, label: `$${maxPrice}`}]}
-      min={1}
-      max={20}
+      min={minPrice}
+      max={maxPrice}
     />
   </AlgoliaRefinementListWrapper>
 )
@@ -119,7 +120,7 @@ const FilterList = ({ header, handleChange, roastTypes }) => (
 )
 
 const ClearFilters = ({ clearFiltersAndRefinements, filters }) => (
-  <ClearRefinementsButton onClick={clearFiltersAndRefinements} disabled={!filters.length}>
+  <ClearRefinementsButton onClick={clearFiltersAndRefinements} disabled={filters.roastType.length === 0 && (filters.price.min === 1 && filters.price.max === 20)}>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="11"
@@ -163,7 +164,7 @@ const Search = ({ filters, filtering }) => {
   useEffect(() => {
     const getQuery = async () => {
       setLoading(true)
-      const response = await axios.get('/api/coffees/query', { params: { roastType: filters } })
+      const response = await axios.get('/api/coffees/query', { params: { roastType: filters.roastType, priceLow: filters.price.min, priceHigh: filters.price.max } })
       setCoffees(response.data)
       setLoading(false)
     }
@@ -181,7 +182,7 @@ const Search = ({ filters, filtering }) => {
 
   return (
     <FlexContainer>
-      {coffees.filter(coffee => filters.length !== 0 ? filters.includes(coffee.roastType) : coffee).map(coffee => (
+      {coffees.map(coffee => (
           <CoffeeItem coffee={coffee} key={coffee.id} />
         ))}
     </FlexContainer>
@@ -199,7 +200,7 @@ const CoffeeItem = ({ coffee }) => (
       <InfoContainer>
         <Box height='40px' overflow='hidden' fontWeight='bold'>{coffee.coffeeName}</Box>
         <Box margin='5px 0'>${coffee.price}</Box>
-        <Box margin='5px 0' style={{textTransform: 'capitalize'}}>{coffee.roastType} roast</Box>
+        <Box margin='5px 0' style={{textTransform: 'capitalize'}}>{coffee.roastType ? `${coffee.roastType} roast` : ''}</Box>
       </InfoContainer>
     </ProductLink>
   </FlexProductDiv>
