@@ -16,14 +16,21 @@ const ProductGrid = ({ route, heading, subheading }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const getSavedCoffees = async () => {
-      setLoading(true)
-      const currentUser = await userService.getCurrentUser()
-      setCoffees(currentUser.saved_coffees)
-      setLoading(false)
-    }
-    getSavedCoffees()
+    let isMounted = true
+    setLoading(true)
+    userService.getCurrentUser().then(currentUser => {
+      if (isMounted) {
+        setCoffees(currentUser.saved_coffees)
+        setLoading(false)
+      }
+    })
+    return () => { isMounted = false }
+
   }, [])
+
+  if (loading) {
+    return <p>Loading...</p>
+  }
 
   return (
     <TastingWrapper>
@@ -35,15 +42,13 @@ const ProductGrid = ({ route, heading, subheading }) => {
         <BrowseWrapper>
           <BrowseHitsDiv>
             <FlexContainer>
-            {!loading && coffees ?
-                coffees.length === 0 ?
-                  <Box width="100%" align="center">
-                    <Typography variant="h5">No saved coffees, try adding one from the <Link to={ROUTES.BROWSE}>browse page</Link>!</Typography>
-                  </Box> :
-                  coffees.map(coffee => (
-                    <CoffeeItem key={coffee.id} coffee={coffee} route={route} />
-                  ))
-                : <h2>Loading Coffees...</h2>
+            {coffees.length === 0 ?
+              <Box width="100%" align="center">
+                <Typography variant="h5">No saved coffees, try adding one from the <Link to={ROUTES.BROWSE}>browse page</Link>!</Typography>
+              </Box> :
+              coffees.map(coffee => (
+                <CoffeeItem key={coffee.id} coffee={coffee} route={route} />
+              ))
             }
             </FlexContainer>
           </BrowseHitsDiv>
