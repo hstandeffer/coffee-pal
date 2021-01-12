@@ -15,6 +15,7 @@ import BrowsePage from '../Browse'
 import TastingPage from '../Tasting'
 import ProductTastingPage from '../Tasting/ProductTasting'
 import ProductPage from '../Product'
+import CoffeeEditPage from '../Coffee/Edit'
 import AddCoffeePage from '../Coffee/Add'
 import RoasterPage from '../Roaster'
 import AddRoasterPage from '../Roaster/Add'
@@ -38,6 +39,7 @@ class App extends React.Component {
     if (!this.state.loaded) {
       return null
     }
+    
     return (
       <Router>
         <Navigation /> 
@@ -51,7 +53,7 @@ class App extends React.Component {
           <Route path={ROUTES.PROFILE} component={ProfilePage} />
           <Route path={ROUTES.ADMIN} component={AdminPage} />
           <Route path={ROUTES.BROWSE} component={BrowsePage} />
-          <Route path={ROUTES.PRODUCT} component={ProductPage} />
+          <Route exact path={ROUTES.COFFEE_EDIT} component={CoffeeEditPage} />
           <Route path={ROUTES.SEARCH} component={SearchPage} />
           <Route exact path={ROUTES.TASTINGS} component={TastingPage} />
           <Route path={ROUTES.PRODUCT_TASTING} component={ProductTastingPage} />
@@ -59,6 +61,7 @@ class App extends React.Component {
           <Route exact path={ROUTES.ROASTERS} component={RoasterPage} />
           <Route path={ROUTES.ADD_ROASTERS} component={AddRoasterPage} />
           <Route path={ROUTES.VIEW_ROASTER} component={ViewRoasterPage} />
+          <Route exact path={ROUTES.PRODUCT} component={ProductPage} />
         </Switch>
       </Router>
     )

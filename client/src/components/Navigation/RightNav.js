@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import * as ROUTES from '../../constants/routes'
 import { Link } from 'react-router-dom'
-import StyledButton from '../SignOut'
+import { SignOutButton } from '../SignOut'
 import AuthUserContext from '../Session/context'
 
 const StyledLink = styled(Link)`
@@ -80,7 +80,7 @@ const RightNav = ({ open, closeMenu }) => {
           <StyledLink open={open} onClick={closeMenu} to={obj.route}>{obj.text}</StyledLink>
         </li>
       ))}
-      {authContext.isLoggedIn ? <li><StyledButton open={open} closeMenu={closeMenu} /></li> : null}
+      {authContext.isLoggedIn ? <li><SignOutButton open={open} closeMenu={closeMenu} /></li> : null}
     </Ul>
   )
 }

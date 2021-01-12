@@ -1,6 +1,6 @@
 import React from 'react';
 import { Wrapper } from '../../shared-style';
-import PasswordChangeForm from '../PasswordChange';
+import { PasswordChangeForm } from '../PasswordChange';
 import { withAuthorization } from '../Session';
 import Typography from '@material-ui/core/Typography';
 import { Box } from '@material-ui/core';
@@ -16,7 +16,6 @@ const AccountPage = () => (
   </Wrapper>
 )
 
-// const condition = authUser => !!authUser
-const condition = () => 'all'
+const condition = authUser => !!authUser
 
 export default withAuthorization(condition)(AccountPage)

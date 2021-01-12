@@ -4,12 +4,12 @@ import * as ROUTES from '../../constants/routes'
 import { withAuthorization, AuthUserContext } from '../Session'
 import { Redirect } from 'react-router-dom'
 
-const SignOutButton = (props) => {
+export const SignOutButton = (props) => {
   const authUserContext = useContext(AuthUserContext)
 
-  const handleSignout = async () => {
-    await authUserContext.logout()
-    await props.closeMenu()
+  const handleSignout = () => {
+    authUserContext.logout()
+    props.closeMenu()
     return <Redirect to={ROUTES.LANDING} />
   }
   

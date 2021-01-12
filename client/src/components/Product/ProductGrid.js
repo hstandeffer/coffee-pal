@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react'
 import userService from '../../services/user'
 import withAuthorization from '../Session/withAuthorization'
 
-import { imagePath } from '../../shared/utils/helpers'
-
 import { FlexProductDiv, ImageContainer, ImageContentContainer, InfoContainer } from '../Search/style'
 import { BrowseHitsDiv, BrowseWrapper, FlexContainer, ProductLink } from '../Browse/style'
 import { TastingWrapper, TastingDiv } from '../Tasting/style'
@@ -18,14 +16,21 @@ const ProductGrid = ({ route, heading, subheading }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const getSavedCoffees = async () => {
-      setLoading(true)
-      const currentUser = await userService.getCurrentUser()
-      setCoffees(currentUser.saved_coffees)
-      setLoading(false)
-    }
-    getSavedCoffees()
+    let isMounted = true
+    setLoading(true)
+    userService.getCurrentUser().then(currentUser => {
+      if (isMounted) {
+        setCoffees(currentUser.saved_coffees)
+        setLoading(false)
+      }
+    })
+    return () => { isMounted = false }
+
   }, [])
+
+  if (loading) {
+    return <p>Loading...</p>
+  }
 
   return (
     <TastingWrapper>
@@ -37,15 +42,13 @@ const ProductGrid = ({ route, heading, subheading }) => {
         <BrowseWrapper>
           <BrowseHitsDiv>
             <FlexContainer>
-            {!loading && coffees ?
-                coffees.length === 0 ?
-                  <Box width="100%" align="center">
-                    <Typography variant="h5">No saved coffees, try adding one from the <Link to={ROUTES.BROWSE}>browse page</Link>!</Typography>
-                  </Box> :
-                  coffees.map(coffee => (
-                    <CoffeeItem key={coffee.id} coffee={coffee} route={route} />
-                  ))
-                : <h2>Loading Coffees...</h2>
+            {coffees.length === 0 ?
+              <Box width="100%" align="center">
+                <Typography variant="h5">No saved coffees, try adding one from the <Link to={ROUTES.BROWSE}>browse page</Link>!</Typography>
+              </Box> :
+              coffees.map(coffee => (
+                <CoffeeItem key={coffee.id} coffee={coffee} route={route} />
+              ))
             }
             </FlexContainer>
           </BrowseHitsDiv>
@@ -58,10 +61,10 @@ const ProductGrid = ({ route, heading, subheading }) => {
 export const CoffeeItem = ({ coffee, route }) => {
   return (
     <FlexProductDiv>
-      <ProductLink to={`/${route ? route : 'tasting'}/${coffee.coffeeName.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${coffee.id}`}>
+      <ProductLink to={`/${route ? route : 'tastings'}/${coffee.id}`}>
         <ImageContainer>
           <ImageContentContainer>
-            <img src={`${coffee.imageUrl}`} alt={coffee.coffeeName} />
+            <img src={`${process.env.REACT_APP_IMAGE_PATH}/${coffee.imagePath ? coffee.imagePath : coffee.roaster.imagePath}`} alt={coffee.coffeeName} />
           </ImageContentContainer>
         </ImageContainer>
         <InfoContainer>
@@ -74,13 +77,13 @@ export const CoffeeItem = ({ coffee, route }) => {
   )
 }
 
-export const RoasterItem = ({ roaster, route }) => {
+export const RoasterItem = ({ roaster }) => {
   return (
     <FlexProductDiv>
-      <ProductLink to={`/${route ? route : 'tasting'}/${roaster.name.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${roaster.id}`}>
+      <ProductLink to={`roasters/${roaster.id}`}>
         <ImageContainer>
           <ImageContentContainer>
-            <img src={`${imagePath}/${roaster.imagePath}`} alt={roaster.name} />
+            <img src={`${process.env.REACT_APP_IMAGE_PATH}/${roaster.imagePath}`} alt={roaster.name} />
           </ImageContentContainer>
         </ImageContainer>
         <InfoContainer>
