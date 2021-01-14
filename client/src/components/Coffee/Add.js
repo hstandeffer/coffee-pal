@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Box, Typography, FormLabel, Select, Link } from '@material-ui/core'
+import { Link as RouterLink } from 'react-router-dom';
 import Checkbox from '@material-ui/core/Checkbox'
 import { StyledButton } from '../../shared-style'
 import { StyledInput, StyledTextField } from './style'
@@ -149,7 +150,9 @@ const Add = () => {
             size="small"
             renderInput={(params) => <StyledTextField style={{ margin: '5px auto 5px', padding: 0 }} {...params} variant="outlined" />}
           />
-          <Typography paragraph variant="body2" color="textSecondary">Brand not listed? <Link style={{ cursor: 'pointer' }} href={`/roasters/add`}>Add it here</Link>.</Typography>
+          <Typography paragraph variant="body2" color="textSecondary">Brand not listed?
+            <Link component={RouterLink} style={{ cursor: 'pointer' }} to={`/roasters/add`}>Add it here</Link>.
+          </Typography>
 
           <FormLabel htmlFor="price">Price ($)</FormLabel>
           <StyledInput id="price" type="number" required value={price} onChange={({ target }) => setPrice(target.value)} />

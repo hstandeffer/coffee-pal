@@ -1,25 +1,51 @@
-import React from 'react';
-import { withAuthorization } from '../Session';
+import React from 'react'
+import dayjs from 'dayjs'
+import { Box, Typography, makeStyles } from '@material-ui/core'
 
-import ProductGrid from '../Product/ProductGrid';
-import { Box, Button } from '@material-ui/core';
-import { Link } from 'react-router-dom'
+import { ImageContentContainer } from '../Search/style'
+import { AvatarImageContainer } from './style'
 
-import * as ROUTES from '../../constants/routes'
+const useStyles = makeStyles((theme) => ({
+  info: {
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'column',
+      alignItems: 'center'
+    }
+  },
+  userInfo: {
+    [theme.breakpoints.down('xs')]: {
+      textAlign: 'center'
+    }
+  },
+  avatar: {
+    [theme.breakpoints.down('xs')]: {
+      maxWidth: '125px'
+    },
+    [theme.breakpoints.up('sm')]: {
+      maxWidth: '175px',
+      marginRight: '20px'
+    }
+  }
+}))
 
-const ProfilePage = () => {
+const ProfilePage = ({ user }) => {
+  const classes = useStyles()
+
   return (
-    <Box>
-      <Box marginRight="2.5em" marginTop="1.5em" textAlign="right">
-        <Link style={{textDecoration: 'none'}} to={ROUTES.ADD_COFFEE}>
-          <Button variant="outlined" size="large" color="primary">Submit New Coffee</Button>
-        </Link>
+    <Box className={classes.info} display="flex" flexDirection="row" justifyContent="flex-start">
+      <AvatarImageContainer className={classes.avatar}>
+        <ImageContentContainer>
+          <img alt="default profile" src="https://t4.ftcdn.net/jpg/03/46/93/61/360_F_346936114_RaxE6OQogebgAWTalE1myseY1Hbb5qPM.jpg"></img>
+        </ImageContentContainer>
+      </AvatarImageContainer>
+      <Box>
+        <Box className={classes.userInfo}>
+          <Typography variant="h4">{user.username}</Typography>
+          <Typography variant="body1">User since {dayjs(user.register_date).format('MMM YYYY')}</Typography>
+        </Box>
       </Box>
-      <ProductGrid route={'coffees'} heading={'Your Saved Coffees'}/>
     </Box>
   )
 }
 
-const condition = authUser => !!authUser
-
-export default withAuthorization(condition)(ProfilePage)
+export default ProfilePage

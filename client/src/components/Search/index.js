@@ -8,11 +8,10 @@ import {
   InfoContainer
 } from './style'
 import axios from 'axios'
-import Typography from '@material-ui/core/Typography'
 import Slider from '@material-ui/core/Slider'
 
 import Hidden from '@material-ui/core/Hidden'
-import { BrowseWrapper, BrowseFiltersDiv, TestDiv, BrowseFiltersHeaderDiv, ClearRefinementsButton, AlgoliaStyledUl, AlgoliaAllRefinementListsWrapper, AlgoliaRefinementListWrapper, AlgoliaStyledLi, AlgoliaStyledOuterRefinementListSpan, AlgoliaStyledRefinementListCountSpan, AlgoliaRefinementHeader, BrowseHitsDiv, ProductLink, TestButton, MobileFiltersButtonWrapper, ClearRefinementsButtonMobile, SaveFiltersButtonMobile, TestFooter } from '../Browse/style'
+import { BrowseWrapper, BrowseFiltersDiv, TestDiv, BrowseFiltersHeaderDiv, ClearRefinementsButton, AlgoliaStyledUl, AlgoliaAllRefinementListsWrapper, AlgoliaRefinementListWrapper, AlgoliaStyledLi, AlgoliaStyledOuterRefinementListSpan, AlgoliaRefinementHeader, BrowseHitsDiv, ProductLink, TestButton, MobileFiltersButtonWrapper, ClearRefinementsButtonMobile, SaveFiltersButtonMobile, TestFooter } from '../Browse/style'
 import { Box } from '@material-ui/core'
 
 const SearchPage = () => {

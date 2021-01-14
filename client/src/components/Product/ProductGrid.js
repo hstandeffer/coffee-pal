@@ -1,60 +1,37 @@
-import React, { useState, useEffect } from 'react'
-import userService from '../../services/user'
+import React from 'react'
 import withAuthorization from '../Session/withAuthorization'
 
 import { FlexProductDiv, ImageContainer, ImageContentContainer, InfoContainer } from '../Search/style'
-import { BrowseHitsDiv, BrowseWrapper, FlexContainer, ProductLink } from '../Browse/style'
-import { TastingWrapper, TastingDiv } from '../Tasting/style'
+import { BrowseHitsDiv, FlexContainer, ProductLink } from '../Browse/style'
+import { ProductWrapper, ProductGridDiv } from './style'
 import Typography from '@material-ui/core/Typography'
 import { Box } from '@material-ui/core'
 import { Link } from 'react-router-dom';
 
 import * as ROUTES from '../../constants/routes'
 
-const ProductGrid = ({ route, heading, subheading }) => {
-  const [coffees, setCoffees] = useState([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    let isMounted = true
-    setLoading(true)
-    userService.getCurrentUser().then(currentUser => {
-      if (isMounted) {
-        setCoffees(currentUser.saved_coffees)
-        setLoading(false)
-      }
-    })
-    return () => { isMounted = false }
-
-  }, [])
-
-  if (loading) {
-    return <p>Loading...</p>
-  }
-
+const ProductGrid = ({ coffees, route, heading, subheading }) => {
   return (
-    <TastingWrapper>
-      <TastingDiv style={{ marginTop: '1rem' }}>
-        <Box my={2}>
-          <Typography variant="h4" component="h2">{heading}</Typography>
-        </Box>
-        <Typography variant="h6">{subheading}</Typography>
-        <BrowseWrapper>
-          <BrowseHitsDiv>
-            <FlexContainer>
-            {coffees.length === 0 ?
-              <Box width="100%" align="center">
-                <Typography variant="h5">No saved coffees, try adding one from the <Link to={ROUTES.BROWSE}>browse page</Link>!</Typography>
-              </Box> :
-              coffees.map(coffee => (
-                <CoffeeItem key={coffee.id} coffee={coffee} route={route} />
-              ))
-            }
-            </FlexContainer>
-          </BrowseHitsDiv>
-        </BrowseWrapper>
-      </TastingDiv>
-    </TastingWrapper>
+    <ProductGridDiv style={{ marginTop: '1rem' }}>
+      <Box my={2}>
+        <Typography variant="h4" component="h2">{heading}</Typography>
+      </Box>
+      <Typography variant="h6">{subheading}</Typography>
+      <ProductWrapper>
+        <BrowseHitsDiv>
+          <FlexContainer>
+          {coffees.length === 0 ?
+            <Box width="100%" align="center">
+              <Typography variant="h5">No saved coffees, try adding one from the <Link to={ROUTES.BROWSE}>browse page</Link>!</Typography>
+            </Box> :
+            coffees.map(coffee => (
+              <CoffeeItem key={coffee.id} coffee={coffee} route={route} />
+            ))
+          }
+          </FlexContainer>
+        </BrowseHitsDiv>
+      </ProductWrapper>
+    </ProductGridDiv>
   )
 }
 

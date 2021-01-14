@@ -7,11 +7,11 @@ import SignUpPage from '../SignUp'
 import SignInPage from '../SignIn'
 import PasswordForget from '../PasswordForget'
 import PasswordReset from '../PasswordReset'
-import AccountPage from '../Account'
-import AdminPage from '../Admin'
+import AccountPage from '../Profile/Account'
+import { SavedCoffees } from '../Profile/Saved'
 import ProfilePage from '../Profile'
-import SearchPage from '../Search'
-import BrowsePage from '../Browse'
+// import AdminPage from '../Admin'
+import BrowsePage from '../Search'
 import TastingPage from '../Tasting'
 import ProductTastingPage from '../Tasting/ProductTasting'
 import ProductPage from '../Product'
@@ -20,6 +20,8 @@ import AddCoffeePage from '../Coffee/Add'
 import RoasterPage from '../Roaster'
 import AddRoasterPage from '../Roaster/Add'
 import ViewRoasterPage from '../Roaster/View'
+
+import Layout from '../../shared/layouts/Profile'
 
 import * as ROUTES from '../../constants/routes'
 import { withAuthentication } from '../Session'
@@ -49,12 +51,12 @@ class App extends React.Component {
           <Route path={ROUTES.SIGN_IN} component={SignInPage} />
           <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForget} />
           <Route path={ROUTES.PASSWORD_RESET} component={PasswordReset} />
-          <Route path={ROUTES.ACCOUNT} component={AccountPage} />
-          <Route path={ROUTES.PROFILE} component={ProfilePage} />
-          <Route path={ROUTES.ADMIN} component={AdminPage} />
+          <RouteWrapper exact path={ROUTES.PROFILE} component={ProfilePage} layout={Layout} />
+          <RouteWrapper path={ROUTES.ACCOUNT} component={AccountPage} layout={Layout} />
+          <RouteWrapper path={ROUTES.SAVED_COFFEES} component={SavedCoffees} layout={Layout} />
+          {/* <Route path={ROUTES.ADMIN} component={AdminPage} /> */}
           <Route path={ROUTES.BROWSE} component={BrowsePage} />
           <Route exact path={ROUTES.COFFEE_EDIT} component={CoffeeEditPage} />
-          <Route path={ROUTES.SEARCH} component={SearchPage} />
           <Route exact path={ROUTES.TASTINGS} component={TastingPage} />
           <Route path={ROUTES.PRODUCT_TASTING} component={ProductTastingPage} />
           <Route path={ROUTES.ADD_COFFEE} component={AddCoffeePage} />
@@ -68,5 +70,19 @@ class App extends React.Component {
   }
 }
 
-// this wraps the entire app around the authentication context so the authUser object is always available on auth state change
+const RouteWrapper = ({
+  component: Component, 
+  layout: Layout, 
+  ...rest
+}) => {
+  return (
+    <Route {...rest} render={(props) =>
+      <Layout {...props}>
+        <Component {...props} />
+      </Layout>
+    } />
+  )
+}
+
+// this wraps the entire app around the authentication context
 export default withAuthentication(App)

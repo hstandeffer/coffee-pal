@@ -3,6 +3,7 @@ import { withAuthorization } from '../Session'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import { Grid, Box, Container, Link} from '@material-ui/core'
+import { Link as RouterLink } from 'react-router-dom';
 import roasterService from '../../services/roaster'
 import { useParams } from "react-router-dom"
 import { RoasterImageBox } from './style'
@@ -79,7 +80,7 @@ const Roaster = () => {
           <div className={classes.heroButtons}>
             <Grid container spacing={2} justify="center">
               <Grid item>
-                <Link color="textSecondary" href={roaster.website}>
+                <Link component={RouterLink} color="textSecondary" to={roaster.website}>
                   <Button variant="contained" color="primary">
                     Visit Site
                   </Button>

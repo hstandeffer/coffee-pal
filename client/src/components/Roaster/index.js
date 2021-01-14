@@ -3,6 +3,7 @@ import { withAuthorization } from '../Session';
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Container, Link } from '@material-ui/core';
+import { Link as RouterLink } from 'react-router-dom';
 import roasterService from '../../services/roaster'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
@@ -64,7 +65,7 @@ const Roaster = () => {
       </Box>
       {roasterList.map(roaster => (
           <Box key={roaster.id}>
-            <Link underline="none" href={`/roasters/${roaster.id}`}>
+            <Link component={RouterLink} underline="none" to={`/roasters/${roaster.id}`}>
               <Box boxShadow={1} p={1} bgcolor="#fff" borderRadius={4} my={2}>
                 <Box display="flex">
                   <Box pr="8px" className={classes.roastImage}>

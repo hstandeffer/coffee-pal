@@ -53,7 +53,7 @@ const Landing = () => {
               )) : <Typography variant="h6">Loading...</Typography> }
             </Grid>
             <Box my={1}>
-              <Link to={ROUTES.SEARCH}><StyledButton>View All</StyledButton></Link>
+              <Link to={ROUTES.BROWSE}><StyledButton>View All</StyledButton></Link>
             </Box>
           </Box>
         </Grid>
