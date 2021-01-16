@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { withAuthorization } from '../../components/Session'
 import { Box, Button, Link, Hidden } from '@material-ui/core'
 import { Link as RouterLink } from 'react-router-dom';
 import userService from '../../services/user'
@@ -10,13 +9,13 @@ import ProfileDrawer from '../components/ProfileDrawer'
 const ProfileLinks = () => (
   <>
     <Link component={RouterLink} underline="none" to="/profile">
-      <Button fullWidth size="large">Profile</Button>
+      <Button style={{ paddingTop: '20px', paddingBottom: '20px' }} fullWidth size="large">Profile</Button>
     </Link>
     <Link component={RouterLink} underline="none" to="/profile/account">
-      <Button fullWidth size="large">Account</Button>
+      <Button style={{ paddingTop: '20px', paddingBottom: '20px' }} fullWidth size="large">Account</Button>
     </Link>
     <Link component={RouterLink} underline="none" to="/profile/saved">
-      <Button fullWidth size="large">Saved Coffees</Button>
+      <Button style={{ paddingTop: '20px', paddingBottom: '20px' }} fullWidth size="large">Saved Coffees</Button>
     </Link>
   </>
 )
@@ -64,6 +63,4 @@ const ProfilePage = ({ children }) => {
   )
 }
 
-const condition = authUser => !!authUser
-
-export default withAuthorization(condition)(ProfilePage)
+export default ProfilePage

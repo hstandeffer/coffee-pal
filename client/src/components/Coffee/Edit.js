@@ -19,7 +19,6 @@ import FormControl from '@material-ui/core/FormControl'
 import ListItemText from '@material-ui/core/ListItemText'
 import Alert from '@material-ui/lab/Alert'
 
-import withAuthorization from '../Session/withAuthorization'
 import roasterService from '../../services/roaster'
 import coffeeService from '../../services/coffee'
 
@@ -256,6 +255,4 @@ const Edit = () => {
   )
 }
 
-const condition = authUser => !!authUser
-
-export default withAuthorization(condition)(Edit)
+export default Edit

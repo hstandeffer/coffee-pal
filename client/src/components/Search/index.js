@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { withAuthorization } from '../Session'
 import {
   FlexContainer,
   FlexProductDiv,
@@ -205,6 +204,4 @@ const CoffeeItem = ({ coffee }) => (
   </FlexProductDiv>
 )
 
-const condition = authUser => !!authUser
-
-export default withAuthorization(condition)(SearchPage)
+export default SearchPage

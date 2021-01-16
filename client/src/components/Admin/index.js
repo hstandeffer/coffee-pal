@@ -2,8 +2,6 @@
 // import { compose } from 'recompose'
 
 // import fetch from 'node-fetch'
-
-// import { withAuthorization } from '../Session'
 // import * as ROLES from '../../constants/roles'
 // import { StyledDiv } from '../../shared-style.js'
 
@@ -193,6 +191,4 @@
 //   </ul>
 // ) 
 
-// const condition = authUser => authUser && !!authUser.roles[ROLES.ADMIN]
-
-// export default withAuthorization(condition)(Admin)
+// export default Admin

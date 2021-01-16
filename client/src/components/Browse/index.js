@@ -47,8 +47,6 @@ import {
   ProductLink
 } from './style'
 
-import { withAuthorization } from '../Session';
-
 const searchClient = algoliasearch(
   'BDTHKSA1TY',
   'd3b6a47c767eebf56ba2732462bf8875'
@@ -272,6 +270,4 @@ const CustomSearchBox = connectSearchBox(({ currentRefinement, isSearchStalled, 
   )
 })
 
-const condition = authUser => !!authUser
-
-export default withAuthorization(condition)(Browse)
+export default Browse

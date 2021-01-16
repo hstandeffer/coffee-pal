@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { withAuthorization } from '../Session';
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Container, Link } from '@material-ui/core';
@@ -94,6 +93,4 @@ const Roaster = () => {
   )
 }
 
-const condition = () => 'all'
-
-export default withAuthorization(condition)(Roaster)
+export default Roaster

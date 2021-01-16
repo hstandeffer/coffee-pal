@@ -34,4 +34,20 @@ authRouter.post('/', (request, response) => {
     })
 })
 
+authRouter.post('/verify', async (request, response) => {
+  const { token } = request.body
+  try {
+    const decoded = jwt.verify(token, config.JWT_SECRET)
+    if (decoded) {
+      response.json(decoded)
+    }
+    else {
+      response.status(401).json({ msg: 'Unauthenticated' })
+    }
+  }
+  catch (err) {
+    response.status(404).json({ msg: err })
+  }
+})
+
 module.exports = authRouter

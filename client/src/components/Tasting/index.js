@@ -1,6 +1,4 @@
 import React from 'react';
-import { withAuthorization } from '../Session';
-
 import ProductGrid from '../Product/ProductGrid';
 import { Box, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom'
@@ -20,6 +18,4 @@ const Tasting = () => {
   )
 }
 
-const condition = authUser => !!authUser;
-
-export default withAuthorization(condition)(Tasting)
+export default Tasting

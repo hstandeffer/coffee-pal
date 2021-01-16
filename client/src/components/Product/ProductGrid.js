@@ -1,5 +1,4 @@
 import React from 'react'
-import withAuthorization from '../Session/withAuthorization'
 
 import { FlexProductDiv, ImageContainer, ImageContentContainer, InfoContainer } from '../Search/style'
 import { BrowseHitsDiv, FlexContainer, ProductLink } from '../Browse/style'
@@ -73,6 +72,4 @@ export const RoasterItem = ({ roaster }) => {
   )
 }
 
-const condition = authUser => !!authUser;
-
-export default withAuthorization(condition)(ProductGrid)
+export default ProductGrid

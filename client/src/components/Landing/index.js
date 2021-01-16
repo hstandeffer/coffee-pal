@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { withAuthorization } from '../Session'
 import { LandingBanner, StyledButton } from './style'
 import { Link } from 'react-router-dom';
 import * as ROUTES from '../../constants/routes'
@@ -79,6 +78,4 @@ const Landing = () => {
   )
 }
 
-const condition = () => 'public'
-
-export default withAuthorization(condition)(Landing)
+export default Landing

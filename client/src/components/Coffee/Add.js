@@ -19,7 +19,6 @@ import FormControl from '@material-ui/core/FormControl'
 import ListItemText from '@material-ui/core/ListItemText'
 import Alert from '@material-ui/lab/Alert'
 
-import withAuthorization from '../Session/withAuthorization'
 import roasterService from '../../services/roaster'
 
 import Toast from '../../shared/components/Toast'
@@ -236,6 +235,4 @@ const Add = () => {
   )
 }
 
-const condition = authUser => !!authUser
-
-export default withAuthorization(condition)(Add)
+export default Add
