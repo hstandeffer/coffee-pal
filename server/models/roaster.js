@@ -51,4 +51,6 @@ roasterSchema.set('toJSON', {
   }
 })
 
+roasterSchema.index({ name: 1 })
+
 module.exports = mongoose.model('Roaster', roasterSchema)
