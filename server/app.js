@@ -5,7 +5,7 @@ const config = require('./utils/config')
 
 const app = express()
 
-mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
   .then(() => {
     console.log('connected to MongoDB')
   })
