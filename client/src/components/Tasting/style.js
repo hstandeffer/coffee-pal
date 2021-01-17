@@ -15,7 +15,6 @@ export const TastingDiv = styled.div`
 	text-align: center;
 	background: #fff;
 	border-radius: 4px;
-	border: 1px solid #d9e7ea;
 
 	@media (max-width: 600px) {
 		padding: 24px 0;

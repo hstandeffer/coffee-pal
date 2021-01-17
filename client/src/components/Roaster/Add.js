@@ -10,8 +10,6 @@ import { StyledButton, Textarea } from '../../shared-style'
 import { Input } from './style'
 
 import axios from 'axios'
-
-import withAuthorization from '../Session/withAuthorization'
 import userService from '../../services/user'
 
 const AddRoaster = () => {
@@ -108,6 +106,4 @@ const AddRoaster = () => {
   )
 }
 
-const condition = authUser => !!authUser
-
-export default withAuthorization(condition)(AddRoaster)
+export default AddRoaster

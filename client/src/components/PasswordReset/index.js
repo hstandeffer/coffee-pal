@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
-import { withAuthorization } from '../Session'
 import { StyledH1, Wrapper, Input, StyledDiv, StyledButton } from '../../shared-style'
 import { useParams } from 'react-router-dom'
 import userService from '../../services/user'
@@ -86,6 +85,4 @@ const PasswordReset = () => {
   )
 }
 
-const condition = () => 'public'
-
-export default withAuthorization(condition)(PasswordReset)
+export default PasswordReset

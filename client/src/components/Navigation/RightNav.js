@@ -57,17 +57,9 @@ const authRoutes = [
     text: 'Browse'
   },
   {
-    route: ROUTES.TASTINGS,
-    text: 'Tasting'
-  },
-  {
     route: ROUTES.PROFILE,
     text: 'Profile'
   },
-  {
-    route: ROUTES.ACCOUNT,
-    text: 'Account'
-  }
 ]
 
 const RightNav = ({ open, closeMenu }) => {

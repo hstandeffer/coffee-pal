@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { withAuthorization } from '../Session'
 import { Wrapper, Input, StyledDiv, StyledButton } from '../../shared-style'
 import userService from '../../services/user'
 
@@ -65,6 +64,4 @@ const PasswordChange = () => (
   </Wrapper>
 )
 
-const condition = () => 'public'
-
-export default withAuthorization(condition)(PasswordChange)
+export default PasswordChange

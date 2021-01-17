@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
-import { withAuthorization } from '../Session';
 import { StyledH1, Wrapper, Input, StyledDiv, StyledButton, StyledLink } from '../../shared-style';
 import AuthUserContext from '../Session/context'
 
@@ -56,6 +55,7 @@ const SignUp = () => {
             onChange={({ target }) => setUsername(target.value)}
             type="text"
             placeholder="Username"
+            tabIndex="1"
           />
           <Input
             name="email"
@@ -63,6 +63,7 @@ const SignUp = () => {
             onChange={({ target }) => setEmail(target.value)}
             type="text"
             placeholder="Email Address"
+            tabIndex="2"
           />
           <Input
             name="password"
@@ -70,6 +71,7 @@ const SignUp = () => {
             onChange={({ target }) => setPassword(target.value)}
             type="password"
             placeholder="Password"
+            tabIndex="3"
           />
           <Input
             name="confirmPassword"
@@ -77,8 +79,9 @@ const SignUp = () => {
             onChange={({ target }) => setConfirmPassword(target.value)}
             type="password"
             placeholder="Confirm Password"
+            tabIndex="4"
           />
-          <StyledButton disabled={isInvalid} type="submit">Sign Up</StyledButton> 
+          <StyledButton disabled={isInvalid} tabIndex="5" type="submit">Sign Up</StyledButton> 
           {error && <p>{error.message}</p>}
 
           <Box mt={2}>
@@ -94,6 +97,4 @@ export const SignUpLink = () => (
   <Typography component="p" color="textSecondary">Don't have an account? <StyledLink to={ROUTES.SIGN_UP}>Sign Up</StyledLink></Typography>
 )
 
-const condition = () => 'public'
-
-export default withAuthorization(condition)(SignUp)
+export default SignUp
