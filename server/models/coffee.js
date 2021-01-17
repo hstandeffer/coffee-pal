@@ -59,4 +59,6 @@ coffeeSchema.set('toJSON', {
   }
 })
 
+coffeeSchema.index({ brand: 1, roastType: 1 })
+
 module.exports = mongoose.model('Coffee', coffeeSchema)
