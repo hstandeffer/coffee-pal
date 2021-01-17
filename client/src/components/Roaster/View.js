@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import { Grid, Box, Container, Link} from '@material-ui/core'
-import { Link as RouterLink } from 'react-router-dom';
 import roasterService from '../../services/roaster'
 import { useParams } from "react-router-dom"
 import { RoasterImageBox } from './style'
@@ -23,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     borderBottom: '2px solid #cacaca'
   },
   heroButtons: {
-    marginTop: theme.spacing(4),
+    marginTop: theme.spacing(2),
   },
   cardGrid: {
     paddingTop: theme.spacing(8),
@@ -67,28 +66,23 @@ const Roaster = () => {
         <Container maxWidth="sm">
           <Box py={3}>
             <RoasterImageBox width="8rem" className={classes.roastImage}>
-              {roaster.imagePath ? <img alt="roaster" src='https://picsum.photos/200'></img> : null }
+              {roaster.imagePath ? <img alt="roaster" src={`${process.env.REACT_APP_IMAGE_PATH}/${roaster.imagePath}`}></img> : null }
             </RoasterImageBox>
           </Box>
           <Typography component="h1" variant="h3" align="center" color="textPrimary" gutterBottom>
             {roaster.name}
           </Typography>
-          <Typography variant="h5" align="center" color="textSecondary" paragraph>
+          <Typography variant="body1" align="center" color="textPrimary">
             {roaster.summary}
           </Typography>
           <div className={classes.heroButtons}>
             <Grid container spacing={2} justify="center">
               <Grid item>
-                <Link component={RouterLink} color="textSecondary" to={roaster.website}>
+                <Link color="textSecondary" href={roaster.website}>
                   <Button variant="contained" color="primary">
                     Visit Site
                   </Button>
                 </Link>
-              </Grid>
-              <Grid item>
-                <Button variant="outlined" color="primary">
-                  Contact Seller
-                </Button>
               </Grid>
             </Grid>
           </div>

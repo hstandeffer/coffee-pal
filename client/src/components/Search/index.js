@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import {
   FlexContainer,
-  FlexProductDiv,
-  ImageContainer,
-  ImageContentContainer,
-  InfoContainer
 } from './style'
 import axios from 'axios'
 import Slider from '@material-ui/core/Slider'
 
 import Hidden from '@material-ui/core/Hidden'
-import { BrowseWrapper, BrowseFiltersDiv, TestDiv, BrowseFiltersHeaderDiv, ClearRefinementsButton, AlgoliaStyledUl, AlgoliaAllRefinementListsWrapper, AlgoliaRefinementListWrapper, AlgoliaStyledLi, AlgoliaStyledOuterRefinementListSpan, AlgoliaRefinementHeader, BrowseHitsDiv, ProductLink, TestButton, MobileFiltersButtonWrapper, ClearRefinementsButtonMobile, SaveFiltersButtonMobile, TestFooter } from '../Browse/style'
-import { Box } from '@material-ui/core'
+import { BrowseWrapper, BrowseFiltersDiv, TestDiv, BrowseFiltersHeaderDiv, ClearRefinementsButton, AlgoliaStyledUl, AlgoliaAllRefinementListsWrapper, AlgoliaRefinementListWrapper, AlgoliaStyledLi, AlgoliaStyledOuterRefinementListSpan, AlgoliaRefinementHeader, BrowseHitsDiv, TestButton, MobileFiltersButtonWrapper, ClearRefinementsButtonMobile, SaveFiltersButtonMobile, TestFooter } from '../Browse/style'
+import { CoffeeItem } from '../Product/ProductGrid'
 
 const SearchPage = () => {
   const minPrice = 1
@@ -186,22 +182,5 @@ const Search = ({ filters, filtering }) => {
     </FlexContainer>
   )
 }
-
-const CoffeeItem = ({ coffee }) => (
-  <FlexProductDiv>
-    <ProductLink to={`/coffees/${coffee.id}`}>
-      <ImageContainer>
-        <ImageContentContainer>
-          <img src={`${process.env.REACT_APP_IMAGE_PATH}/${coffee.imagePath ? coffee.imagePath : coffee.roaster.imagePath}`} alt={coffee.coffeeName} />
-        </ImageContentContainer>
-      </ImageContainer>
-      <InfoContainer>
-        <Box height='40px' overflow='hidden' fontWeight='bold'>{coffee.coffeeName}</Box>
-        <Box margin='5px 0'>${coffee.price}</Box>
-        <Box margin='5px 0' style={{textTransform: 'capitalize'}}>{coffee.roastType ? `${coffee.roastType} roast` : ''}</Box>
-      </InfoContainer>
-    </ProductLink>
-  </FlexProductDiv>
-)
 
 export default SearchPage

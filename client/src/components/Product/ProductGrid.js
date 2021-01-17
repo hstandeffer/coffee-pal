@@ -2,12 +2,13 @@ import React from 'react'
 
 import { FlexProductDiv, ImageContainer, ImageContentContainer, InfoContainer } from '../Search/style'
 import { BrowseHitsDiv, FlexContainer, ProductLink } from '../Browse/style'
-import { ProductWrapper, ProductGridDiv } from './style'
+import { ProductWrapper, ProductGridDiv, LineClampSummary } from './style'
 import Typography from '@material-ui/core/Typography'
 import { Box } from '@material-ui/core'
 import { Link } from 'react-router-dom';
 
 import * as ROUTES from '../../constants/routes'
+import CoffeeBeanSvg from '../../shared/components/CoffeeBeanSvg'
 
 const ProductGrid = ({ coffees, route, heading, subheading }) => {
   return (
@@ -37,16 +38,18 @@ const ProductGrid = ({ coffees, route, heading, subheading }) => {
 export const CoffeeItem = ({ coffee, route }) => {
   return (
     <FlexProductDiv>
-      <ProductLink to={`/${route ? route : 'tastings'}/${coffee.id}`}>
+      <ProductLink to={`/${route ? route : 'coffees'}/${coffee.id}`}>
         <ImageContainer>
           <ImageContentContainer>
             <img src={`${process.env.REACT_APP_IMAGE_PATH}/${coffee.imagePath ? coffee.imagePath : coffee.roaster.imagePath}`} alt={coffee.coffeeName} />
           </ImageContentContainer>
         </ImageContainer>
         <InfoContainer>
-          <Box height='40px' overflow="hidden" fontWeight="bold">{coffee.coffeeName}</Box>
-          <Box margin="5px 0">${coffee.price}</Box>
-          {coffee.roastType && <Box margin="5px 0" style={{ textTransform: 'capitalize'}}>{coffee.roastType} roast</Box>}
+          <Box textAlign="left" paddingBottom="5px" height='40px' overflow="hidden" fontWeight="bold">{coffee.coffeeName}</Box>
+          <Box display="flex" flexDirection="row" justifyContent="space-between">
+            <CoffeeBeanSvg roastType={coffee.roastType} />
+            <Box fontWeight="fontWeightBold">${coffee.price.toFixed(2)}</Box>
+          </Box>
         </InfoContainer>
       </ProductLink>
     </FlexProductDiv>
@@ -63,9 +66,8 @@ export const RoasterItem = ({ roaster }) => {
           </ImageContentContainer>
         </ImageContainer>
         <InfoContainer>
-        <Box height='40px' overflow="hidden" fontWeight="bold">{roaster.name}</Box>
-          <Box margin="5px 0">{roaster.summary}</Box>
-          <Box margin="5px 0" style={{ textTransform: 'capitalize'}}>{roaster.state}, {roaster.country}</Box>
+          <Box textAlign="left" marginBottom="5px" height='40px' overflow="hidden" fontWeight="bold">{roaster.name}</Box>
+          <LineClampSummary>{roaster.summary}</LineClampSummary>
         </InfoContainer>
       </ProductLink>
     </FlexProductDiv>

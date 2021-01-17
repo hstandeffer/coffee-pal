@@ -7,7 +7,7 @@ import { ImageContainer, ImageContentContainer } from '../Search/style'
 
 import StarIcon from '@material-ui/icons/Star'
 import LanguageIcon from '@material-ui/icons/Language';
-import { Grid, Hidden, Button, Typography, Box } from '@material-ui/core'
+import { Grid, Hidden, Button, Typography, Box, Container } from '@material-ui/core'
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
@@ -48,9 +48,10 @@ const Product = () => {
     return <p>Loading...</p>
   }
   return (
-    <Box mx={4} pt={4}>
+    <Container maxWidth="md">
+    <Box bgcolor="rgb(0 0 0 / 0.05)" mx="auto" my="2rem" p={4} borderRadius="1rem">
       <Grid container justify="flex-start" spacing={4}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={4}>
           <Hidden smUp>
             <Typography variant="h4" component="p" align="center" gutterBottom m={0}>{coffee.coffeeName}</Typography>
           </Hidden>
@@ -64,7 +65,7 @@ const Product = () => {
             <Button style={{ marginLeft: '5px' }} fullWidth startIcon={<LanguageIcon />} variant="outlined" color="primary" href={coffee.url}>Website</Button>
           </Box>
         </Grid>
-        <Grid item xs={12} sm={6} md={9}>
+        <Grid item xs={12} sm={6} md={8}>
           <Hidden xsDown>
             {coffee.coffeeName && <Typography variant="h4" component="p" align="left" m={0}>{coffee.coffeeName}</Typography>}
           </Hidden>
@@ -85,6 +86,7 @@ const Product = () => {
         </Grid>
       </Grid>
     </Box>
+    </Container>
   )
 }
 

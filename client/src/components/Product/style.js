@@ -30,3 +30,14 @@ export const ProductWrapper = styled.div`
     display: block;
   }
 `
+
+export const LineClampSummary = styled.div`
+  text-align: left;
+  color: darkslategrey;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
