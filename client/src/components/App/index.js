@@ -22,6 +22,7 @@ import RoasterPage from '../Roaster'
 import AddRoasterPage from '../Roaster/Add'
 import ViewRoasterPage from '../Roaster/View'
 import NotFoundPage from '../../shared/components/404'
+import Footer from '../Footer'
 
 import Layout from '../../shared/layouts/Profile'
 
@@ -66,6 +67,7 @@ const App = () => {
         
         <PublicRoute restricted={false} component={NotFoundPage} />
       </Switch>
+      <Footer />
     </Router>
   )
 }
