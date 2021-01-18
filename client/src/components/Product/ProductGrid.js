@@ -45,7 +45,7 @@ export const CoffeeItem = ({ coffee, route }) => {
           </ImageContentContainer>
         </ImageContainer>
         <InfoContainer>
-          <Box textAlign="left" paddingBottom="5px" height='40px' overflow="hidden" fontWeight="bold">{coffee.coffeeName}</Box>
+          <Box textAlign="left" marginBottom="5px" height='40px' overflow="hidden" fontWeight="bold">{coffee.coffeeName}</Box>
           <Box display="flex" flexDirection="row" justifyContent="space-between">
             <CoffeeBeanSvg roastType={coffee.roastType} />
             <Box fontWeight="fontWeightBold">${coffee.price.toFixed(2)}</Box>

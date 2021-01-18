@@ -5,6 +5,7 @@ import userService from '../../services/user'
 import { SidebarDiv, MainContentDiv, ProfileWrapper } from '../../components/Profile/style'
 import { TestDiv } from '../../components/Browse/style'
 import ProfileDrawer from '../components/ProfileDrawer'
+import FullPageSpinner from '../components/Spinner'
 
 const ProfileLinks = () => (
   <>
@@ -39,7 +40,7 @@ const ProfilePage = ({ children }) => {
   }, [])
 
   if (loading) {
-    return <p>Loading...</p>
+    return <FullPageSpinner size={50} />
   }
 
   return (
@@ -48,7 +49,7 @@ const ProfilePage = ({ children }) => {
         <ProfileDrawer profileLinks={<ProfileLinks />} direction='left'/>
       </Hidden>
       <SidebarDiv>
-        <TestDiv>
+        <TestDiv style={{ position: 'inherit' }}>
           <Box py={5} width="100%">
             <ProfileLinks />
           </Box>

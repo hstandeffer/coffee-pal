@@ -50,7 +50,7 @@ const SearchPage = () => {
         <TestDiv filtering={filtering}>
           <BrowseFiltersHeaderDiv>
             <h2>Filters</h2>
-            <ClearFilters filters={filters} clearFiltersAndRefinements={clearFiltersAndRefinements} />
+            <ClearFilters minPrice={minPrice} maxPrice={maxPrice} filters={filters} clearFiltersAndRefinements={clearFiltersAndRefinements} />
           </BrowseFiltersHeaderDiv>
           {/* Insert current filters here later - will require restructuring */}
           <AlgoliaAllRefinementListsWrapper>
@@ -113,8 +113,8 @@ const FilterList = ({ header, handleChange, roastTypes }) => (
   </AlgoliaRefinementListWrapper>
 )
 
-const ClearFilters = ({ clearFiltersAndRefinements, filters }) => (
-  <ClearRefinementsButton onClick={clearFiltersAndRefinements} disabled={filters.roastType.length === 0 && (filters.price.min === 1 && filters.price.max === 20)}>
+const ClearFilters = ({ clearFiltersAndRefinements, filters, minPrice, maxPrice }) => (
+  <ClearRefinementsButton onClick={clearFiltersAndRefinements} disabled={filters.roastType.length === 0 && (filters.price.min === minPrice && filters.price.max === maxPrice)}>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="11"
