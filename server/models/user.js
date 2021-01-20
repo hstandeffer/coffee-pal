@@ -13,16 +13,29 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true
+    required: true,
+    select: false
   },
   register_date: {
     type: Date,
     default: Date.now
   },
+  name: {
+    type: String
+  },
+  imagePath: {
+    type: String
+  },
   saved_coffees: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Coffee'
   }],
+  favorite_coffee_type: {
+    type: String
+  },
+  favorite_brewing_method: {
+    type: String
+  },
   reset_password_token: String,
   reset_password_expires: Date
 })

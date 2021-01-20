@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Wrapper, Input, StyledDiv, StyledButton } from '../../shared-style'
+import { Wrapper, InputWithLabelAbove, StyledDiv, StyledButton } from '../../shared-style'
 import userService from '../../services/user'
 
 import Toast from '../../shared/components/Toast'
-import { Typography } from '@material-ui/core'
+import { Typography, FormLabel, Box } from '@material-ui/core'
 
 export const PasswordChangeForm = () => {
   const [password, setPassword] = useState('')
@@ -31,27 +31,31 @@ export const PasswordChangeForm = () => {
 
   return (
     <>
-      <Typography variant="h5" >Reset Password</Typography>
-      <form onSubmit={handleSubmit}>
-        <Input
-          name="password"
-          value={password}
-          onChange={({ target }) => setPassword(target.value)}
-          type="password"
-          placeholder="Password"
-        />
-        <Input
-          name="confirmPassword"
-          value={confirmPassword}
-          onChange={({ target }) => setConfirmPassword(target.value)}
-          type="password"
-          placeholder="Confirm Password"
-        />
-        <StyledButton disabled={isInvalid} type="submit">Update Password</StyledButton> 
+      <Typography gutterBottom variant="h5">Update Password</Typography>
+      <Box textAlign="left">
+        <form onSubmit={handleSubmit}>
+          <FormLabel required htmlFor="password">Password</FormLabel>
+          <InputWithLabelAbove
+            name="password"
+            value={password}
+            onChange={({ target }) => setPassword(target.value)}
+            type="password"
+            placeholder="Password"
+          />
+          <FormLabel required htmlFor="confirmPassword">Confirm Password</FormLabel>
+          <InputWithLabelAbove
+            name="confirmPassword"
+            value={confirmPassword}
+            onChange={({ target }) => setConfirmPassword(target.value)}
+            type="password"
+            placeholder="Confirm Password"
+          />
+          <StyledButton disabled={isInvalid} type="submit">Update Password</StyledButton> 
 
-        {error && <p>{error.message}</p>}
-        <Toast open={open} setOpen={setOpen} severity="success" message="Your password has been successfully changed!" />
-      </form>
+          {error && <p>{error.message}</p>}
+          <Toast open={open} setOpen={setOpen} severity="success" message="Your password has been successfully changed!" />
+        </form>
+      </Box>
     </>
   )
 }

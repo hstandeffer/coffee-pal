@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const ProductGridDiv = styled.div`
   padding: 0 5em;
-  margin: 2.5em auto;
+  margin: 0 auto;
   text-align: center;
   background: #fff;
   border-radius: 4px;

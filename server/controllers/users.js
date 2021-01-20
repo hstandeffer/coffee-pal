@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 const cryptoRandomString = require('crypto-random-string')
 const nodemailer = require('nodemailer')
 const { auth } = require('../utils/middleware')
-require('dotenv').config
+const { upload } = require('../utils/multer')
 
 usersRouter.get('/', async (request, response) => {
   try {
@@ -89,19 +89,19 @@ usersRouter.post('/forgot-password', async (request, response) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: `${process.env.EMAIL_ADDRESS}`,
-      pass: `${process.env.EMAIL_PASSWORD}`,
+      user: `${config.EMAIL_ADDRESS}`,
+      pass: `${config.EMAIL_PASSWORD}`,
     },
   })
   
   const mailOptions = {
-    from: `${process.env.EMAIL_ADDRESS}`,
+    from: `${config.EMAIL_ADDRESS}`,
     to: `${user.email}`,
     subject: 'Reset Baroasta Password',
     text:
       'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n'
       + 'Please click on the following link, or paste this into your browser to complete the process within one hour of receiving it:\n\n'
-      + `${process.env.APP_URL}/password-reset/${token}\n\n`
+      + `${config.APP_URL}/password-reset/${token}\n\n`
       + 'If you did not request this, please ignore this email and your password will remain unchanged.\n',
   }
   
@@ -172,9 +172,35 @@ usersRouter.put('/change-password', auth, async (request, response) => {
   })
 })
 
+usersRouter.put('/update', auth, upload.single('userImage'), async (request, response) => {
+  const { name, favoriteCoffee, favoriteBrewing } = request.body
+  const updateObj = {
+    name: name,
+    favorite_coffee_type: favoriteCoffee,
+    favorite_brewing_method: favoriteBrewing,
+  }
+
+  if (request.file && request.file.filename) {
+    request.file.key = request.file.filename
+    updateObj.imagePath = request.file.key
+  }
+
+  try {
+    const user = await User.findByIdAndUpdate(request.user.id,
+      updateObj,
+      { new: true },
+    )
+    await user.save()
+    return response.json(user.toJSON())
+  }
+  catch (err) {
+    return response.status(404).json({ msg: 'User could not be updated' })
+  }
+})
+
 usersRouter.get('/current-user', auth, async (request, response) => {
   try {
-    const user = await User.findById(request.user.id, '-password')
+    const user = await User.findById(request.user.id)
       .populate({
         path: 'saved_coffees',
         model: 'Coffee',

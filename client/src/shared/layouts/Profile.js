@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Button, Link, Hidden } from '@material-ui/core'
+import { Box, Button, Link, Hidden, Container, Typography } from '@material-ui/core'
 import { Link as RouterLink } from 'react-router-dom';
 import userService from '../../services/user'
 import { SidebarDiv, MainContentDiv, ProfileWrapper } from '../../components/Profile/style'
@@ -10,7 +10,7 @@ import FullPageSpinner from '../components/Spinner'
 const ProfileLinks = () => (
   <>
     <Link component={RouterLink} underline="none" to="/profile">
-      <Button style={{ paddingTop: '20px', paddingBottom: '20px' }} fullWidth size="large">Profile</Button>
+      <Button  style={{ paddingTop: '20px', paddingBottom: '20px' }} fullWidth size="large">Profile</Button>
     </Link>
     <Link component={RouterLink} underline="none" to="/profile/account">
       <Button style={{ paddingTop: '20px', paddingBottom: '20px' }} fullWidth size="large">Account</Button>
@@ -21,7 +21,7 @@ const ProfileLinks = () => (
   </>
 )
 
-const ProfilePage = ({ children }) => {
+const ProfilePage = ({ children, heading }) => {
   const [coffees, setCoffees] = useState([])
   const [user, setUser] = useState()
   const [loading, setLoading] = useState(true)
@@ -44,23 +44,33 @@ const ProfilePage = ({ children }) => {
   }
 
   return (
-    <ProfileWrapper>
-      <Hidden mdUp>
-        <ProfileDrawer profileLinks={<ProfileLinks />} direction='left'/>
-      </Hidden>
-      <SidebarDiv>
-        <TestDiv style={{ position: 'inherit' }}>
-          <Box py={5} width="100%">
-            <ProfileLinks />
-          </Box>
-        </TestDiv> 
-      </SidebarDiv>
-      <MainContentDiv>
-        <Box py={5} mx="2rem" mb="3rem">
-          {React.cloneElement(children, { coffees: coffees, user: user})}
+    <Box pb={"5rem"} bgcolor="rgb(242 242 242)">
+      <Container maxWidth="md">
+        <Box py={4}>
+          <Hidden mdUp>
+            <ProfileDrawer profileLinks={<ProfileLinks />} direction='left'/>
+          </Hidden>
+          <Typography align="center" component="h2" variant="h4">Your Settings</Typography>
         </Box>
-      </MainContentDiv>
-    </ProfileWrapper>
+        <ProfileWrapper>
+          <SidebarDiv>
+            <TestDiv style={{ position: 'inherit' }}>
+              <Box py={5} width="100%">
+                <ProfileLinks />
+              </Box>
+            </TestDiv> 
+          </SidebarDiv>
+          <MainContentDiv>
+            <Box py={5}>
+            <Box mb={2}>
+              <Typography align='center' variant="h5" component="h2">{heading}</Typography>
+            </Box>
+              {React.cloneElement(children, { coffees: coffees, user: user})}
+            </Box>
+          </MainContentDiv>
+        </ProfileWrapper>
+      </Container>
+    </Box>
   )
 }
 

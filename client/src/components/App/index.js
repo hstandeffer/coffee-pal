@@ -98,7 +98,7 @@ const PublicRoute = ({component: Component, restricted, ...rest}) => {
 
 const PrivateRouteWrapper = ({
   component: Component, 
-  layout: Layout, 
+  layout: Layout,
   ...rest
 }) => {
   const authContext = useContext(AuthUserContext)

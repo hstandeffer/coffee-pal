@@ -1,48 +1,8 @@
 const roastersRouter = require('express').Router()
 const Roaster = require('../models/roaster')
 
-const config = require('../utils/config')
+const { upload } = require('../utils/multer')
 const { auth } = require('../utils/middleware')
-
-const aws = require('aws-sdk')
-const multer  = require('multer')
-const multerS3 = require('multer-s3')
-
-const path = require('path')
-
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/')
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)) //Appending extension
-  }
-})
-
-if (config.NODE_ENV === 'production') {
-  const s3 = new aws.S3()
-
-  aws.config.update({
-    secretAccessKey: config.AWS_SECRET_KEY,
-    accessKeyId: config.AWS_ACCESS_KEY,
-    region: 'us-east-1'
-  }) 
-  
-  storage = multerS3({
-    s3: s3,
-    acl: 'public-read',
-    bucket: 'baroasta',
-    key: function (req, file, cb) {
-      let newFileName = Date.now() + '-' + file.originalname
-      let fullPath = 'images/' + newFileName
-      cb(null, fullPath)
-    }
-  })
-}
-
-let upload = multer({
-  storage: storage
-})
 
 roastersRouter.get('/', async (request, response) => {
   const roasters = await Roaster.find({}).populate('coffees')
@@ -62,18 +22,20 @@ roastersRouter.get('/list', async (request, response) => {
 
 roastersRouter.post('/', auth, upload.single('roasterImage'), async (request, response) => {
   const body = request.body
-  if (request.file && request.file.filename) {
-    request.file.key = request.file.filename
-  }
-
-  const newRoaster = new Roaster({
+  const roasterObj = {
     name: body.name,
     summary: body.summary,
     address: body.address,
     website: body.website,
     addedBy: request.user.id,
-    imagePath: request.file.key
-  })
+  }
+  
+  if (request.file && request.file.filename) {
+    request.file.key = request.file.filename
+    roasterObj.imagePath = request.file.key
+  }
+
+  const newRoaster = new Roaster(roasterObj)
 
   const roaster = await newRoaster.save()
   response.json(roaster.toJSON())

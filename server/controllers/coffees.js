@@ -69,31 +69,32 @@ coffeesRouter.get('/query', async (request, response) => {
 })
 
 coffeesRouter.post('/', auth, upload.single('coffeeImage'), async (request, response) => {
+  const body = request.body
+  const coffeeObj = {
+    brand: body.selectedBrand,
+    countries: body.selectedCountry,
+    fairTrade: body.fairTrade,
+    imagePath: body.imagePath,
+    organic: body.organic,
+    price: body.price,
+    roastType: body.roastType,
+    shadeGrown: body.shadeGrown,
+    roaster: body.selectedBrand,
+    coffeeName: body.coffeeName,
+    url: body.url,
+    addedBy: request.user.id
+  }
   if (request.file && request.file.filename) {
     request.file.key = request.file.filename
+    roasterObj.imagePath = request.file.key
   }
   
   try {
-    const body = request.body
-    const newCoffee = new Coffee({
-      brand: body.selectedBrand,
-      countries: body.selectedCountry,
-      fairTrade: body.fairTrade,
-      imagePath: body.imagePath,
-      organic: body.organic,
-      price: body.price,
-      roastType: body.roastType,
-      shadeGrown: body.shadeGrown,
-      roaster: body.selectedBrand,
-      coffeeName: body.coffeeName,
-      url: body.url,
-      addedBy: request.user.id
-    })
+    const newCoffee = new Coffee(coffeeObj)
     const coffee = await newCoffee.save()
     response.json(coffee.toJSON())
   }
   catch (err) {
-    console.log(err)
     let errMsg = 'Coffee upload failed. Ensure all fields are correct and try again.'
     response.status(404).json({ msg: errMsg })
   }
