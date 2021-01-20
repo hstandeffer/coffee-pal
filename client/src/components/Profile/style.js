@@ -4,7 +4,6 @@ export const SidebarDiv = styled.div`
   flex: 1;
   max-width: 200px;
   border-right: 1px solid #dfdfdf;
-  height: calc(100vh - 65px);
 
   @media (max-width: 960px) {
     display: none;
@@ -18,6 +17,8 @@ export const MainContentDiv = styled.div`
 export const ProfileWrapper = styled.div`
   width: 100%;
   display: flex;
+  background: #fff;
+  border-radius: 1rem;
 
 	@media (max-width: 600px) {
 		padding: 0;

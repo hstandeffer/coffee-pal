@@ -157,18 +157,18 @@ const Add = () => {
           <StyledInput id="price" type="number" required value={price} onChange={({ target }) => setPrice(target.value)} />
 
           <FormLabel htmlFor="roastType">Roast Type</FormLabel>
-            <Select
-              classes={{ outlined: classes.outlined }}
-              id="roastType"
-              value={roastType}
-              onChange={({ target }) => setRoastType(target.value)}
-              style={{ width: '100%', margin: '5px auto 15px' }}
-              variant="outlined"
-            >
-              <MenuItem value="light">Light</MenuItem>
-              <MenuItem value="medium">Medium</MenuItem>
-              <MenuItem value="dark">Dark</MenuItem>
-            </Select>
+          <Select
+            classes={{ outlined: classes.outlined }}
+            id="roastType"
+            value={roastType}
+            onChange={({ target }) => setRoastType(target.value)}
+            style={{ width: '100%', margin: '5px auto 15px' }}
+            variant="outlined"
+          >
+            <MenuItem value="light">Light</MenuItem>
+            <MenuItem value="medium">Medium</MenuItem>
+            <MenuItem value="dark">Dark</MenuItem>
+          </Select>
 
           <FormLabel htmlFor="countries">Countries</FormLabel>
           <FormControl className={classes.formControl}>

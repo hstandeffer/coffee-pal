@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import Button from '@material-ui/core/Button'
-import MenuOpenIcon from '@material-ui/icons/MenuOpen'
+import MenuOpenIcon from '@material-ui/icons/MenuOpenRounded'
 import { Box } from '@material-ui/core'
 
 const useStyles = makeStyles({
@@ -50,7 +50,7 @@ const ProfileDrawer = ({ profileLinks, direction }) => {
   return (
     <>
       <Button onClick={toggleDrawer(direction, true)}>
-        <MenuOpenIcon fontSize="large" />
+        <MenuOpenIcon style={{ borderRadius: '4px', background: '#3f51b5', color: '#fff' }} fontSize="large" />
       </Button>
       <Drawer anchor={direction} open={state[direction]} onClose={toggleDrawer(direction, false)}>
         {list(direction)}

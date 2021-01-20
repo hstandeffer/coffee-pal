@@ -42,6 +42,10 @@ const Ul = styled.ul`
 
 const nonAuthRoutes = [
   {
+    route: ROUTES.BROWSE,
+    text: 'Browse'
+  },
+  {
     route: ROUTES.SIGN_IN,
     text: 'Login'
   },

@@ -12,9 +12,9 @@ import CoffeeBeanSvg from '../../shared/components/CoffeeBeanSvg'
 
 const ProductGrid = ({ coffees, route, heading, subheading }) => {
   return (
-    <ProductGridDiv style={{ marginTop: '1rem' }}>
-      <Box my={2}>
-        <Typography variant="h4" component="h2">{heading}</Typography>
+    <ProductGridDiv>
+      <Box>
+        <Typography align='center' variant="h5" component="h2">{heading}</Typography>
       </Box>
       <Typography variant="h6">{subheading}</Typography>
       <ProductWrapper>
@@ -48,7 +48,7 @@ export const CoffeeItem = ({ coffee, route }) => {
           <Box textAlign="left" marginBottom="5px" height='40px' overflow="hidden" fontWeight="bold">{coffee.coffeeName}</Box>
           <Box display="flex" flexDirection="row" justifyContent="space-between">
             <CoffeeBeanSvg roastType={coffee.roastType} />
-            <Box fontWeight="fontWeightBold">${coffee.price.toFixed(2)}</Box>
+            <Box fontWeight="fontWeightBold">${coffee.price}</Box>
           </Box>
         </InfoContainer>
       </ProductLink>
