@@ -11,6 +11,7 @@ import * as ROUTES from '../../constants/routes'
 
 import coffeeService from '../../services/coffee'
 import tastingService from '../../services/tasting'
+import FullPageSpinner from '../../shared/components/Spinner';
 
 const ProductTasting = ({ history }) => {
   let { id } = useParams()
@@ -55,7 +56,7 @@ const ProductTasting = ({ history }) => {
   }
 
   if (loading || !coffee) {
-    return <h2>Loading...</h2>
+    return <FullPageSpinner size={50} />
   }
   return (
     <Box maxWidth="600px" p="2.5rem" my="2.5rem" mx="auto" textAlign="center" border="1px solid #d9e7ea" borderRadius="4px">

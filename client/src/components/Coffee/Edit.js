@@ -23,6 +23,7 @@ import roasterService from '../../services/roaster'
 import coffeeService from '../../services/coffee'
 
 import Toast from '../../shared/components/Toast'
+import FullPageSpinner from '../../shared/components/Spinner';
 
 
 const useStyles = makeStyles(() => ({
@@ -137,7 +138,9 @@ const Edit = () => {
       .catch(err => setError(err.response.data.msg))
   }
 
-  if (loading) return <p>Loading...</p>
+  if (loading) {
+    return <FullPageSpinner size={50} />
+  }
 
   return (
     <Box maxWidth="600px" p="2.5rem" my="2.5rem" mx="auto" border="1px solid #d9e7ea" borderRadius="4px" textAlign="center">

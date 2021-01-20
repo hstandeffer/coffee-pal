@@ -8,6 +8,7 @@ import Slider from '@material-ui/core/Slider'
 import Hidden from '@material-ui/core/Hidden'
 import { BrowseWrapper, BrowseFiltersDiv, TestDiv, BrowseFiltersHeaderDiv, ClearRefinementsButton, AlgoliaStyledUl, AlgoliaAllRefinementListsWrapper, AlgoliaRefinementListWrapper, AlgoliaStyledLi, AlgoliaStyledOuterRefinementListSpan, AlgoliaRefinementHeader, BrowseHitsDiv, TestButton, MobileFiltersButtonWrapper, ClearRefinementsButtonMobile, SaveFiltersButtonMobile, TestFooter } from '../Browse/style'
 import { CoffeeItem } from '../Product/ProductGrid'
+import FullPageSpinner from '../../shared/components/Spinner'
 
 const SearchPage = () => {
   const minPrice = 1
@@ -166,7 +167,7 @@ const Search = ({ filters, filtering }) => {
   }, [filters])
 
   if (loading) {
-    return <p>Loading...</p>
+    return <FullPageSpinner size={50} />
   }
 
   // this hides the products so they aren't shown behind the mobile filter view

@@ -7,6 +7,7 @@ import axios from 'axios'
 
 import * as ROUTES from '../../constants/routes'
 import Toast from '../../shared/components/Toast'
+import FullPageSpinner from '../../shared/components/Spinner'
 
 const PasswordReset = () => {
   const [loading, setLoading] = useState(true)
@@ -54,7 +55,9 @@ const PasswordReset = () => {
     return (<Redirect to={ROUTES.PASSWORD_FORGET} />)
   }
   
-  if (loading) return <p>Loading...</p>
+  if (loading) {
+    return <FullPageSpinner size={50} />
+  }
 
   return (
     <Wrapper>

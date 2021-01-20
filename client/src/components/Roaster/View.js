@@ -11,6 +11,7 @@ import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
+import FullPageSpinner from '../../shared/components/Spinner'
 
 const useStyles = makeStyles((theme) => ({
   roastImage: {
@@ -58,7 +59,9 @@ const Roaster = () => {
     setLoading(false)
   }, [id])
 
-  if (loading || !roaster) return <p>Loading...</p>
+  if (loading || !roaster) {
+    return <FullPageSpinner size={50} />
+  }
 
   return (
     <>
