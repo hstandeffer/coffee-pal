@@ -10,6 +10,7 @@ import LanguageIcon from '@material-ui/icons/Language';
 import { Grid, Hidden, Button, Typography, Box, Container } from '@material-ui/core'
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import FullPageSpinner from '../../shared/components/Spinner'
 
 const Alert = props => {
   return <MuiAlert elevation={6} variant="filled" {...props} />
@@ -45,7 +46,7 @@ const Product = () => {
   }, [id])
 
   if (loading || !coffee) {
-    return <p>Loading...</p>
+    return <FullPageSpinner size={50} />
   }
   return (
     <Container maxWidth="md">

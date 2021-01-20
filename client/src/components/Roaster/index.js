@@ -6,6 +6,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import roasterService from '../../services/roaster'
 
 import { RoasterImageBox } from './style'
+import FullPageSpinner from '../../shared/components/Spinner';
 
 const useStyles = makeStyles((theme) => ({
   roastImage: {
@@ -28,7 +29,9 @@ const Roaster = () => {
     setLoading(false)
   }, [])
 
-  if (loading || !roasterList) return <p>Loading...</p>
+  if (loading || !roasterList) {
+    return <FullPageSpinner size={50} />
+  }
 
   return (
     <Container maxWidth="sm">

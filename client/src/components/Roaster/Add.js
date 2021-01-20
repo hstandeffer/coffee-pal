@@ -11,6 +11,7 @@ import { Input } from './style'
 
 import axios from 'axios'
 import userService from '../../services/user'
+import FullPageSpinner from '../../shared/components/Spinner';
 
 const AddRoaster = () => {
   const config = {
@@ -79,7 +80,9 @@ const AddRoaster = () => {
     }
   }
 
-  if (loading) return <p>Loading...</p>
+  if (loading) {
+    return <FullPageSpinner size={50} />
+  }
 
   return (
     <Box bgcolor="#fff" maxWidth="600px" p="2.5rem" my="2.5rem" border="1px solid #d9e7ea" borderRadius="4px" mx="auto" textAlign="center">
