@@ -12,6 +12,7 @@ import AccountPage from '../Profile/Account'
 import { SavedCoffees } from '../Profile/Saved'
 import ProfilePage from '../Profile'
 // import AdminPage from '../Admin'
+import ContactPage from '../Contact'
 import BrowsePage from '../Search'
 import TastingPage from '../Tasting'
 import ProductTastingPage from '../Tasting/ProductTasting'
@@ -60,6 +61,8 @@ const App = () => {
         <PublicRoute restricted={true} path={ROUTES.SIGN_IN} component={SignInPage} />
         <PublicRoute restricted={true} path={ROUTES.PASSWORD_FORGET} component={PasswordForget} />
         <PublicRoute restricted={true} path={ROUTES.PASSWORD_RESET} component={PasswordReset} />
+
+        <PublicRoute restricted={false} path={ROUTES.CONTACT} component={ContactPage} />
         <PublicRoute restricted={false} path={ROUTES.BROWSE} component={BrowsePage} />
         <PublicRoute restricted={false} exact path={ROUTES.ROASTERS} component={RoasterPage} />
         <PublicRoute restricted={false} path={ROUTES.VIEW_ROASTER} component={ViewRoasterPage} />

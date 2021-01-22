@@ -2,9 +2,9 @@ const usersRouter = require('express').Router()
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const config = require('../utils/config')
+const { transporter } = require('../utils/mail')
 const jwt = require('jsonwebtoken')
 const cryptoRandomString = require('crypto-random-string')
-const nodemailer = require('nodemailer')
 const { auth } = require('../utils/middleware')
 const { upload } = require('../utils/multer')
 
@@ -56,16 +56,17 @@ usersRouter.post('/', async (request, response) => {
 usersRouter.post('/save-coffee', auth, async (request, response) => {
   try {
     const id = request.user.id
+    const coffeeId = request.body.coffeeId
     const user = await User.findById(id)
     const isFavorited = user.saved_coffees.some((c) => {
-      return c.equals(id)
+      return c.equals(coffeeId)
     })
-    if (isFavorited) {
-      user.saved_coffees.push(request.body.coffeeId)
+    if (!isFavorited) {
+      user.saved_coffees.push(coffeeId)
       const savedUser = await user.save()
-      response.json(savedUser.toJSON())
+      return response.json(savedUser.toJSON())
     }
-    response.json(user.toJSON())
+    return response.json(user.toJSON())
   }
   catch (err) {
     response.status(404).json({ msg: err })
@@ -85,14 +86,6 @@ usersRouter.post('/forgot-password', async (request, response) => {
   user.reset_password_token = token
   user.reset_password_expires= Date.now() + 600000
   await user.save()
-
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: `${config.EMAIL_ADDRESS}`,
-      pass: `${config.EMAIL_PASSWORD}`,
-    },
-  })
   
   const mailOptions = {
     from: `${config.EMAIL_ADDRESS}`,
