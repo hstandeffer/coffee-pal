@@ -12,9 +12,9 @@ const transporter = nodemailer.createTransport({
 const sendMail = (name, email, subject, text) => {
   const mailOptions = {
     sender: name,
-    from: email,
-    to: config.EMAIL_ADDRESS,
-    subject: `${subject} from ${name || ''}: ${email}` ,
+    from: config.EMAIL_ADDRESS,
+    to: email,
+    subject: subject,
     text: text
   }
 

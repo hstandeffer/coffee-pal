@@ -39,6 +39,7 @@ const Contact = () => {
   const [open, setOpen] = useState(false)
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
+  const [error, setError] = useState('')
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -46,7 +47,7 @@ const Contact = () => {
       await contactService.send(email, message)
     }
     catch (err) {
-      console.log(err.response.data.msg)
+      setError(err.response.data.msg)
     }
     setEmail('')
     setMessage('')
