@@ -20,11 +20,11 @@ const Product = () => {
   let { id } = useParams()
   const [coffee, setCoffee] = useState()
   const [loading, setLoading] = useState(false)
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   const onFavoriteClick = (coffeeId) => {
     userService.saveCoffee(coffeeId)
-    setOpen(true);
+    setOpen(true)
   }
 
   const handleClose = (event, reason) => {

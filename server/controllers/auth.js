@@ -11,10 +11,10 @@ authRouter.post('/', (request, response) => {
     return response.status(400).json({ msg: 'Please enter all fields and try again' })
   }
 
-  User.findOne({ email })
+  User.findOne({ email }, 'password')
     .then(user => {
       if (!user) return response.status(400).json({ msg: 'User does not exist' })
-
+      console.log(password, user.password)
       bcrypt.compare(password, user.password)
         .then(isMatch => {
           if (!isMatch) return response.status(400).json({ msg: 'Invalid credentials' })
