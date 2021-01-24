@@ -59,11 +59,11 @@ coffeesRouter.get('/query', async (request, response) => {
 
   // check is an object and empty: will be true if empty and false otherwise
   if (Object.keys(query).length === 0 && query.constructor === Object) {
-    const noQueryCoffees = await Coffee.find().limit(4).populate('roaster')
+    const noQueryCoffees = await Coffee.find().limit(20).populate('roaster')
     return response.json(noQueryCoffees)
   }
 
-  const coffees = await Coffee.find({ roastType: { $in: query.roastType }, price: { $gte: query.priceLow, $lte: query.priceHigh } }).limit(5).populate('roaster')
+  const coffees = await Coffee.find({ roastType: { $in: query.roastType }, price: { $gte: query.priceLow, $lte: query.priceHigh } }).limit(20).populate('roaster')
 
   return response.json(coffees)
 })
