@@ -43,6 +43,11 @@ const ProfilePage = ({ children, heading }) => {
     return <FullPageSpinner size={50} />
   }
 
+  const handleRemove = async (coffeeId) => {
+    setCoffees(coffees.filter(coffee => coffee.id !== coffeeId ))
+    await userService.deleteCoffee(coffeeId)
+  }
+
   return (
     <Box pb={"5rem"} bgcolor="rgb(242 242 242)">
       <Container maxWidth="md">
@@ -65,7 +70,7 @@ const ProfilePage = ({ children, heading }) => {
             <Box mb={2}>
               <Typography align='center' variant="h5" component="h2">{heading}</Typography>
             </Box>
-              {React.cloneElement(children, { coffees: coffees, user: user})}
+              {React.cloneElement(children, { coffees: coffees, user: user, handleRemove: handleRemove })}
             </Box>
           </MainContentDiv>
         </ProfileWrapper>

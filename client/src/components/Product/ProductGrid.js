@@ -4,28 +4,32 @@ import { FlexProductDiv, ImageContainer, ImageContentContainer, InfoContainer } 
 import { BrowseHitsDiv, FlexContainer, ProductLink } from '../Browse/style'
 import { ProductWrapper, ProductGridDiv, LineClampSummary } from './style'
 import Typography from '@material-ui/core/Typography'
-import { Box } from '@material-ui/core'
+import { Box, Button, Fade } from '@material-ui/core'
 import { Link } from 'react-router-dom';
+import CancelIcon from '@material-ui/icons/CancelSharp';
 
 import * as ROUTES from '../../constants/routes'
 import CoffeeBeanSvg from '../../shared/components/CoffeeBeanSvg'
 
-const ProductGrid = ({ coffees, route, heading, subheading }) => {
+const ProductGrid = ({ coffees, route, heading, handleRemove, editing, setEditing }) => {
   return (
     <ProductGridDiv>
-      <Box>
-        <Typography align='center' variant="h5" component="h2">{heading}</Typography>
-      </Box>
-      <Typography variant="h6">{subheading}</Typography>
+        <Box>
+          <Typography align='center' variant="h5" component="h2">{heading}</Typography>
+      { coffees.length !== 0 ?
+        <Button onClick={() => setEditing(!editing)} size="small" variant="text">edit</Button>
+        : null
+      }
+        </Box>
       <ProductWrapper>
         <BrowseHitsDiv>
           <FlexContainer>
           {coffees.length === 0 ?
-            <Box width="100%" align="center">
-              <Typography variant="h5">No saved coffees, try adding one from the <Link to={ROUTES.BROWSE}>browse page</Link>!</Typography>
+            <Box width="100%" py={2} align="center">
+              <Typography variant="body1">No saved coffees, try adding one from the <Link to={ROUTES.BROWSE}>browse page</Link>!</Typography>
             </Box> :
             coffees.map(coffee => (
-              <CoffeeItem key={coffee.id} coffee={coffee} route={route} />
+              <CoffeeItem editing={editing} handleRemove={handleRemove} key={coffee.id} coffee={coffee} route={route} />
             ))
           }
           </FlexContainer>
@@ -35,9 +39,18 @@ const ProductGrid = ({ coffees, route, heading, subheading }) => {
   )
 }
 
-export const CoffeeItem = ({ coffee, route }) => {
+export const CoffeeItem = ({ coffee, route, editing, handleRemove }) => {
   return (
     <FlexProductDiv>
+      {editing ?
+        <Fade style={{ zIndex: 10 }} in={editing}>
+          <Box position="relative">
+            <Box component="span" position="absolute" top="0" right="0" marginRight="-5px" marginTop="-5px">
+              <CancelIcon onClick={() => handleRemove(coffee.id)} style={{ color: '#f83e3e', cursor: 'pointer' }}/>
+            </Box>
+          </Box>
+        </Fade> : null
+      }
       <ProductLink to={`/${route ? route : 'coffees'}/${coffee.id}`}>
         <ImageContainer>
           <ImageContentContainer>

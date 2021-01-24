@@ -73,6 +73,26 @@ usersRouter.post('/save-coffee', auth, async (request, response) => {
   }
 })
 
+usersRouter.put('/delete-coffee', auth, async (request, response) => {
+  try {
+    const id = request.user.id
+    const coffeeId = request.body.coffeeId
+    const user = await User.findById(id)
+    const isFavorited = user.saved_coffees.some((c) => {
+      return c.equals(coffeeId)
+    })
+    if (isFavorited) {
+      user.saved_coffees.pull(coffeeId)
+      const savedUser = await user.save()
+      return response.json(savedUser.toJSON())
+    }
+    return response.json({ msg: 'Coffee is not favorited' })
+  }
+  catch (err) {
+    response.status(404).json({ msg: err })
+  }
+})
+
 usersRouter.post('/forgot-password', async (request, response) => {
   if (request.body.email === '') {
     response.status(400).send('email is required')

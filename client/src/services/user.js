@@ -13,6 +13,12 @@ const saveCoffee = async (coffeeId) => {
   return response.data
 }
 
+const deleteCoffee = async (coffeeId) => {
+  const coffeeObj = { coffeeId: coffeeId }
+  const response = await axios.put(`${baseUrl}/delete-coffee`, coffeeObj, config)
+  return response.data
+}
+
 const getCurrentUser = async () => {
   const response = await axios.get(`${baseUrl}/current-user`, config)
   return response.data
@@ -34,4 +40,4 @@ const changePassword = async (dataObj) => {
   return response
 }
 
-export default { saveCoffee, getCurrentUser, forgotPassword, updatePassword, changePassword }
+export default { saveCoffee, deleteCoffee, getCurrentUser, forgotPassword, updatePassword, changePassword }
