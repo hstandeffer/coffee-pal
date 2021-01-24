@@ -60,13 +60,13 @@ const ProfilePage = ({ children, heading }) => {
         <ProfileWrapper>
           <SidebarDiv>
             <TestDiv style={{ position: 'inherit' }}>
-              <Box py={5} width="100%">
+            <Box py={3} width="100%">
                 <ProfileLinks />
               </Box>
             </TestDiv> 
           </SidebarDiv>
           <MainContentDiv>
-            <Box py={5}>
+            <Box pt={3} pb={5}>
             <Box mb={2}>
               <Typography align='center' variant="h5" component="h2">{heading}</Typography>
             </Box>

@@ -43,7 +43,7 @@ const SignIn = () => {
   return (
     <Wrapper>
       <StyledDiv>
-        <StyledH1>Login</StyledH1>
+        <StyledH1>Sign in</StyledH1>
         <form onSubmit={handleSubmit}>
           <Input
             name="email"

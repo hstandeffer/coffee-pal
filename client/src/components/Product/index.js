@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useParams } from "react-router-dom"
 import coffeeService from '../../services/coffee'
 import userService from '../../services/user'
 
 import { ImageContainer, ImageContentContainer } from '../Search/style'
+import FullPageSpinner from '../../shared/components/Spinner'
+import Dialog from '../../shared/components/Dialog'
+import AuthUserContext from '../Session/context'
 
 import StarIcon from '@material-ui/icons/Star'
-import LanguageIcon from '@material-ui/icons/Language';
+import LanguageIcon from '@material-ui/icons/Language'
 import { Grid, Hidden, Button, Typography, Box, Container } from '@material-ui/core'
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-import FullPageSpinner from '../../shared/components/Spinner'
+import Snackbar from '@material-ui/core/Snackbar'
+import MuiAlert from '@material-ui/lab/Alert'
 
 const Alert = props => {
   return <MuiAlert elevation={6} variant="filled" {...props} />
@@ -22,7 +24,14 @@ const Product = () => {
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState(false)
 
+  const authContext = useContext(AuthUserContext)
+  const [dialogOpen, setDialogOpen] = useState(false)
+
   const onFavoriteClick = (coffeeId) => {
+    if (!authContext.isLoggedIn) {
+      setDialogOpen(true)
+      return
+    }
     userService.saveCoffee(coffeeId)
     setOpen(true)
   }
@@ -63,7 +72,7 @@ const Product = () => {
           </ImageContainer>
           <Box display="flex" flexDirection="row" pt={1}>
             <Button style={{ marginRight: '5px' }} fullWidth startIcon={<StarIcon />} variant="outlined" color="primary" onClick={() => onFavoriteClick(coffee.id)}>Favorite</Button>
-            <Button style={{ marginLeft: '5px' }} fullWidth startIcon={<LanguageIcon />} variant="outlined" color="primary" href={coffee.url}>Website</Button>
+            <Button style={{ marginLeft: '5px' }} fullWidth startIcon={<LanguageIcon />} variant="outlined" color="primary" target="_blank" href={coffee.url}>Website</Button>
           </Box>
         </Grid>
         <Grid item xs={12} sm={6} md={8}>
@@ -84,6 +93,7 @@ const Product = () => {
               {coffee.coffeeName} has been added to your list!
             </Alert>
           </Snackbar>
+          <Dialog title="Sign in to continue" description={"Sign in or register with your email address"} open={dialogOpen} setOpen={setDialogOpen} />
         </Grid>
       </Grid>
     </Box>

@@ -47,12 +47,8 @@ const nonAuthRoutes = [
   },
   {
     route: ROUTES.SIGN_IN,
-    text: 'Login'
+    text: 'Sign in'
   },
-  {
-    route: ROUTES.SIGN_UP,
-    text: 'Sign Up'
-  }
 ]
 
 const authRoutes = [

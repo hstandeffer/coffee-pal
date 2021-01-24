@@ -3,6 +3,7 @@ import { Grid, Box, Container, Typography, makeStyles, Button, TextField } from 
 import EmailIcon from '@material-ui/icons/Email'
 import contactService from '../../services/contact'
 import Toast from '../../shared/components/Toast'
+import Alert from '@material-ui/lab/Alert'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,7 +62,7 @@ const Contact = () => {
       </Box>
       <Grid container>
         <Grid item xs={12} md={6}>
-          <Box py={10} display="flex" bgcolor="action.selected">
+          <Box py={10} borderRadius="1rem" display="flex" bgcolor="action.selected">
             <Box className={`${classes.halfLg} ${classes.firstBox}`}>
               <Container>
                 <Typography variant="h5" component="h2" gutterBottom={true}>Questions or concerns?</Typography>
@@ -98,6 +99,11 @@ const Contact = () => {
           </Box> 
         </Grid>
       </Grid>
+      { error &&
+        <Box my="1rem">
+          <Alert severity="error">{error}</Alert>
+        </Box>
+      }
       <Toast open={open} setOpen={setOpen} severity="success" message="Your message has been sent!" />
     </Box>
   )
