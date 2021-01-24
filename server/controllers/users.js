@@ -27,7 +27,7 @@ usersRouter.post('/', async (request, response) => {
 
   const user = await User.findOne({ email })
   if (user) {
-    return response.status(400).json({ msg: 'User already exists' })
+    response.status(400).json({ msg: 'User already exists' })
   }
 
   const newUser = new User({
