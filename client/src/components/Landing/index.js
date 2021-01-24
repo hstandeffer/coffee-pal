@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { withAuthorization } from '../Session'
 import { LandingBanner, StyledButton } from './style'
 import { Link } from 'react-router-dom';
 import * as ROUTES from '../../constants/routes'
@@ -10,6 +9,7 @@ import roasterService from '../../services/roaster'
 import Typography from '@material-ui/core/Typography'
 import { Grid, Box } from '@material-ui/core';
 import { CoffeeItem, RoasterItem } from '../Product/ProductGrid';
+import FullPageSpinner from '../../shared/components/Spinner';
 
 const Landing = () => {
   const [coffees, setCoffees] = useState()
@@ -49,11 +49,11 @@ const Landing = () => {
             </Box>
             <Grid container justify="center" alignItems="center">
               {coffees && !loading ? coffees.map((coffee) => (
-                <CoffeeItem key={coffee.id} coffee={coffee} route={'coffee'}/>
-              )) : <Typography variant="h6">Loading...</Typography> }
+                <CoffeeItem key={coffee.id} coffee={coffee} route={'coffees'}/>
+              )) : <FullPageSpinner size={50} /> }
             </Grid>
             <Box my={1}>
-              <Link to={ROUTES.SEARCH}><StyledButton>View All</StyledButton></Link>
+              <Link to={ROUTES.BROWSE}><StyledButton>View All</StyledButton></Link>
             </Box>
           </Box>
         </Grid>
@@ -67,7 +67,7 @@ const Landing = () => {
             <Grid container justify="center" alignItems="center">
               {roasters && !loading ? roasters.map((roaster) => (
                 <RoasterItem key={roaster.id} roaster={roaster} route={'roaster'} />
-              )) : <Typography variant="h6">Loading...</Typography> }
+              )) : <FullPageSpinner size={50} /> }
             </Grid>
             <Box my={1}>
               <Link to={ROUTES.ROASTERS}><StyledButton>View All</StyledButton></Link>
@@ -79,6 +79,4 @@ const Landing = () => {
   )
 }
 
-const condition = () => 'public'
-
-export default withAuthorization(condition)(Landing)
+export default Landing

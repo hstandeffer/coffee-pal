@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { withAuthorization } from '../Session'
-import { StyledH1, Wrapper, Input, StyledDiv, StyledButton } from '../../shared-style'
+import { Wrapper, InputWithLabelAbove, StyledDiv, StyledButton } from '../../shared-style'
 import userService from '../../services/user'
 
 import Toast from '../../shared/components/Toast'
+import { Typography, FormLabel, Box } from '@material-ui/core'
 
-const PasswordReset = () => {
+export const PasswordChangeForm = () => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
@@ -30,34 +30,42 @@ const PasswordReset = () => {
     password === ''
 
   return (
-    <Wrapper>
-      <StyledDiv>
-        <StyledH1>Reset Password</StyledH1>
+    <>
+      <Typography gutterBottom variant="h5">Update Password</Typography>
+      <Box textAlign="left">
         <form onSubmit={handleSubmit}>
-        <Input
-          name="password"
-          value={password}
-          onChange={({ target }) => setPassword(target.value)}
-          type="password"
-          placeholder="Password"
-        />
-        <Input
-          name="confirmPassword"
-          value={confirmPassword}
-          onChange={({ target }) => setConfirmPassword(target.value)}
-          type="password"
-          placeholder="Confirm Password"
-        />
-        <StyledButton disabled={isInvalid} type="submit">Update Password</StyledButton> 
+          <FormLabel required htmlFor="password">Password</FormLabel>
+          <InputWithLabelAbove
+            name="password"
+            value={password}
+            onChange={({ target }) => setPassword(target.value)}
+            type="password"
+            placeholder="Password"
+          />
+          <FormLabel required htmlFor="confirmPassword">Confirm Password</FormLabel>
+          <InputWithLabelAbove
+            name="confirmPassword"
+            value={confirmPassword}
+            onChange={({ target }) => setConfirmPassword(target.value)}
+            type="password"
+            placeholder="Confirm Password"
+          />
+          <StyledButton disabled={isInvalid} type="submit">Update Password</StyledButton> 
 
-        {error && <p>{error.message}</p>}
-      </form>
-    </StyledDiv>
-    <Toast open={open} setOpen={setOpen} severity="success" message="Your password has been successfully changed!" />
-  </Wrapper> 
+          {error && <p>{error.message}</p>}
+          <Toast open={open} setOpen={setOpen} severity="success" message="Your password has been successfully changed!" />
+        </form>
+      </Box>
+    </>
   )
 }
 
-const condition = () => 'public'
+const PasswordChange = () => (
+  <Wrapper>
+    <StyledDiv>
+      <PasswordChangeForm />
+    </StyledDiv>
+  </Wrapper>
+)
 
-export default withAuthorization(condition)(PasswordReset)
+export default PasswordChange

@@ -25,7 +25,7 @@ const coffeeSchema = new mongoose.Schema({
     type: String,
     required: false
   },
-  roasterId: {
+  roaster: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Roaster'
   },
@@ -58,5 +58,7 @@ coffeeSchema.set('toJSON', {
     delete returnedObject.__v
   }
 })
+
+coffeeSchema.index({ brand: 1, roastType: 1 })
 
 module.exports = mongoose.model('Coffee', coffeeSchema)

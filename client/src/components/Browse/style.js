@@ -76,7 +76,7 @@ export const TestButton = styled.button`
     border: none;
     border-radius: 8px;
     bottom: 2rem;
-    box-shadow: 0 4px 22px 0 rgb(74 170 174 / 40%);
+    box-shadow: 0 4px 22px 0 rgb(0 0 0 / 40%);
     color: #fff;
     cursor: pointer;
     display: ${props => props.filtering ? 'none': 'flex'};

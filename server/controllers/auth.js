@@ -11,10 +11,10 @@ authRouter.post('/', (request, response) => {
     return response.status(400).json({ msg: 'Please enter all fields and try again' })
   }
 
-  User.findOne({ email })
+  User.findOne({ email }, 'password')
     .then(user => {
       if (!user) return response.status(400).json({ msg: 'User does not exist' })
-
+      console.log(password, user.password)
       bcrypt.compare(password, user.password)
         .then(isMatch => {
           if (!isMatch) return response.status(400).json({ msg: 'Invalid credentials' })
@@ -32,6 +32,22 @@ authRouter.post('/', (request, response) => {
           })
         })
     })
+})
+
+authRouter.post('/verify', async (request, response) => {
+  const { token } = request.body
+  try {
+    const decoded = jwt.verify(token, config.JWT_SECRET)
+    if (decoded) {
+      response.json(decoded)
+    }
+    else {
+      response.status(401).json({ msg: 'Unauthenticated' })
+    }
+  }
+  catch (err) {
+    response.status(404).json({ msg: err })
+  }
 })
 
 module.exports = authRouter

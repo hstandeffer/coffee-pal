@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { Redirect } from 'react-router-dom'
-import { withAuthorization, AuthUserContext } from '../Session'
+import { AuthUserContext } from '../Session'
 import { StyledH1, Wrapper, Input, StyledDiv, StyledButton, StyledLink } from '../../shared-style'
 
 import { SignUpLink } from '../SignUp'
@@ -26,7 +26,11 @@ const SignIn = () => {
 
     axios.post('/api/auth', user)
       .then(response => {
-        authUserContext.login(response.data.token)
+        const userObj = {
+          token: response.data.token,
+          id: response.data.user.id
+        }
+        authUserContext.login(userObj)
         return (<Redirect to={ROUTES.BROWSE} />)
       })
       .catch(error => {
@@ -39,7 +43,7 @@ const SignIn = () => {
   return (
     <Wrapper>
       <StyledDiv>
-        <StyledH1>Login</StyledH1>
+        <StyledH1>Sign in</StyledH1>
         <form onSubmit={handleSubmit}>
           <Input
             name="email"
@@ -47,6 +51,7 @@ const SignIn = () => {
             onChange={({ target }) => setEmail(target.value)}
             type="text"
             placeholder="Email Address"
+            tabIndex="1"
           />
           <Input
             name="password"
@@ -54,8 +59,9 @@ const SignIn = () => {
             onChange={({ target }) => setPassword(target.value)}
             type="password"
             placeholder="Password"
+            tabIndex="2"
           />
-          <StyledButton disabled={isInvalid} type="submit">Sign In</StyledButton>
+          <StyledButton disabled={isInvalid} tabIndex="3" type="submit">Sign In</StyledButton>
           {error && <p className={{ color: 'red' }}>{error.message}</p>}
 
           <Box mt={2}>
@@ -71,7 +77,5 @@ const SignIn = () => {
 export const SignInLink = () => (
   <Typography component="p" color="textSecondary">Already have an account? <StyledLink to={ROUTES.SIGN_IN}>Sign In</StyledLink></Typography>
 )
-  
-const condition = () => 'public'
 
-export default withAuthorization(condition)(SignIn)
+export default SignIn

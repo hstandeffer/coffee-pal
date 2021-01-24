@@ -47,8 +47,6 @@ import {
   ProductLink
 } from './style'
 
-import { withAuthorization } from '../Session';
-
 const searchClient = algoliasearch(
   'BDTHKSA1TY',
   'd3b6a47c767eebf56ba2732462bf8875'
@@ -218,7 +216,7 @@ const CustomHits = connectHits(({ hits }) => {
 
 const Hit = ({ hit }) => (
   <FlexProductDiv>
-    <ProductLink to={`/coffee/${hit.title.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${hit.objectID}`}>
+    <ProductLink to={`/coffees/${hit.title.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${hit.objectID}`}>
       <ImageContainer>
         <ImageContentContainer>
           {/* <img onError={(e) => e.target.src = "https://freepikpsd.com/wp-content/uploads/2019/10/coffee-bag-png-7-Transparent-Images.png"} src={hit.imageUrl} alt={hit.title} /> */}
@@ -272,6 +270,4 @@ const CustomSearchBox = connectSearchBox(({ currentRefinement, isSearchStalled, 
   )
 })
 
-const condition = authUser => !!authUser
-
-export default withAuthorization(condition)(Browse)
+export default Browse

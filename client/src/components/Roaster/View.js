@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { withAuthorization } from '../Session'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import { Grid, Box, Container, Link} from '@material-ui/core'
@@ -12,6 +11,7 @@ import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
+import FullPageSpinner from '../../shared/components/Spinner'
 
 const useStyles = makeStyles((theme) => ({
   roastImage: {
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     borderBottom: '2px solid #cacaca'
   },
   heroButtons: {
-    marginTop: theme.spacing(4),
+    marginTop: theme.spacing(2),
   },
   cardGrid: {
     paddingTop: theme.spacing(8),
@@ -59,7 +59,9 @@ const Roaster = () => {
     setLoading(false)
   }, [id])
 
-  if (loading || !roaster) return <p>Loading...</p>
+  if (loading || !roaster) {
+    return <FullPageSpinner size={50} />
+  }
 
   return (
     <>
@@ -67,13 +69,13 @@ const Roaster = () => {
         <Container maxWidth="sm">
           <Box py={3}>
             <RoasterImageBox width="8rem" className={classes.roastImage}>
-              {roaster.imagePath ? <img alt="roaster" src='https://picsum.photos/200'></img> : null }
+              {roaster.imagePath ? <img alt="roaster" src={`${process.env.REACT_APP_IMAGE_PATH}/${roaster.imagePath}`}></img> : null }
             </RoasterImageBox>
           </Box>
           <Typography component="h1" variant="h3" align="center" color="textPrimary" gutterBottom>
             {roaster.name}
           </Typography>
-          <Typography variant="h5" align="center" color="textSecondary" paragraph>
+          <Typography variant="body1" align="center" color="textPrimary">
             {roaster.summary}
           </Typography>
           <div className={classes.heroButtons}>
@@ -84,11 +86,6 @@ const Roaster = () => {
                     Visit Site
                   </Button>
                 </Link>
-              </Grid>
-              <Grid item>
-                <Button variant="outlined" color="primary">
-                  Contact Seller
-                </Button>
               </Grid>
             </Grid>
           </div>
@@ -130,6 +127,4 @@ const Roaster = () => {
   )
 }
 
-const condition = () => 'all'
-
-export default withAuthorization(condition)(Roaster)
+export default Roaster

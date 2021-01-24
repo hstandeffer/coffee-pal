@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useParams } from "react-router-dom"
 import coffeeService from '../../services/coffee'
 import userService from '../../services/user'
 
 import { ImageContainer, ImageContentContainer } from '../Search/style'
+import FullPageSpinner from '../../shared/components/Spinner'
+import Dialog from '../../shared/components/Dialog'
+import AuthUserContext from '../Session/context'
 
-import { Grid, Hidden, Button, Typography, Link, Box } from '@material-ui/core'
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+import StarIcon from '@material-ui/icons/Star'
+import LanguageIcon from '@material-ui/icons/Language'
+import { Grid, Hidden, Button, Typography, Box, Container } from '@material-ui/core'
+import Snackbar from '@material-ui/core/Snackbar'
+import MuiAlert from '@material-ui/lab/Alert'
 
 const Alert = props => {
   return <MuiAlert elevation={6} variant="filled" {...props} />
@@ -17,11 +22,18 @@ const Product = () => {
   let { id } = useParams()
   const [coffee, setCoffee] = useState()
   const [loading, setLoading] = useState(false)
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
+
+  const authContext = useContext(AuthUserContext)
+  const [dialogOpen, setDialogOpen] = useState(false)
 
   const onFavoriteClick = (coffeeId) => {
+    if (!authContext.isLoggedIn) {
+      setDialogOpen(true)
+      return
+    }
     userService.saveCoffee(coffeeId)
-    setOpen(true);
+    setOpen(true)
   }
 
   const handleClose = (event, reason) => {
@@ -43,57 +55,49 @@ const Product = () => {
   }, [id])
 
   if (loading || !coffee) {
-    return <p>Loading...</p>
+    return <FullPageSpinner size={50} />
   }
   return (
-    <Box mx={8} pt={4}>
-      <Grid container justify="flex-start" spacing={8}>
-        <Grid item sm={4} xs={12}>
+    <Container maxWidth="md">
+    <Box bgcolor="rgb(0 0 0 / 0.05)" mx="auto" my="2rem" p={4} borderRadius="1rem">
+      <Grid container justify="flex-start" spacing={4}>
+        <Grid item xs={12} sm={6} md={4}>
           <Hidden smUp>
             <Typography variant="h4" component="p" align="center" gutterBottom m={0}>{coffee.coffeeName}</Typography>
           </Hidden>
           <ImageContainer>
             <ImageContentContainer>
-              <img onError={(e) => e.target.src = "https://freepikpsd.com/wp-content/uploads/2019/10/coffee-bag-png-7-Transparent-Images.png"} src={coffee.imageUrl} alt={coffee.coffeeName} />
+              <img src={`${process.env.REACT_APP_IMAGE_PATH}/${coffee.roaster.imagePath}`} alt={coffee.coffeeName} />
             </ImageContentContainer>
           </ImageContainer>
+          <Box display="flex" flexDirection="row" pt={1}>
+            <Button style={{ marginRight: '5px' }} fullWidth startIcon={<StarIcon />} variant="outlined" color="primary" onClick={() => onFavoriteClick(coffee.id)}>Favorite</Button>
+            <Button style={{ marginLeft: '5px' }} fullWidth startIcon={<LanguageIcon />} variant="outlined" color="primary" target="_blank" href={coffee.url}>Website</Button>
+          </Box>
         </Grid>
-        <Grid item sm={4} xs={12}>
+        <Grid item xs={12} sm={6} md={8}>
           <Hidden xsDown>
             {coffee.coffeeName && <Typography variant="h4" component="p" align="left" m={0}>{coffee.coffeeName}</Typography>}
           </Hidden>
-          {coffee.brand && <Typography variant="h6" component="p" gutterBottom>{coffee.brand}</Typography>}
+          {coffee.brand && <Typography color="textPrimary" variant="h6" component="p" gutterBottom>{coffee.brand}</Typography>}
           {coffee.price && <Typography gutterBottom component="p">${coffee.price}</Typography>}
           {coffee.roastType && <Typography gutterBottom component="p" style={{textTransform: 'capitalize'}}>{coffee.roastType} Roast</Typography>}
-          {coffee.countries && <Typography gutterBottom component="p"><strong>Countries: </strong>{coffee.countries.join(', ')}</Typography>}
+          {coffee.countries.length > 0 && <Typography gutterBottom component="p"><strong>Countries: </strong>{coffee.countries.join(', ')}</Typography>}
           {coffee.fairTrade && <Typography gutterBottom component="p">Fair Trade</Typography>}
           {coffee.organic && <Typography gutterBottom component="p">Organic</Typography>}
           {coffee.shadeGrown && <Typography gutterBottom component="p">Shade Grown</Typography>}
           {coffee.singleOrigin && <Typography gutterBottom component="p">Single Origin</Typography>}
           {coffee.blend && <Typography gutterBottom component="p"></Typography>}
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={12}>
-              <Button style={{height: '100%'}} fullWidth variant="outlined" color="primary" onClick={() => onFavoriteClick(coffee.id)}>Add To List</Button>
-            </Grid>
-            <Grid item xs={12} md={12}>
-              <Link underline="none" href={`${coffee.url}`}>
-                <Button style={{height: '100%'}} fullWidth variant="outlined" color="primary">Buy from Seller</Button>
-              </Link>
-            </Grid>
-            <Grid item xs={12} md={12}>
-              <Link underline="none" href={`/tasting/${coffee.coffeeName.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-')}/${coffee.id}`}>
-                <Button style={{height: '100%'}} fullWidth variant="outlined" color="primary">Begin Tasting</Button>
-              </Link>
-            </Grid>
-          </Grid>
           <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
             <Alert onClose={handleClose} severity="success">
               {coffee.coffeeName} has been added to your list!
             </Alert>
           </Snackbar>
+          <Dialog title="Sign in to continue" description={"Sign in or register with your email address"} open={dialogOpen} setOpen={setDialogOpen} />
         </Grid>
       </Grid>
     </Box>
+    </Container>
   )
 }
 

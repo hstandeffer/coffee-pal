@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import * as ROUTES from '../../constants/routes'
 import { Link } from 'react-router-dom'
-import StyledButton from '../SignOut'
+import { SignOutButton } from '../SignOut'
 import AuthUserContext from '../Session/context'
 
 const StyledLink = styled(Link)`
@@ -42,13 +42,13 @@ const Ul = styled.ul`
 
 const nonAuthRoutes = [
   {
-    route: ROUTES.SIGN_IN,
-    text: 'Login'
+    route: ROUTES.BROWSE,
+    text: 'Browse'
   },
   {
-    route: ROUTES.SIGN_UP,
-    text: 'Sign Up'
-  }
+    route: ROUTES.SIGN_IN,
+    text: 'Sign in'
+  },
 ]
 
 const authRoutes = [
@@ -57,17 +57,9 @@ const authRoutes = [
     text: 'Browse'
   },
   {
-    route: ROUTES.TASTINGS,
-    text: 'Tasting'
-  },
-  {
     route: ROUTES.PROFILE,
     text: 'Profile'
   },
-  {
-    route: ROUTES.ACCOUNT,
-    text: 'Account'
-  }
 ]
 
 const RightNav = ({ open, closeMenu }) => {
@@ -80,7 +72,7 @@ const RightNav = ({ open, closeMenu }) => {
           <StyledLink open={open} onClick={closeMenu} to={obj.route}>{obj.text}</StyledLink>
         </li>
       ))}
-      {authContext.isLoggedIn ? <li><StyledButton open={open} closeMenu={closeMenu} /></li> : null}
+      {authContext.isLoggedIn ? <li><SignOutButton open={open} closeMenu={closeMenu} /></li> : null}
     </Ul>
   )
 }

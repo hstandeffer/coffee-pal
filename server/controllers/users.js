@@ -2,11 +2,11 @@ const usersRouter = require('express').Router()
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const config = require('../utils/config')
+const { transporter } = require('../utils/mail')
 const jwt = require('jsonwebtoken')
 const cryptoRandomString = require('crypto-random-string')
-const nodemailer = require('nodemailer')
 const { auth } = require('../utils/middleware')
-require('dotenv').config
+const { upload } = require('../utils/multer')
 
 usersRouter.get('/', async (request, response) => {
   try {
@@ -56,10 +56,37 @@ usersRouter.post('/', async (request, response) => {
 usersRouter.post('/save-coffee', auth, async (request, response) => {
   try {
     const id = request.user.id
+    const coffeeId = request.body.coffeeId
     const user = await User.findById(id)
-    user.saved_coffees.push(request.body.coffeeId)
-    const savedUser = await user.save()
-    response.json(savedUser.toJSON())
+    const isFavorited = user.saved_coffees.some((c) => {
+      return c.equals(coffeeId)
+    })
+    if (!isFavorited) {
+      user.saved_coffees.push(coffeeId)
+      const savedUser = await user.save()
+      return response.json(savedUser.toJSON())
+    }
+    return response.json(user.toJSON())
+  }
+  catch (err) {
+    response.status(404).json({ msg: err })
+  }
+})
+
+usersRouter.put('/delete-coffee', auth, async (request, response) => {
+  try {
+    const id = request.user.id
+    const coffeeId = request.body.coffeeId
+    const user = await User.findById(id)
+    const isFavorited = user.saved_coffees.some((c) => {
+      return c.equals(coffeeId)
+    })
+    if (isFavorited) {
+      user.saved_coffees.pull(coffeeId)
+      const savedUser = await user.save()
+      return response.json(savedUser.toJSON())
+    }
+    return response.json({ msg: 'Coffee is not favorited' })
   }
   catch (err) {
     response.status(404).json({ msg: err })
@@ -79,23 +106,15 @@ usersRouter.post('/forgot-password', async (request, response) => {
   user.reset_password_token = token
   user.reset_password_expires= Date.now() + 600000
   await user.save()
-
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: `${process.env.EMAIL_ADDRESS}`,
-      pass: `${process.env.EMAIL_PASSWORD}`,
-    },
-  })
   
   const mailOptions = {
-    from: `${process.env.EMAIL_ADDRESS}`,
+    from: `${config.EMAIL_ADDRESS}`,
     to: `${user.email}`,
     subject: 'Reset Baroasta Password',
     text:
       'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n'
       + 'Please click on the following link, or paste this into your browser to complete the process within one hour of receiving it:\n\n'
-      + `${process.env.APP_URL}/password-reset/${token}\n\n`
+      + `${config.APP_URL}/password-reset/${token}\n\n`
       + 'If you did not request this, please ignore this email and your password will remain unchanged.\n',
   }
   
@@ -146,7 +165,7 @@ usersRouter.put('/update-password', async (request, response) => {
 
 usersRouter.put('/change-password', auth, async (request, response) => {
   const { password } = request.body
-  const user = User.findById(request.user.id)
+  const user = await User.findById(request.user.id)
 
   if (!password) {
     response.status(400).json({ msg: 'Please enter a new password.' })
@@ -166,9 +185,43 @@ usersRouter.put('/change-password', auth, async (request, response) => {
   })
 })
 
+usersRouter.put('/update', auth, upload.single('userImage'), async (request, response) => {
+  const { name, favoriteCoffee, favoriteBrewing } = request.body
+  const updateObj = {
+    name: name,
+    favorite_coffee_type: favoriteCoffee,
+    favorite_brewing_method: favoriteBrewing,
+  }
+
+  if (request.file && request.file.filename) {
+    request.file.key = request.file.filename
+    updateObj.imagePath = request.file.key
+  }
+
+  try {
+    const user = await User.findByIdAndUpdate(request.user.id,
+      updateObj,
+      { new: true },
+    )
+    await user.save()
+    return response.json(user.toJSON())
+  }
+  catch (err) {
+    return response.status(404).json({ msg: 'User could not be updated' })
+  }
+})
+
 usersRouter.get('/current-user', auth, async (request, response) => {
   try {
-    const user = await User.findById(request.user.id).populate('saved_coffees')
+    const user = await User.findById(request.user.id)
+      .populate({
+        path: 'saved_coffees',
+        model: 'Coffee',
+        populate: {
+          path: 'roaster',
+          model: 'Roaster'
+        }
+      })
     response.json(user.toJSON())
   }
   catch (err) {

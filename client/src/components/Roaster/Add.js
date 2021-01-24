@@ -10,9 +10,8 @@ import { StyledButton, Textarea } from '../../shared-style'
 import { Input } from './style'
 
 import axios from 'axios'
-
-import withAuthorization from '../Session/withAuthorization'
 import userService from '../../services/user'
+import FullPageSpinner from '../../shared/components/Spinner';
 
 const AddRoaster = () => {
   const config = {
@@ -28,6 +27,7 @@ const AddRoaster = () => {
   const [image, setImage] = useState()
 
   const [userId, setUserId] = useState(null)
+  const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
   const [open, setOpen] = useState(false)
 
@@ -65,16 +65,24 @@ const AddRoaster = () => {
     data.append('website', website)
     data.append('addedBy', userId)
 
-    await axios.post('/api/roasters', data, config)
-    setOpen(true)
-    setName('')
-    setSummary('')
-    setAddress('')
-    setWebsite('')
-    ref.current.value = ''
+    try {
+
+      await axios.post('/api/roasters', data, config)
+      setOpen(true)
+      setName('')
+      setSummary('')
+      setAddress('')
+      setWebsite('')
+      ref.current.value = ''
+    }
+    catch (err) {
+      setError(err.response.data.msg)
+    }
   }
 
-  if (loading) return <p>Loading...</p>
+  if (loading) {
+    return <FullPageSpinner size={50} />
+  }
 
   return (
     <Box bgcolor="#fff" maxWidth="600px" p="2.5rem" my="2.5rem" border="1px solid #d9e7ea" borderRadius="4px" mx="auto" textAlign="center">
@@ -85,7 +93,7 @@ const AddRoaster = () => {
           <Input id="name" required value={name} onChange={({ target }) => setName(target.value)} />
 
           <FormLabel required htmlFor="summary">Roaster Summary</FormLabel>
-          <Textarea style={{ margin: '5px auto 15px', fontSize: 'inherit'}} placeholder="Started in Austin in 2001..." id="summary" required value={summary} onChange={({ target }) => setSummary(target.value)} />
+          <Textarea style={{ margin: '5px auto 15px', fontSize: 'inherit'}} id="summary" required value={summary} onChange={({ target }) => setSummary(target.value)} />
 
           <FormLabel htmlFor="website">Website URL</FormLabel>
           <Input id="website" value={website} onChange={({ target }) => setWebsite(target.value)} />
@@ -95,6 +103,12 @@ const AddRoaster = () => {
 
           <FormLabel color="primary" htmlFor="roasterImage">Logo Image</FormLabel>
           <Input type="file" ref={ref} name="roasterImage" id="roasterImage" onChange={handleUpload} />
+
+          { error &&
+            <Box my="1rem">
+              <Alert severity="error">{error}</Alert>
+            </Box>
+          }
 
           <StyledButton type="submit">Submit</StyledButton>
         </form>
@@ -108,6 +122,4 @@ const AddRoaster = () => {
   )
 }
 
-const condition = authUser => !!authUser
-
-export default withAuthorization(condition)(AddRoaster)
+export default AddRoaster

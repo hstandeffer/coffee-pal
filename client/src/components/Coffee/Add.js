@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Box, Typography, FormLabel, Select, Link } from '@material-ui/core'
+import { Link as RouterLink } from 'react-router-dom';
 import Checkbox from '@material-ui/core/Checkbox'
 import { StyledButton } from '../../shared-style'
+import FullPageSpinner from '../../shared/components/Spinner'
 import { StyledInput, StyledTextField } from './style'
 import Input from '@material-ui/core/Input'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -18,7 +20,6 @@ import FormControl from '@material-ui/core/FormControl'
 import ListItemText from '@material-ui/core/ListItemText'
 import Alert from '@material-ui/lab/Alert'
 
-import withAuthorization from '../Session/withAuthorization'
 import roasterService from '../../services/roaster'
 
 import Toast from '../../shared/components/Toast'
@@ -79,6 +80,7 @@ const Add = () => {
   const [price, setPrice] = useState('')
   const [roastType, setRoastType] = useState('medium')
 
+  const ref = React.useRef()
 
   useEffect(() => {
     setLoading(true)
@@ -97,7 +99,7 @@ const Add = () => {
     const data = new FormData()
     data.append('coffeeImage', image)
     data.append('coffeeName', coffeeName)
-    data.append('selectedBrand', selectedBrand) 
+    data.append('selectedBrand', selectedBrand.id) 
     data.append('selectedCountry', selectedCountry) 
     data.append('fairTrade', fairTrade) 
     data.append('organic', organic) 
@@ -111,7 +113,7 @@ const Add = () => {
         setOpen(true)
         setCoffeeName('')
         setSelectedBrand('')
-        setSelectedCountry('')
+        setSelectedCountry([])
         setFairTrade('')
         setOrganic('')
         setShadeGrown('')
@@ -119,11 +121,14 @@ const Add = () => {
         setImage(null)
         setPrice('')
         setRoastType('')
+        ref.current.value = ''
       })
       .catch(err => setError(err.response.data.msg))
   }
 
-  if (loading) return <p>Loading...</p>
+  if (loading) {
+    return <FullPageSpinner size={50} />
+  }
 
   return (
     <Box maxWidth="600px" p="2.5rem" my="2.5rem" mx="auto" border="1px solid #d9e7ea" borderRadius="4px" textAlign="center">
@@ -144,29 +149,31 @@ const Add = () => {
                 setSelectedBrand('')
                 return
               }
-              setSelectedBrand(newValue.id)
+              setSelectedBrand(newValue)
             }}
             size="small"
             renderInput={(params) => <StyledTextField style={{ margin: '5px auto 5px', padding: 0 }} {...params} variant="outlined" />}
           />
-          <Typography paragraph variant="body2" color="textSecondary">Brand not listed? <Link style={{ cursor: 'pointer' }} href={`/roasters/add`}>Add it here</Link>.</Typography>
+          <Typography paragraph variant="body2" color="textSecondary">Brand not listed?
+            <Link component={RouterLink} style={{ cursor: 'pointer' }} to={`/roasters/add`}>Add it here</Link>.
+          </Typography>
 
           <FormLabel htmlFor="price">Price ($)</FormLabel>
           <StyledInput id="price" type="number" required value={price} onChange={({ target }) => setPrice(target.value)} />
 
           <FormLabel htmlFor="roastType">Roast Type</FormLabel>
-            <Select
-              classes={{ outlined: classes.outlined }}
-              id="roastType"
-              value={roastType}
-              onChange={({ target }) => setRoastType(target.value)}
-              style={{ width: '100%', margin: '5px auto 15px' }}
-              variant="outlined"
-            >
-              <MenuItem value="light">Light</MenuItem>
-              <MenuItem value="medium">Medium</MenuItem>
-              <MenuItem value="dark">Dark</MenuItem>
-            </Select>
+          <Select
+            classes={{ outlined: classes.outlined }}
+            id="roastType"
+            value={roastType}
+            onChange={({ target }) => setRoastType(target.value)}
+            style={{ width: '100%', margin: '5px auto 15px' }}
+            variant="outlined"
+          >
+            <MenuItem value="light">Light</MenuItem>
+            <MenuItem value="medium">Medium</MenuItem>
+            <MenuItem value="dark">Dark</MenuItem>
+          </Select>
 
           <FormLabel htmlFor="countries">Countries</FormLabel>
           <FormControl className={classes.formControl}>
@@ -195,7 +202,7 @@ const Add = () => {
           <StyledInput id="url" value={url} onChange={({ target }) => setUrl(target.value)} />
 
           <FormLabel color="primary" htmlFor="roasterImage">Product Image</FormLabel>
-          <StyledInput type="file" name="roasterImage" id="roasterImage" onChange={handleUpload} />
+          <StyledInput ref={ref} type="file" name="roasterImage" id="roasterImage" onChange={handleUpload} />
 
           <Box display="flex" flexDirection="row" justifyContent="space-around">
             <FormControlLabel
@@ -233,6 +240,4 @@ const Add = () => {
   )
 }
 
-const condition = authUser => !!authUser
-
-export default withAuthorization(condition)(Add)
+export default Add

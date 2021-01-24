@@ -46,7 +46,7 @@ let upload = multer({
 
 coffeesRouter.get('/', async (request, response) => {
   try {
-    const coffees = await Coffee.find({})
+    const coffees = await Coffee.find({}).populate('roaster')
     response.json(coffees.map(coffee => coffee.toJSON()))
   }
   catch (err) {
@@ -54,32 +54,47 @@ coffeesRouter.get('/', async (request, response) => {
   }
 })
 
+coffeesRouter.get('/query', async (request, response) => {
+  const query = request.query
+
+  // check is an object and empty: will be true if empty and false otherwise
+  if (Object.keys(query).length === 0 && query.constructor === Object) {
+    const noQueryCoffees = await Coffee.find().limit(20).populate('roaster')
+    return response.json(noQueryCoffees)
+  }
+
+  const coffees = await Coffee.find({ roastType: { $in: query.roastType }, price: { $gte: query.priceLow, $lte: query.priceHigh } }).limit(20).populate('roaster')
+
+  return response.json(coffees)
+})
+
 coffeesRouter.post('/', auth, upload.single('coffeeImage'), async (request, response) => {
+  const body = request.body
+  const coffeeObj = {
+    brand: body.selectedBrand,
+    countries: body.selectedCountry,
+    fairTrade: body.fairTrade,
+    imagePath: body.imagePath,
+    organic: body.organic,
+    price: body.price,
+    roastType: body.roastType,
+    shadeGrown: body.shadeGrown,
+    roaster: body.selectedBrand,
+    coffeeName: body.coffeeName,
+    url: body.url,
+    addedBy: request.user.id
+  }
   if (request.file && request.file.filename) {
     request.file.key = request.file.filename
+    roasterObj.imagePath = request.file.key
   }
   
   try {
-    const body = request.body
-    const newCoffee = new Coffee({
-      brand: body.selectedBrand,
-      countries: body.selectedCountry,
-      fairTrade: body.fairTrade,
-      imagePath: body.imagePath,
-      organic: body.organic,
-      price: body.price,
-      roastType: body.roastType,
-      shadeGrown: body.shadeGrown,
-      roasterId: body.selectedBrand,
-      coffeeName: body.coffeeName,
-      url: body.url,
-      addedBy: request.user.id
-    })
+    const newCoffee = new Coffee(coffeeObj)
     const coffee = await newCoffee.save()
     response.json(coffee.toJSON())
   }
   catch (err) {
-    console.log(err)
     let errMsg = 'Coffee upload failed. Ensure all fields are correct and try again.'
     response.status(404).json({ msg: errMsg })
   }
@@ -87,7 +102,7 @@ coffeesRouter.post('/', auth, upload.single('coffeeImage'), async (request, resp
 
 coffeesRouter.get('/recent', async (request, response) => {
   try {
-    const coffees = await Coffee.find().limit(4)
+    const coffees = await Coffee.find().limit(4).populate('roaster')
     response.json(coffees)
   }
   catch (err) {
@@ -98,7 +113,7 @@ coffeesRouter.get('/recent', async (request, response) => {
 // keep at bottom so wildcard doesnt catch above routes
 coffeesRouter.get('/:id', async (request, response) => {
   try {
-    const coffee = Coffee.findById(request.params.id)
+    const coffee = await Coffee.findById(request.params.id).populate('roaster', { name: 1, _id: 1, imagePath: 1 })
     response.json(coffee.toJSON())
   }
   catch (err) {

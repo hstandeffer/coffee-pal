@@ -1,6 +1,4 @@
 import React from 'react';
-import { withAuthorization } from '../Session';
-
 import ProductGrid from '../Product/ProductGrid';
 import { Box, Button } from '@material-ui/core';
 import { Link } from 'react-router-dom'
@@ -15,11 +13,9 @@ const Tasting = () => {
           <Button variant="outlined" size="large" color="primary">Submit New Coffee</Button>
         </Link>
       </Box>
-      <ProductGrid route={'tasting'} heading={'Your Saved Coffees'} subheading={'Select one of your saved coffees to begin a tasting'}/>
+      <ProductGrid route={'tastings'} heading={'Your Saved Coffees'} subheading={'Select one of your saved coffees to begin a tasting'}/>
     </Box>
   )
 }
 
-const condition = authUser => !!authUser;
-
-export default withAuthorization(condition)(Tasting)
+export default Tasting

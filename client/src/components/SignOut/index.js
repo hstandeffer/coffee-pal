@@ -1,21 +1,20 @@
 import React, { useContext } from 'react'
 import { StyledButton } from './style'
 import * as ROUTES from '../../constants/routes'
-import { withAuthorization, AuthUserContext } from '../Session'
-import { Redirect } from 'react-router-dom'
+import { AuthUserContext } from '../Session'
+import { useHistory } from 'react-router-dom'
 
-const SignOutButton = (props) => {
+export const SignOutButton = (props) => {
   const authUserContext = useContext(AuthUserContext)
+  const history = useHistory()
 
-  const handleSignout = async () => {
-    await authUserContext.logout()
-    await props.closeMenu()
-    return <Redirect to={ROUTES.LANDING} />
+  const handleSignout = () => { 
+    props.closeMenu()
+    authUserContext.logout()
+    history.push(ROUTES.LANDING)
   }
   
   return <StyledButton open={props.open} type="button" onClick={handleSignout}>Sign Out</StyledButton>
 }
 
-const condition = authUser => !!authUser
-
-export default withAuthorization(condition)(SignOutButton)
+export default SignOutButton
