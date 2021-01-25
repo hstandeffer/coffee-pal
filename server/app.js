@@ -23,9 +23,9 @@ app.use('/api/roasters', require('./controllers/roasters'))
 app.use('/api/users', require('./controllers/users'))
 app.use('/api/auth', require('./controllers/auth'))
 app.use('/api/contact', require('./controllers/contact'))
-
-// app.get('/*', function (req, res) {
-//   res.sendFile(path.join(__dirname, 'build', 'index.html'));
-// })
+ 
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+})
 
 module.exports = app
