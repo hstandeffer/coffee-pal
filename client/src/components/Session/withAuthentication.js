@@ -31,6 +31,7 @@ const withAuthentication = Component => props => {
         })
         setLoading(false)
     }
+    setLoading(false)
   }, [])
 
   if (loading) {

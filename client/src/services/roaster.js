@@ -1,37 +1,30 @@
-import axios from 'axios'
-import { getStoredAuthToken } from '../shared/utils/authToken'
+import api from '../shared/utils/api'
 
 const baseUrl = '/api/roasters'
 
-let token = getStoredAuthToken()
-
-const config = {
-  headers: { Authorization: token ? token : null },
-}
-
 const getAll = async () => {
-  const response = await axios.get(baseUrl, config)
-  return response.data
+  const response = await api.get(baseUrl)
+  return response
 }
 
 const get = async (roasterId) => {
-  const response = await axios.get(`${baseUrl}/${roasterId}`, config)
-  return response.data
+  const response = await api.get(`${baseUrl}/${roasterId}`)
+  return response
 }
 
 const add = async (roasterObject) => {
-  const response = await axios.post(baseUrl, roasterObject, config)
-  return response.data
+  const response = await api.post(baseUrl, roasterObject)
+  return response
 }
 
 const getRecent = async () => {
-  const response = await axios.get(`${baseUrl}/recent-roasters`, config)
-  return response.data
+  const response = await api.get(`${baseUrl}/recent-roasters`)
+  return response
 }
 
 const getList = async () => {
-  const response = await axios.get(`${baseUrl}/list`, config)
-  return response.data
+  const response = await api.get(`${baseUrl}/list`)
+  return response
 }
 
 export default { getAll, get, add, getRecent, getList }
