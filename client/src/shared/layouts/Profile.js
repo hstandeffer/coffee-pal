@@ -27,16 +27,12 @@ const ProfilePage = ({ children, heading }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    let isMounted = true
     setLoading(true)
     userService.getCurrentUser().then(currentUser => {
-      if (isMounted) {
-        setUser(currentUser)
-        setCoffees(currentUser.saved_coffees)
-        setLoading(false)
-      }
+      setUser(currentUser)
+      setCoffees(currentUser.saved_coffees)
+      setLoading(false)
     })
-    return () => { isMounted = false }
   }, [])
 
   if (loading) {

@@ -157,13 +157,17 @@ const Search = ({ filters, filtering }) => {
   const [coffees, setCoffees] = useState([])
 
   useEffect(() => {
-    const getQuery = async () => {
-      setLoading(true)
-      const response = await axios.get('/api/coffees/query', { params: { roastType: filters.roastType, priceLow: filters.price.min, priceHigh: filters.price.max } })
-      setCoffees(response.data)
-      setLoading(false)
+    let isMounted = true
+    if (isMounted) {
+      const getQuery = async () => {
+        setLoading(true)
+        const response = await axios.get('/api/coffees/query', { params: { roastType: filters.roastType, priceLow: filters.price.min, priceHigh: filters.price.max } })
+        setCoffees(response.data)
+        setLoading(false)
+      }
+      getQuery()
     }
-    getQuery()
+    return () => { isMounted = false }
   }, [filters])
 
   if (loading) {

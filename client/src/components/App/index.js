@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
+import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import AuthUserContext from '../Session/context'
 
 import Navigation from '../Navigation'
