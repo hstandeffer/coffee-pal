@@ -13,7 +13,7 @@ export const BrowseWrapper = styled.div`
   display: flex;
 
 	@media (max-width: 600px) {
-		padding: 0;
+    padding: 1em 0;
 	}
 
   @media (max-width: 960px) {

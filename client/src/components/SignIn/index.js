@@ -8,6 +8,7 @@ import * as ROUTES from '../../constants/routes'
 import axios from 'axios'
 import { PasswordForgetLink } from '../PasswordForget'
 import { Typography, Box } from '@material-ui/core'
+import Alert from '@material-ui/lab/Alert'
 
 const SignIn = () => {
   const authUserContext = useContext(AuthUserContext)
@@ -62,7 +63,12 @@ const SignIn = () => {
             tabIndex="2"
           />
           <StyledButton disabled={isInvalid} tabIndex="3" type="submit">Sign In</StyledButton>
-          {error && <p className={{ color: 'red' }}>{error.message}</p>}
+
+          { error &&
+            <Box my="1rem">
+              <Alert severity="error">{error}</Alert>
+            </Box>
+          }
 
           <Box mt={2}>
             <PasswordForgetLink />

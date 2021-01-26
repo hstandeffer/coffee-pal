@@ -4,6 +4,7 @@ import userService from '../../services/user'
 
 import Toast from '../../shared/components/Toast'
 import { Typography, FormLabel, Box } from '@material-ui/core'
+import Alert from '@material-ui/lab/Alert'
 
 export const PasswordChangeForm = () => {
   const [password, setPassword] = useState('')
@@ -52,7 +53,11 @@ export const PasswordChangeForm = () => {
           />
           <StyledButton disabled={isInvalid} type="submit">Update Password</StyledButton> 
 
-          {error && <p>{error.message}</p>}
+          { error &&
+            <Box my="1rem">
+              <Alert severity="error">{error}</Alert>
+            </Box>
+          }
           <Toast open={open} setOpen={setOpen} severity="success" message="Your password has been successfully changed!" />
         </form>
       </Box>

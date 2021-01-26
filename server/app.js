@@ -2,7 +2,10 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
 const config = require('./utils/config')
+const middleware = require('./utils/middleware')
 const path = require('path')
+
+require ('express-async-errors')
 
 const app = express()
 
@@ -23,6 +26,8 @@ app.use('/api/roasters', require('./controllers/roasters'))
 app.use('/api/users', require('./controllers/users'))
 app.use('/api/auth', require('./controllers/auth'))
 app.use('/api/contact', require('./controllers/contact'))
+
+app.use(middleware.errorHandler)
  
 app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));

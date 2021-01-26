@@ -31,7 +31,7 @@ const api = (method, url, variables) =>
       error => {
         if (error.response) {
           if (error.response) {
-            removeStoredAuthToken();
+            
           } else {
             reject(error.response.data.error);
           }

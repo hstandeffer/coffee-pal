@@ -8,6 +8,8 @@ import axios from 'axios'
 import * as ROUTES from '../../constants/routes'
 import Toast from '../../shared/components/Toast'
 import FullPageSpinner from '../../shared/components/Spinner'
+import Alert from '@material-ui/lab/Alert'
+import { Box } from '@material-ui/core'
 
 const PasswordReset = () => {
   const [loading, setLoading] = useState(true)
@@ -80,7 +82,11 @@ const PasswordReset = () => {
         />
         <StyledButton disabled={isInvalid} type="submit">Update Password</StyledButton> 
 
-        {error && <p>{error.message}</p>}
+        { error &&
+          <Box my="1rem">
+            <Alert severity="error">{error}</Alert>
+          </Box>
+        }
       </form>
     </StyledDiv>
     <Toast open={open} setOpen={setOpen} severity="success" message="Your password has been successfully reset! You may now login using the new password." />

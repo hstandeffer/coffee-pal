@@ -34,36 +34,38 @@ const Roaster = () => {
   }
 
   return (
-    <Container maxWidth="sm">
-      <Box my={4}>
-        <Box mb={2}>
-          <Typography align="center" variant="h4">Small Batch Roasters</Typography>
+    <Box py={3} bgcolor="rgb(242, 242, 242)">
+      <Container maxWidth="sm">
+        <Box py={3}>
+          <Typography align="center" variant="h4">All Roasters</Typography>
         </Box>
-      </Box>
-      {roasterList.map(roaster => (
-          <Box key={roaster.id}>
-            <Link component={RouterLink} underline="none" to={`/roasters/${roaster.id}`}>
-              <Box boxShadow={1} p={1} bgcolor="#fff" borderRadius={4} my={2}>
-                <Box display="flex">
-                  <Box pr="8px" className={classes.roastImage}>
-                    <RoasterImageBox>
-                      {roaster.imagePath ? <img alt="roaster" src={`${process.env.REACT_APP_IMAGE_PATH}/${roaster.imagePath}`}></img> : null }
-                    </RoasterImageBox>
-                  </Box>
-                  <Box px="8px" display="flex" flexDirection="column" justifyContent="space-between" width={0} flexGrow={1}>
-                    <Box whiteSpace="nowrap">
-                      <Typography color="textPrimary" noWrap variant="h6">{roaster.name}</Typography>
-                      <Box color="textPrimary" textOverflow="ellipsis" overflow="hidden">
-                        <Typography component="span" color="textPrimary" variant="body2">{roaster.summary}</Typography>
+        <Box borderRadius="1rem" px={3} py={1} bgcolor="white">
+          {roasterList.map(roaster => (
+              <Box key={roaster.id}>
+                <Link component={RouterLink} underline="none" to={`/roasters/${roaster.id}`}>
+                  <Box boxShadow={1} p={1} bgcolor="#fff" borderRadius={4} my={2}>
+                    <Box display="flex">
+                      <Box pr={1} className={classes.roastImage}>
+                        <RoasterImageBox>
+                          {roaster.imagePath ? <img alt="roaster" src={`${process.env.REACT_APP_IMAGE_PATH}/${roaster.imagePath}`}></img> : null }
+                        </RoasterImageBox>
+                      </Box>
+                      <Box px="8px" display="flex" flexDirection="column" justifyContent="space-between" width={0} flexGrow={1}>
+                        <Box whiteSpace="nowrap">
+                          <Typography color="textPrimary" noWrap variant="h6">{roaster.name}</Typography>
+                          <Box color="textPrimary" textOverflow="ellipsis" overflow="hidden">
+                            <Typography component="span" color="textPrimary" variant="body2">{roaster.summary}</Typography>
+                          </Box>
+                        </Box>
                       </Box>
                     </Box>
                   </Box>
-                </Box>
+                </Link>
               </Box>
-            </Link>
-          </Box>
-      ))}
-    </Container>
+          ))}
+        </Box>
+      </Container>
+    </Box>
   )
 }
 

@@ -8,15 +8,15 @@ authRouter.post('/', (request, response) => {
   const { email, password } = request.body
 
   if (!email || !password) {
-    return response.status(400).json({ msg: 'Please enter all fields and try again' })
+    return response.status(400).json({ error: 'Please enter all fields and try again' })
   }
 
   User.findOne({ email }, 'password')
     .then(user => {
-      if (!user) return response.status(400).json({ msg: 'User does not exist' })
+      if (!user) return response.status(400).json({ error: 'User does not exist' })
       bcrypt.compare(password, user.password)
         .then(isMatch => {
-          if (!isMatch) return response.status(400).json({ msg: 'Invalid credentials' })
+          if (!isMatch) return response.status(400).json({ error: 'Invalid credentials' })
 
           jwt.sign({ id: user.id }, config.JWT_SECRET, { expiresIn: 3600 * 24 * 365 }, (err, token) => {
             if (err) throw err
@@ -35,17 +35,16 @@ authRouter.post('/', (request, response) => {
 
 authRouter.post('/verify', async (request, response) => {
   const { token } = request.body
-  try {
-    const decoded = jwt.verify(token, config.JWT_SECRET)
-    if (decoded) {
-      response.json(decoded)
-    }
-    else {
-      response.status(401).json({ msg: 'Unauthenticated' })
-    }
+  if (!token) {
+    return response.status(401).json({ error: 'Authentication token is invalid' })
   }
-  catch (err) {
-    response.status(404).json({ msg: err })
+
+  const decoded = jwt.verify(token, config.JWT_SECRET)
+  if (decoded) {
+    response.json(decoded)
+  }
+  else {
+    response.status(401).json({ error: 'User is unauthenticated' })
   }
 })
 

@@ -9,8 +9,7 @@ import Input from '@material-ui/core/Input'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 
-import { getStoredAuthToken } from '../../shared/utils/authToken'
-import axios from 'axios'
+import api from '../../shared/utils/api'
 
 import countryList from '../../constants/countries'
 
@@ -58,10 +57,6 @@ const MenuProps = {
 }
 
 const Add = () => {
-  const config = {
-    headers: { Authorization: getStoredAuthToken() ? `Bearer ${getStoredAuthToken()}` : undefined },
-  }
-
   const classes = useStyles()
 
   const [loading, setLoading] = useState(true)
@@ -69,7 +64,7 @@ const Add = () => {
   const [open, setOpen] = useState(false)
 
   const [coffeeName, setCoffeeName] = useState('')
-  const [selectedBrand, setSelectedBrand] = useState('')
+  const [selectedBrand, setSelectedBrand] = useState(null)
   const [brands, setBrands] = useState([])
   const [selectedCountry, setSelectedCountry] = useState([])
   const [fairTrade, setFairTrade] = useState(false)
@@ -78,7 +73,7 @@ const Add = () => {
   const [url, setUrl] = useState('')
   const [image, setImage] = useState()
   const [price, setPrice] = useState('')
-  const [roastType, setRoastType] = useState('medium')
+  const [roastType, setRoastType] = useState('')
 
   const ref = React.useRef()
 
@@ -108,15 +103,15 @@ const Add = () => {
     data.append('price', price) 
     data.append('roastType', roastType)
 
-    axios.post('/api/coffees', data, config)
+    api.post('/api/coffees', data)
       .then(response => {
         setOpen(true)
         setCoffeeName('')
-        setSelectedBrand('')
+        setSelectedBrand(null)
         setSelectedCountry([])
-        setFairTrade('')
-        setOrganic('')
-        setShadeGrown('')
+        setFairTrade(false)
+        setOrganic(false)
+        setShadeGrown(false)
         setUrl('')
         setImage(null)
         setPrice('')
@@ -142,7 +137,9 @@ const Add = () => {
           <Autocomplete
             id="brand"
             options={brands}
-            getOptionLabel={(option) => option.name}
+            value={selectedBrand || null}
+            getOptionSelected={(option, value) => option.name === value.name}
+            getOptionLabel={(option) => option.name ? option.name : ''}
             style={{ width: '100%' }}
             onChange={(event, newValue, reason) => {
               if (reason === 'clear') {
@@ -155,7 +152,7 @@ const Add = () => {
             renderInput={(params) => <StyledTextField style={{ margin: '5px auto 5px', padding: 0 }} {...params} variant="outlined" />}
           />
           <Typography paragraph variant="body2" color="textSecondary">Brand not listed?
-            <Link component={RouterLink} style={{ cursor: 'pointer' }} to={`/roasters/add`}>Add it here</Link>.
+            <Link component={RouterLink} style={{ cursor: 'pointer' }} to={`/roasters/add`}> Add it here</Link>.
           </Typography>
 
           <FormLabel htmlFor="price">Price ($)</FormLabel>

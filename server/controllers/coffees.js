@@ -1,5 +1,6 @@
 const coffeesRouter = require('express').Router()
 const Coffee = require('../models/coffee')
+const Roaster = require('../models/roaster')
 
 const config = require('../utils/config')
 const { auth } = require('../utils/middleware')
@@ -84,17 +85,25 @@ coffeesRouter.post('/', auth, upload.single('coffeeImage'), async (request, resp
     url: body.url,
     addedBy: request.user.id
   }
+
   if (request.file && request.file.filename) {
     request.file.key = request.file.filename
     roasterObj.imagePath = request.file.key
   }
   
   try {
+    const roaster = await Roaster.findById(body.selectedBrand)
+    
     const newCoffee = new Coffee(coffeeObj)
-    const coffee = await newCoffee.save()
-    response.json(coffee.toJSON())
+    const savedCoffee = await newCoffee.save()
+    
+    roaster.coffees = roaster.coffees.concat(savedCoffee._id)
+    await roaster.save()
+
+    response.json(savedCoffee.toJSON())
   }
   catch (err) {
+    console.log(err)
     let errMsg = 'Coffee upload failed. Ensure all fields are correct and try again.'
     response.status(404).json({ msg: errMsg })
   }

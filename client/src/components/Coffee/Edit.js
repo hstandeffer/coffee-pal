@@ -80,7 +80,7 @@ const Edit = () => {
   const [url, setUrl] = useState('')
   const [image, setImage] = useState()
   const [price, setPrice] = useState('')
-  const [roastType, setRoastType] = useState('medium')
+  const [roastType, setRoastType] = useState('')
 
 
   useEffect(() => {

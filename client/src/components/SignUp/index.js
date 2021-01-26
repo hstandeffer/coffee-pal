@@ -8,6 +8,7 @@ import axios from 'axios'
 import * as ROUTES from '../../constants/routes';
 import { Typography, Box } from '@material-ui/core';
 import { SignInLink } from '../SignIn';
+import Alert from '@material-ui/lab/Alert';
 
 const SignUp = () => {
   const authUserContext = useContext(AuthUserContext)
@@ -86,7 +87,12 @@ const SignUp = () => {
             tabIndex="4"
           />
           <StyledButton disabled={isInvalid} tabIndex="5" type="submit">Sign Up</StyledButton> 
-          {error && <p>{error.message}</p>}
+          
+          { error &&
+            <Box my="1rem">
+              <Alert severity="error">{error}</Alert>
+            </Box>
+          }
 
           <Box mt={2}>
             <SignInLink />
