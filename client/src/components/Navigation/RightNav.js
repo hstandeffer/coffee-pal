@@ -46,6 +46,10 @@ const nonAuthRoutes = [
     text: 'Coffees'
   },
   {
+    route: ROUTES.ROASTERS,
+    text: 'Roasters'
+  },
+  {
     route: ROUTES.SIGN_IN,
     text: 'Sign in'
   },

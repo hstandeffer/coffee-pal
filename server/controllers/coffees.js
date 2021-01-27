@@ -2,63 +2,18 @@ const coffeesRouter = require('express').Router()
 const Coffee = require('../models/coffee')
 const Roaster = require('../models/roaster')
 
-const config = require('../utils/config')
+const { upload } = require('../utils/multer')
 const { auth } = require('../utils/middleware')
 
-const aws = require('aws-sdk')
-const multer  = require('multer')
-const multerS3 = require('multer-s3')
-
-const path = require('path')
-
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/')
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)) //Appending extension
-  }
-})
-
-if (config.NODE_ENV === 'production') {
-  const s3 = new aws.S3()
-
-  aws.config.update({
-    secretAccessKey: config.AWS_SECRET_KEY,
-    accessKeyId: config.AWS_ACCESS_KEY,
-    region: 'us-east-1'
-  }) 
-  
-  storage = multerS3({
-    s3: s3,
-    acl: 'public-read',
-    bucket: 'baroasta',
-    key: function (req, file, cb) {
-      let newFileName = Date.now() + '-' + file.originalname
-      let fullPath = 'images/' + newFileName
-      cb(null, fullPath)
-    }
-  })
-}
-
-let upload = multer({
-  storage: storage
-})
-
 coffeesRouter.get('/', async (request, response) => {
-  try {
-    const coffees = await Coffee.find({}).populate('roaster')
-    response.json(coffees.map(coffee => coffee.toJSON()))
-  }
-  catch (err) {
-    response.status(404).json({ msg: err })
-  }
+  const coffees = await Coffee.find({}).populate('roaster')
+  return response.json(coffees.map(coffee => coffee.toJSON()))
 })
 
 coffeesRouter.get('/query', async (request, response) => {
   const query = request.query
 
-  // check is an object and empty: will be true if empty and false otherwise
+  // checks is an object and empty: will be true if empty and false otherwise
   if (Object.keys(query).length === 0 && query.constructor === Object) {
     const noQueryCoffees = await Coffee.find().limit(20).populate('roaster')
     return response.json(noQueryCoffees)
@@ -66,7 +21,7 @@ coffeesRouter.get('/query', async (request, response) => {
 
   const coffees = await Coffee.find({ roastType: { $in: query.roastType }, price: { $gte: query.priceLow, $lte: query.priceHigh } }).limit(20).populate('roaster')
 
-  return response.json(coffees)
+  return response.json(coffees.map(coffee => coffee.toJSON()))
 })
 
 coffeesRouter.post('/', auth, upload.single('coffeeImage'), async (request, response) => {
@@ -75,7 +30,6 @@ coffeesRouter.post('/', auth, upload.single('coffeeImage'), async (request, resp
     brand: body.selectedBrand,
     countries: body.selectedCountry,
     fairTrade: body.fairTrade,
-    imagePath: body.imagePath,
     organic: body.organic,
     price: body.price,
     roastType: body.roastType,
@@ -91,43 +45,62 @@ coffeesRouter.post('/', auth, upload.single('coffeeImage'), async (request, resp
     roasterObj.imagePath = request.file.key
   }
   
-  try {
-    const roaster = await Roaster.findById(body.selectedBrand)
-    
-    const newCoffee = new Coffee(coffeeObj)
-    const savedCoffee = await newCoffee.save()
-    
-    roaster.coffees = roaster.coffees.concat(savedCoffee._id)
-    await roaster.save()
+  const roaster = await Roaster.findById(body.selectedBrand)
+  
+  const newCoffee = new Coffee(coffeeObj)
+  const savedCoffee = await newCoffee.save()
+  
+  roaster.coffees = roaster.coffees.concat(savedCoffee._id)
+  await roaster.save()
 
-    response.json(savedCoffee.toJSON())
-  }
-  catch (err) {
-    console.log(err)
-    let errMsg = 'Coffee upload failed. Ensure all fields are correct and try again.'
-    response.status(404).json({ msg: errMsg })
-  }
+  response.json(savedCoffee.toJSON())
 })
 
 coffeesRouter.get('/recent', async (request, response) => {
-  try {
-    const coffees = await Coffee.find().limit(4).populate('roaster')
-    response.json(coffees)
+  const coffees = await Coffee.find().limit(4).populate('roaster')
+  return response.json(coffees.map(coffee => coffee.toJSON()))
+})
+
+coffeesRouter.put('/:id', auth, async (request, response) => {
+  const body = request.body
+  const coffeeObj = {
+    brand: body.selectedBrand,
+    countries: body.selectedCountry,
+    fairTrade: body.fairTrade,
+    organic: body.organic,
+    price: body.price,
+    roastType: body.roastType,
+    shadeGrown: body.shadeGrown,
+    roaster: body.selectedBrand,
+    coffeeName: body.coffeeName,
+    url: body.url,
+    addedBy: request.user.id
   }
-  catch (err) {
-    response.status(404).json({ msg: err })
+
+  if (request.file && request.file.filename) {
+    request.file.key = request.file.filename
+    roasterObj.imagePath = request.file.key
+  }
+
+  const coffee = await Coffee.findByIdAndUpdate(request.params.id, coffeeObj, { new: true })
+  return response.status(204).json(coffee.toJSON())
+})
+
+coffeesRouter.delete('/:id', auth, async (request, response) => {
+  const coffee = await Coffee.findById(request.params.id)
+  if (coffee.addedBy === request.user.id) {
+    coffee.remove()
+    return response.status(204).json({ msg: 'Coffee deleted successfully' })
+  }
+  else {
+    return response.status(401).json({ error: 'Unauthorized' })
   }
 })
 
 // keep at bottom so wildcard doesnt catch above routes
 coffeesRouter.get('/:id', async (request, response) => {
-  try {
-    const coffee = await Coffee.findById(request.params.id).populate('roaster', { name: 1, _id: 1, imagePath: 1 })
-    response.json(coffee.toJSON())
-  }
-  catch (err) {
-    response.status(404).json({ msg: err })
-  }
+  const coffee = await Coffee.findById(request.params.id).populate('roaster', { name: 1, _id: 1, imagePath: 1 })
+  return response.json(coffee.toJSON())
 })
 
 module.exports = coffeesRouter

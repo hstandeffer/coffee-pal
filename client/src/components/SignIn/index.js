@@ -5,7 +5,7 @@ import { StyledH1, Wrapper, Input, StyledDiv, StyledButton, StyledLink } from '.
 
 import { SignUpLink } from '../SignUp'
 import * as ROUTES from '../../constants/routes'
-import axios from 'axios'
+import authService from '../../services/auth'
 import { PasswordForgetLink } from '../PasswordForget'
 import { Typography, Box } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
@@ -17,7 +17,7 @@ const SignIn = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
 
-  const handleSubmit = event => {
+  const handleSubmit = async event => {
     event.preventDefault()
 
     const user = {
@@ -25,18 +25,26 @@ const SignIn = () => {
       password
     }
 
-    axios.post('/api/auth', user)
-      .then(response => {
-        const userObj = {
-          token: response.data.token,
-          id: response.data.user.id
-        }
-        authUserContext.login(userObj)
-        return (<Redirect to={ROUTES.BROWSE} />)
-      })
-      .catch(error => {
-        setError(error)
-      })
+    const response = await authService.signIn(user).catch((err) => {
+      if (err.errors) {
+        setError(`${err.errors[0].msg} for ${err.errors[0].param} field.`)
+      }
+      else {
+        setError(err.error)
+      }
+    })
+
+    if (!response) {
+      return
+    }
+
+    const userObj = {
+      token: response.token,
+      id: response.user.id
+    }
+
+    authUserContext.login(userObj)
+    return (<Redirect to={ROUTES.BROWSE} />)
   }
 
   const isInvalid = password === '' || email === ''

@@ -4,20 +4,15 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
 import { PlacesAutocomplete } from '../../shared/hooks/PlacesAutocomplete'
-import { getStoredAuthToken } from '../../shared/utils/authToken'
 
 import { StyledButton, Textarea } from '../../shared-style'
 import { Input } from './style'
 
-import axios from 'axios'
+import roasterService from '../../services/roaster'
 import userService from '../../services/user'
 import FullPageSpinner from '../../shared/components/Spinner';
 
 const AddRoaster = () => {
-  const config = {
-    headers: { Authorization: getStoredAuthToken() ? `Bearer ${getStoredAuthToken()}` : undefined },
-  }
-
   const ref = React.useRef()
 
   const [name, setName] = useState('')
@@ -65,19 +60,25 @@ const AddRoaster = () => {
     data.append('website', website)
     data.append('addedBy', userId)
 
-    try {
+    const response = await roasterService.add(data).catch((err) => {
+      if (err.errors) {
+        setError(`${err.errors[0].msg} for ${err.errors[0].param} field.`)
+      }
+      else {
+        setError(err.error)
+      }
+    })
 
-      await axios.post('/api/roasters', data, config)
-      setOpen(true)
-      setName('')
-      setSummary('')
-      setAddress('')
-      setWebsite('')
-      ref.current.value = ''
+    if (!response) {
+      return
     }
-    catch (err) {
-      setError(err.response.data.msg)
-    }
+
+    setOpen(true)
+    setName('')
+    setSummary('')
+    setAddress('')
+    setWebsite('')
+    ref.current.value = ''
   }
 
   if (loading) {

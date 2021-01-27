@@ -1,28 +1,24 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Typography, FormLabel, Select, Link } from '@material-ui/core'
 import { Link as RouterLink } from 'react-router-dom';
-import Checkbox from '@material-ui/core/Checkbox'
-import { StyledButton } from '../../shared-style'
 import FullPageSpinner from '../../shared/components/Spinner'
+import Toast from '../../shared/components/Toast'
+import { StyledButton } from '../../shared-style'
 import { StyledInput, StyledTextField } from './style'
-import Input from '@material-ui/core/Input'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Autocomplete from '@material-ui/lab/Autocomplete'
 
-import api from '../../shared/utils/api'
+import roasterService from '../../services/roaster'
+import coffeeService from '../../services/coffee'
 
 import countryList from '../../constants/countries'
 
+import { Box, Typography, FormLabel, Select, Link, Checkbox } from '@material-ui/core'
+import Input from '@material-ui/core/Input'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Autocomplete from '@material-ui/lab/Autocomplete'
 import MenuItem from '@material-ui/core/MenuItem'
 import { makeStyles } from '@material-ui/core/styles'
 import FormControl from '@material-ui/core/FormControl'
 import ListItemText from '@material-ui/core/ListItemText'
 import Alert from '@material-ui/lab/Alert'
-
-import roasterService from '../../services/roaster'
-
-import Toast from '../../shared/components/Toast'
-
 
 const useStyles = makeStyles(() => ({
   formControl: {
@@ -85,11 +81,11 @@ const Add = () => {
     setLoading(false)
   }, [])
 
-  const handleUpload = async event => {
+  const handleUpload = async (event) => {
     setImage(event.target.files[0])
   }
 
-  const handleSubmit = event => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
     const data = new FormData()
     data.append('coffeeImage', image)
@@ -103,22 +99,31 @@ const Add = () => {
     data.append('price', price) 
     data.append('roastType', roastType)
 
-    api.post('/api/coffees', data)
-      .then(response => {
-        setOpen(true)
-        setCoffeeName('')
-        setSelectedBrand(null)
-        setSelectedCountry([])
-        setFairTrade(false)
-        setOrganic(false)
-        setShadeGrown(false)
-        setUrl('')
-        setImage(null)
-        setPrice('')
-        setRoastType('')
-        ref.current.value = ''
-      })
-      .catch(err => setError(err.response.data.msg))
+    const response = await coffeeService.add(data).catch((err) => {
+      if (err.errors) {
+        setError(`${err.errors[0].msg} for ${err.errors[0].param} field.`)
+      }
+      else {
+        setError(err.error)
+      }
+    })
+
+    if (!response) {
+      return
+    }
+
+    setOpen(true)
+    setCoffeeName('')
+    setSelectedBrand(null)
+    setSelectedCountry([])
+    setFairTrade(false)
+    setOrganic(false)
+    setShadeGrown(false)
+    setUrl('')
+    setImage(null)
+    setPrice('')
+    setRoastType('')
+    ref.current.value = ''
   }
 
   if (loading) {

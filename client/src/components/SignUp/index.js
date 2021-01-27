@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { StyledH1, Wrapper, Input, StyledDiv, StyledButton, StyledLink } from '../../shared-style';
 import AuthUserContext from '../Session/context'
 
-import axios from 'axios'
+import userService from '../../services/user'
 
 import * as ROUTES from '../../constants/routes';
 import { Typography, Box } from '@material-ui/core';
@@ -20,28 +20,35 @@ const SignUp = () => {
   const [error, setError] = useState('')
   
 
-  const handleSubmit = event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const newUser = {
+    const user = {
       username,
       email,
       password
     }
 
-    axios.post('/api/users', newUser)
-      .then(response => {
-        const userObj = {
-          token: response.data.token,
-          id: response.data.user.id
-        }
-        authUserContext.login(userObj)
-        return (<Redirect to={ROUTES.BROWSE} />)
-      })
-      .catch(error => {
-        setError(error)
-      })  
-  };
+    const response = await userService.signUp(user).catch((err) => {
+      if (err.errors) {
+        setError(`${err.errors[0].msg} for ${err.errors[0].param} field.`)
+      }
+      else {
+        setError(err.error)
+      }
+    })
+
+    if (!response) {
+      return
+    }
+
+    const userObj = {
+      token: response.token,
+      id: response.user.id
+    }
+    authUserContext.login(userObj)
+    return (<Redirect to={ROUTES.BROWSE} />) 
+  }
 
   const isInvalid = 
     password !== confirmPassword ||

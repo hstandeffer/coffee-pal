@@ -17,9 +17,14 @@ const add = async (coffeeObject) => {
   return response
 }
 
+const update = async (coffeeId, coffeeObject) => {
+  const response = await api.put(`${baseUrl}/${coffeeId}`, coffeeObject)
+  return response
+}
+
 const getRecent = async () => {
   const response = await api.get(`${baseUrl}/recent`)
   return response
 }
 
-export default { getAll, get, add, getRecent }
+export default { getAll, get, add, update, getRecent }

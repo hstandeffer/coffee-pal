@@ -15,15 +15,22 @@ export const PasswordChangeForm = () => {
   const handleSubmit = async event => {
     event.preventDefault()
     const dataObj = { password }
-    const response = await userService.changePassword(dataObj)
-    if (response.status === 200) {
-      setOpen(true)
-      setPassword('')
-      setConfirmPassword('')
+    const response = await userService.changePassword(dataObj).catch((err) => {
+      if (err.errors) {
+        setError(`${err.errors[0].msg} for ${err.errors[0].param} field.`)
+      }
+      else {
+        setError(err.error)
+      }
+    })
+
+    if (!response) {
+      return
     }
-    else {
-      setError('Something went wrong, please try again.')
-    }
+
+    setOpen(true)
+    setPassword('')
+    setConfirmPassword('')
   }
 
   const isInvalid = 

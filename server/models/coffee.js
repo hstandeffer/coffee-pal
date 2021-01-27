@@ -25,6 +25,10 @@ const coffeeSchema = new mongoose.Schema({
     type: String,
     required: false
   },
+  addedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
   roaster: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Roaster'

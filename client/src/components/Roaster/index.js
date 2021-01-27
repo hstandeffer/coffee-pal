@@ -6,11 +6,15 @@ import { Link as RouterLink } from 'react-router-dom';
 import roasterService from '../../services/roaster'
 
 import { RoasterImageBox } from './style'
+import { LineClampSummary } from '../../shared-style'
 import FullPageSpinner from '../../shared/components/Spinner';
 
 const useStyles = makeStyles((theme) => ({
   roastImage: {
     alignSelf: 'center'
+  },
+  roasterName: {
+    lineHeight: 'inherit'
   }
 }))
 
@@ -51,10 +55,10 @@ const Roaster = () => {
                         </RoasterImageBox>
                       </Box>
                       <Box px="8px" display="flex" flexDirection="column" justifyContent="space-between" width={0} flexGrow={1}>
-                        <Box whiteSpace="nowrap">
-                          <Typography color="textPrimary" noWrap variant="h6">{roaster.name}</Typography>
+                        <Box lineHeight="inherit">
+                          <Typography className={classes.roasterName} color="textPrimary" variant="h6">{roaster.name}</Typography>
                           <Box color="textPrimary" textOverflow="ellipsis" overflow="hidden">
-                            <Typography component="span" color="textPrimary" variant="body2">{roaster.summary}</Typography>
+                            <LineClampSummary>{roaster.summary}</LineClampSummary>
                           </Box>
                         </Box>
                       </Box>

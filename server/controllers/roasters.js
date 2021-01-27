@@ -38,7 +38,7 @@ roastersRouter.post('/', auth, upload.single('roasterImage'), async (request, re
   const newRoaster = new Roaster(roasterObj)
 
   const roaster = await newRoaster.save()
-  response.json(roaster.toJSON())
+  return response.json(roaster.toJSON())
 })
 
 roastersRouter.get('/recent-roasters', async (request, response) => {

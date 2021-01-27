@@ -47,7 +47,7 @@ const Landing = () => {
             <Box my={2}>
               <Typography variant="h4">Recently Added Coffees</Typography>
             </Box>
-            <Grid container justify="center" alignItems="center">
+            <Grid container alignItems="center">
               {coffees && !loading ? coffees.map((coffee) => (
                 <CoffeeItem key={coffee.id} coffee={coffee} route={'coffees'}/>
               )) : <FullPageSpinner size={50} /> }
@@ -64,7 +64,7 @@ const Landing = () => {
             <Box my={2}>
               <Typography variant="h4">Recently Added Roasters</Typography>
             </Box>
-            <Grid container justify="center" alignItems="center">
+            <Grid container alignItems="center">
               {roasters && !loading ? roasters.map((roaster) => (
                 <RoasterItem key={roaster.id} roaster={roaster} route={'roaster'} />
               )) : <FullPageSpinner size={50} /> }

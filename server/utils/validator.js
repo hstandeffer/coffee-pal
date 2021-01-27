@@ -7,6 +7,12 @@ const contactValidation = () => {
   ]
 }
 
+const forgotPwValidation = () => {
+  return [
+    body('email').isEmail()
+  ]
+}
+
 const validate = (request, response, next) => {
   const errors = validationResult(request)
 
@@ -17,6 +23,7 @@ const validate = (request, response, next) => {
 }
 
 module.exports = {
+  forgotPwValidation,
   contactValidation,
   validate
 }

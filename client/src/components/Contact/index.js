@@ -44,12 +44,19 @@ const Contact = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    try {
-      await contactService.send(email, message)
+    const response = await contactService.send(email, message).catch((err) => {
+      if (err.errors) {
+        setError(`${err.errors[0].msg} for ${err.errors[0].param} field.`)
+      }
+      else {
+        setError(err.error)
+      }
+    })
+
+    if (!response) {
+      return
     }
-    catch (err) {
-      setError(err.response.data.msg)
-    }
+
     setEmail('')
     setMessage('')
     setOpen(true)

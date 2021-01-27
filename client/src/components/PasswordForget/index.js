@@ -19,14 +19,21 @@ const PasswordForget = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    try {
-      await userService.forgotPassword(email)
-      setEmail('')
-      setOpen(true)
+    const response = await userService.forgotPassword(email).catch((err) => {
+      if (err.errors) {
+        setError(`${err.errors[0].msg} for ${err.errors[0].param} field.`)
+      }
+      else {
+        setError(err.error)
+      }
+    })
+
+    if (!response) {
+      return
     }
-    catch (err) {
-      setError(err)
-    }
+
+    setEmail('')
+    setOpen(true)
   }
 
   return (

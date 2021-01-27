@@ -7,15 +7,11 @@ const jwt = require('jsonwebtoken')
 const cryptoRandomString = require('crypto-random-string')
 const { auth } = require('../utils/middleware')
 const { upload } = require('../utils/multer')
+const { forgotPwValidation, validate } = require('../utils/validator')
 
 usersRouter.get('/', async (request, response) => {
-  try {
-    const users = await User.find({})
-    response.json(users.map(user => user.toJSON()))
-  }
-  catch (err) {
-    response.status(404).json({ msg: err })
-  }
+  const users = await User.find({})
+  response.json(users.map(user => user.toJSON()))
 })
 
 usersRouter.post('/', async (request, response) => {
@@ -54,52 +50,45 @@ usersRouter.post('/', async (request, response) => {
 })
 
 usersRouter.post('/save-coffee', auth, async (request, response) => {
-  try {
-    const id = request.user.id
-    const coffeeId = request.body.coffeeId
-    const user = await User.findById(id)
-    const isFavorited = user.saved_coffees.some((c) => {
-      return c.equals(coffeeId)
-    })
-    if (!isFavorited) {
-      user.saved_coffees.push(coffeeId)
-      const savedUser = await user.save()
-      return response.json(savedUser.toJSON())
-    }
-    return response.json(user.toJSON())
+  const id = request.user.id
+  const coffeeId = request.body.coffeeId
+
+  const user = await User.findById(id)
+  const isFavorited = user.saved_coffees.some((c) => {
+    return c.equals(coffeeId)
+  })
+  if (!isFavorited) {
+    user.saved_coffees.push(coffeeId)
+    const savedUser = await user.save()
+    return response.status(200).json(savedUser.toJSON())
   }
-  catch (err) {
-    response.status(404).json({ msg: err })
-  }
+
+  return response.json(user.toJSON())
 })
 
+// this is removing a saved coffee, need to rename route
 usersRouter.put('/delete-coffee', auth, async (request, response) => {
-  try {
-    const id = request.user.id
-    const coffeeId = request.body.coffeeId
-    const user = await User.findById(id)
-    const isFavorited = user.saved_coffees.some((c) => {
-      return c.equals(coffeeId)
-    })
-    if (isFavorited) {
-      user.saved_coffees.pull(coffeeId)
-      const savedUser = await user.save()
-      return response.json(savedUser.toJSON())
-    }
-    return response.json({ msg: 'Coffee is not favorited' })
+  const id = request.user.id
+  const coffeeId = request.body.coffeeId
+
+  const user = await User.findById(id)
+  const isFavorited = user.saved_coffees.some((c) => {
+    return c.equals(coffeeId)
+  })
+
+  if (isFavorited) {
+    user.saved_coffees.pull(coffeeId)
+    const savedUser = await user.save()
+    return response.json(savedUser.toJSON())
   }
-  catch (err) {
-    response.status(404).json({ msg: err })
-  }
+  return response.status(400).json({ msg: 'Coffee is not favorited' })
 })
 
-usersRouter.post('/forgot-password', async (request, response) => {
-  if (request.body.email === '') {
-    response.status(400).send('email is required')
-  }
+usersRouter.post('/forgot-password', forgotPwValidation(), validate, async (request, response) => {
   const user = await User.findOne({ email: request.body.email }).exec()
+
   if (user === null) {
-    response.status(403).send('email not found')
+    response.status(403).json({ error: 'Email not found' })
   }
   
   const token = cryptoRandomString({ length: 32, type: 'url-safe' })
@@ -120,9 +109,9 @@ usersRouter.post('/forgot-password', async (request, response) => {
   
   transporter.sendMail(mailOptions, (err, res) => {
     if (err) {
-      console.error('there was an error: ', err)
+      return response.status(400).json({ error: 'The password reset email could not be sent'})
     } else {
-      response.status(200).send('recovery email sent')
+      return response.status(200).json({ msg: 'recovery email sent' })
     }
   })
 })
@@ -130,10 +119,10 @@ usersRouter.post('/forgot-password', async (request, response) => {
 usersRouter.get('/password-reset/:token', async (request, response) => {
   const user = await User.findOne({ reset_password_token: request.params.token, reset_password_expires: { $gt: Date.now() } })
   if (user === null || !user) {
-    response.status(403).json({ msg: 'Password reset link is invalid or has expired' })
+    response.status(403).json({ error: 'Password reset link is invalid or has expired' })
   }
   else {
-    response.status(200).send('password reset ok')
+    response.status(200).json({ msg: 'password reset ok' })
   }
 })
 
@@ -142,16 +131,18 @@ usersRouter.put('/update-password', async (request, response) => {
   const { password, token } = request.body
   const user = await User.findOne({ reset_password_token: token, reset_password_expires: { $gt: Date.now() } })
   if (user === null || !user) {
-    response.status(403).json({ msg: 'Password reset link is invalid or has expired' })
+    response.status(403).json({ error: 'Password reset link is invalid or has expired' })
   }
 
   if (!password) {
-    response.status(400).json({ msg: 'Please enter a new password.' })
+    response.status(400).json({ error: 'Please enter a new password.' })
   }
 
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(password, salt, (err, hash) => {
-      if (err) throw err
+      if (err) {
+        return response.status(400).json({ error: 'Something went wrong, please try again.' })
+      }
       user.password = hash
       user.reset_password_token = null
       user.reset_password_expires = null
@@ -167,8 +158,12 @@ usersRouter.put('/change-password', auth, async (request, response) => {
   const { password } = request.body
   const user = await User.findById(request.user.id)
 
+  if (!user) {
+    return response.status(400).json({ error: 'User does not exist' })
+  }
+
   if (!password) {
-    response.status(400).json({ msg: 'Please enter a new password.' })
+    response.status(400).json({ error: 'Please enter a new password.' })
   }
 
   bcrypt.genSalt(10, (err, salt) => {
@@ -198,35 +193,25 @@ usersRouter.put('/update', auth, upload.single('userImage'), async (request, res
     updateObj.imagePath = request.file.key
   }
 
-  try {
-    const user = await User.findByIdAndUpdate(request.user.id,
-      updateObj,
-      { new: true },
-    )
-    await user.save()
-    return response.json(user.toJSON())
-  }
-  catch (err) {
-    return response.status(404).json({ msg: 'User could not be updated' })
-  }
+  const user = await User.findByIdAndUpdate(request.user.id,
+    updateObj,
+    { new: true },
+  )
+  await user.save()
+  return response.json(user.toJSON())
 })
 
 usersRouter.get('/current-user', auth, async (request, response) => {
-  try {
-    const user = await User.findById(request.user.id)
-      .populate({
-        path: 'saved_coffees',
-        model: 'Coffee',
-        populate: {
-          path: 'roaster',
-          model: 'Roaster'
-        }
-      })
-    response.json(user.toJSON())
-  }
-  catch (err) {
-    response.status(404).json({ msg: err })
-  }
+  const user = await User.findById(request.user.id)
+    .populate({
+      path: 'saved_coffees',
+      model: 'Coffee',
+      populate: {
+        path: 'roaster',
+        model: 'Roaster'
+      }
+    })
+  return response.json(user.toJSON())
 })
 
 module.exports = usersRouter

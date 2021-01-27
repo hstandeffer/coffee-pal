@@ -32,4 +32,19 @@ const changePassword = async (dataObj) => {
   return response
 }
 
-export default { saveCoffee, deleteCoffee, getCurrentUser, forgotPassword, updatePassword, changePassword }
+const resetPassword = async (token) => {
+  const response = await api.get(`${baseUrl}/password-reset/${token}`)
+  return response
+}
+
+const update = async (dataObj) => {
+  const response = await api.put(`${baseUrl}/update`, dataObj)
+  return response
+}
+
+const signUp = async (user) => {
+  const response = await api.post(`${baseUrl}`, user)
+  return response
+}
+
+export default { saveCoffee, deleteCoffee, getCurrentUser, forgotPassword, updatePassword, changePassword, resetPassword, update, signUp }
