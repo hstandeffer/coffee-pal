@@ -3,6 +3,7 @@ import * as ROUTES from '../../constants/routes'
 import { Input, StyledDiv, StyledButton, StyledLink, Wrapper, StyledH1 } from '../../shared-style'
 
 import Toast from '../../shared/components/Toast'
+import Seo from '../../shared/components/Seo'
 
 import Box from '@material-ui/core/Box'
 import { Typography } from '@material-ui/core'
@@ -38,6 +39,7 @@ const PasswordForget = () => {
 
   return (
     <Wrapper>
+      <Seo title={'Forgot Password'} />
       <StyledDiv>
         <StyledH1>Forgot your password?</StyledH1>
         <div>

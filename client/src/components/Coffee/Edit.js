@@ -19,6 +19,7 @@ import countryList from '../../constants/countries'
 
 import roasterService from '../../services/roaster'
 import coffeeService from '../../services/coffee'
+import Seo from '../../shared/components/Seo';
 
 
 const useStyles = makeStyles(() => ({
@@ -143,6 +144,7 @@ const Edit = () => {
 
   return (
     <Box maxWidth="600px" p="2.5rem" my="2.5rem" mx="auto" border="1px solid #d9e7ea" borderRadius="4px" textAlign="center">
+      <Seo title={'Edit Coffee'} />
       <Typography gutterBottom paragraph variant="h4" component="h2">Edit Coffee</Typography>
       <Box textAlign="left">
         <form onSubmit={handleSubmit} encType="multipart/form-data">

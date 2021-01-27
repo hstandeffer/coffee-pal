@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/styles'
 import userService from '../../services/user'
 import Alert from '@material-ui/lab/Alert'
 import Toast from '../../shared/components/Toast'
+import Seo from '../../shared/components/Seo'
 
 const useStyles = makeStyles(() => ({
   outlined: {
@@ -80,6 +81,7 @@ const ProfilePage = ({ user }) => {
 
   return (
     <Box maxWidth="480px" px="2.5rem" mb="2.5rem" mx="auto" borderRadius="4px">
+      <Seo title={'Your Profile'} />
       <Typography align='center' variant="h5" component="h2">Your Profile</Typography>
       <Box textAlign="left" mt="1rem">
         <form onSubmit={handleSubmit}>
