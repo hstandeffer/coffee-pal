@@ -19,6 +19,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import FormControl from '@material-ui/core/FormControl'
 import ListItemText from '@material-ui/core/ListItemText'
 import Alert from '@material-ui/lab/Alert'
+import Seo from '../../shared/components/Seo';
 
 const useStyles = makeStyles(() => ({
   formControl: {
@@ -132,6 +133,7 @@ const Add = () => {
 
   return (
     <Box maxWidth="600px" p="2.5rem" my="2.5rem" mx="auto" border="1px solid #d9e7ea" borderRadius="4px" textAlign="center">
+      <Seo title={'Add New Coffee'} />
       <Typography gutterBottom paragraph variant="h4" component="h2">Add New Coffee</Typography>
       <Box textAlign="left">
         <form onSubmit={handleSubmit} encType="multipart/form-data">

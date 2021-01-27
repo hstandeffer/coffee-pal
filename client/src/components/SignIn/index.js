@@ -9,6 +9,7 @@ import authService from '../../services/auth'
 import { PasswordForgetLink } from '../PasswordForget'
 import { Typography, Box } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
+import Seo from '../../shared/components/Seo'
 
 const SignIn = () => {
   const authUserContext = useContext(AuthUserContext)
@@ -51,6 +52,7 @@ const SignIn = () => {
 
   return (
     <Wrapper>
+      <Seo title={'Sign In'} />
       <StyledDiv>
         <StyledH1>Sign in</StyledH1>
         <form onSubmit={handleSubmit}>

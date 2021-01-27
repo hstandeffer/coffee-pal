@@ -9,6 +9,7 @@ import * as ROUTES from '../../constants/routes';
 import { Typography, Box } from '@material-ui/core';
 import { SignInLink } from '../SignIn';
 import Alert from '@material-ui/lab/Alert';
+import Seo from '../../shared/components/Seo';
 
 const SignUp = () => {
   const authUserContext = useContext(AuthUserContext)
@@ -58,6 +59,7 @@ const SignUp = () => {
 
   return (
     <Wrapper>
+      <Seo title={'Sign Up'} />
       <StyledDiv>
         <StyledH1>Sign Up</StyledH1>
         <form onSubmit={handleSubmit}>

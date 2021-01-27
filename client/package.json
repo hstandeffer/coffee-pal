@@ -17,6 +17,7 @@
     "react-bootstrap": "^1.4.0",
     "react-cool-onclickoutside": "^1.5.9",
     "react-dom": "^16.10.2",
+    "react-helmet-async": "^1.0.7",
     "react-instantsearch-dom": "^6.7.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.3",

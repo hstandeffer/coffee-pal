@@ -8,6 +8,7 @@ import roasterService from '../../services/roaster'
 import { RoasterImageBox } from './style'
 import { LineClampSummary } from '../../shared-style'
 import FullPageSpinner from '../../shared/components/Spinner';
+import Seo from '../../shared/components/Seo';
 
 const useStyles = makeStyles((theme) => ({
   roastImage: {
@@ -39,6 +40,7 @@ const Roaster = () => {
 
   return (
     <Box py={3} bgcolor="rgb(242, 242, 242)">
+      <Seo title={'All Roasters'} />
       <Container maxWidth="sm">
         <Box py={3}>
           <Typography align="center" variant="h4">All Roasters</Typography>

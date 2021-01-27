@@ -11,6 +11,7 @@ import { Input } from './style'
 import roasterService from '../../services/roaster'
 import userService from '../../services/user'
 import FullPageSpinner from '../../shared/components/Spinner';
+import Seo from '../../shared/components/Seo';
 
 const AddRoaster = () => {
   const ref = React.useRef()
@@ -87,7 +88,8 @@ const AddRoaster = () => {
 
   return (
     <Box bgcolor="#fff" maxWidth="600px" p="2.5rem" my="2.5rem" border="1px solid #d9e7ea" borderRadius="4px" mx="auto" textAlign="center">
-    <Typography gutterBottom paragraph variant="h4" component="h2">Add New Roaster</Typography>
+      <Seo title={'Add New Roaster'} />
+      <Typography gutterBottom paragraph variant="h4" component="h2">Add New Roaster</Typography>
       <Box textAlign="left">
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <FormLabel required htmlFor="name">Roaster Name</FormLabel>

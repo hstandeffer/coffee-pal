@@ -12,6 +12,7 @@ import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
 import FullPageSpinner from '../../shared/components/Spinner'
+import Seo from '../../shared/components/Seo'
 
 const useStyles = makeStyles((theme) => ({
   roastImage: {
@@ -65,6 +66,7 @@ const Roaster = () => {
 
   return (
     <>
+      <Seo title={roaster.name} />
       <div className={classes.heroContent}>
         <Container maxWidth="sm">
           <Box py={3}>

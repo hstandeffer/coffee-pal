@@ -4,6 +4,7 @@ import EmailIcon from '@material-ui/icons/Email'
 import contactService from '../../services/contact'
 import Toast from '../../shared/components/Toast'
 import Alert from '@material-ui/lab/Alert'
+import Seo from '../../shared/components/Seo'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,6 +65,7 @@ const Contact = () => {
 
   return (
     <Box py={6} className={classes.root}>
+      <Seo title={'Contact Us'} />
       <Box pb={4} textAlign="center">
         <Typography variant="h4">Contact Us</Typography>
       </Box>

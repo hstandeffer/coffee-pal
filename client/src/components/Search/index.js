@@ -9,6 +9,7 @@ import Hidden from '@material-ui/core/Hidden'
 import { BrowseWrapper, BrowseFiltersDiv, TestDiv, BrowseFiltersHeaderDiv, ClearRefinementsButton, AlgoliaStyledUl, AlgoliaAllRefinementListsWrapper, AlgoliaRefinementListWrapper, AlgoliaStyledLi, AlgoliaStyledOuterRefinementListSpan, AlgoliaRefinementHeader, BrowseHitsDiv, TestButton, MobileFiltersButtonWrapper, ClearRefinementsButtonMobile, SaveFiltersButtonMobile, TestFooter } from '../Browse/style'
 import { CoffeeItem } from '../Product/ProductGrid'
 import FullPageSpinner from '../../shared/components/Spinner'
+import Seo from '../../shared/components/Seo'
 
 const SearchPage = () => {
   const minPrice = 1
@@ -41,6 +42,7 @@ const SearchPage = () => {
 
   return (
     <BrowseWrapper>
+      <Seo title={'All Coffees'} />
       <Hidden mdUp>
         <TestButton filtering={filtering} onClick={() => setFiltering(!filtering)}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 14"><path d="M15 1H1l5.6 6.3v4.37L9.4 13V7.3z" stroke="#fff" strokeWidth="1.29" fill="none" fillRule="evenodd" strokeLinecap="round" strokeLinejoin="round"></path></svg>
