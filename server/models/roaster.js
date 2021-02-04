@@ -11,11 +11,6 @@ const roasterSchema = new mongoose.Schema({
   },
   address: {
     type: String,
-    required: true
-  },
-  dollarSigns: {
-    type: String,
-    required: false
   },
   updatedAt: {
     type: Date,
@@ -31,11 +26,11 @@ const roasterSchema = new mongoose.Schema({
   },
   website: {
     type: String,
-    required: false
+    required: true
   },
   imagePath: {
     type: String,
-    required: false
+    required: true
   },
   coffees: [{
     type: mongoose.Schema.Types.ObjectId,

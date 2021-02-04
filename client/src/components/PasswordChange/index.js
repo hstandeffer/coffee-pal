@@ -43,21 +43,11 @@ export const PasswordChangeForm = () => {
       <Box textAlign="left">
         <form onSubmit={handleSubmit}>
           <FormLabel required htmlFor="password">Password</FormLabel>
-          <InputWithLabelAbove
-            name="password"
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-            type="password"
-            placeholder="Password"
-          />
+          <InputWithLabelAbove name="password" value={password} onChange={({ target }) => setPassword(target.value)} type="password" />
+
           <FormLabel required htmlFor="confirmPassword">Confirm Password</FormLabel>
-          <InputWithLabelAbove
-            name="confirmPassword"
-            value={confirmPassword}
-            onChange={({ target }) => setConfirmPassword(target.value)}
-            type="password"
-            placeholder="Confirm Password"
-          />
+          <InputWithLabelAbove name="confirmPassword" value={confirmPassword} onChange={({ target }) => setConfirmPassword(target.value)} type="password" />
+
           <StyledButton disabled={isInvalid} type="submit">Update Password</StyledButton> 
 
           { error &&
@@ -65,7 +55,7 @@ export const PasswordChangeForm = () => {
               <Alert severity="error">{error}</Alert>
             </Box>
           }
-          <Toast open={open} setOpen={setOpen} severity="success" message="Your password has been successfully changed!" />
+          <Toast open={open} setOpen={setOpen} severity="success" message="Your password has been updated." />
         </form>
       </Box>
     </>

@@ -3,13 +3,10 @@ const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const config = require('../utils/config')
 const jwt = require('jsonwebtoken')
+const { signInValidation, validate } = require('../utils/validator')
 
-authRouter.post('/', async (request, response) => {
+authRouter.post('/', signInValidation(), validate, async (request, response) => {
   const { email, password } = request.body
-
-  if (!email || !password) {
-    return response.status(400).json({ error: 'Please ensure all fields are correct and try again.' })
-  }
 
   const user = await User.findOne({ email }, 'password')
   if (!user) return response.status(400).json({ error: 'User does not exist' })

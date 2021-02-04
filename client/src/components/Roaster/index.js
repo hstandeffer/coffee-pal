@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Container, Link } from '@material-ui/core';
+import { Box, Button, Container, Link } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import roasterService from '../../services/roaster'
 
@@ -42,8 +42,9 @@ const Roaster = () => {
     <Box py={3} bgcolor="rgb(242, 242, 242)">
       <Seo title={'All Roasters'} />
       <Container maxWidth="sm">
-        <Box py={3}>
-          <Typography align="center" variant="h4">All Roasters</Typography>
+        <Box textAlign="center" pt={3} pb={2}>
+          <Typography gutterBottom variant="h4">All Roasters</Typography>
+          <Button size="small" variant="outlined">Submit New</Button>
         </Box>
         <Box borderRadius="1rem" px={3} py={1} bgcolor="white">
           {roasterList.map(roaster => (

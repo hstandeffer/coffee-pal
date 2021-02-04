@@ -8,6 +8,20 @@ export const FiltersWrapper = styled.div`
   }
 `
 
+export const SubmitNewButtonDiv = styled.div`
+  text-align: right;
+  margin: 0 1.5% 10px;
+  flex-basis: 100%;
+    
+  @media(max-width: 960px) {
+    margin: 0 calc(5%/3) 10px;
+  }
+
+  @media(max-width: 600px) {
+    margin: 0px 5% 10px;
+  }
+`
+
 export const FiltersDiv = styled.div`
 	padding: 24px;
   margin: 0 10px;

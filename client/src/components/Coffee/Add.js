@@ -88,19 +88,20 @@ const Add = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    const data = new FormData()
-    data.append('coffeeImage', image)
-    data.append('coffeeName', coffeeName)
-    data.append('selectedBrand', selectedBrand.id) 
-    data.append('selectedCountry', selectedCountry) 
-    data.append('fairTrade', fairTrade) 
-    data.append('organic', organic) 
-    data.append('shadeGrown', shadeGrown) 
-    data.append('url', url) 
-    data.append('price', price) 
-    data.append('roastType', roastType)
+    const coffeeObj = {
+      coffeeName,
+      selectedBrand,
+      selectedCountry,
+      fairTrade,
+      organic,
+      shadeGrown,
+      url,
+      image,
+      price,
+      roastType,
+    }
 
-    const response = await coffeeService.add(data).catch((err) => {
+    const response = await coffeeService.add(coffeeObj).catch((err) => {
       if (err.errors) {
         setError(`${err.errors[0].msg} for ${err.errors[0].param} field.`)
       }
@@ -137,12 +138,13 @@ const Add = () => {
       <Typography gutterBottom paragraph variant="h4" component="h2">Add New Coffee</Typography>
       <Box textAlign="left">
         <form onSubmit={handleSubmit} encType="multipart/form-data">
-          <FormLabel htmlFor="coffeeName">Coffee Name</FormLabel>
-          <StyledInput id="coffeeName" required value={coffeeName} onChange={({ target }) => setCoffeeName(target.value)} />
+          <FormLabel required htmlFor="coffeeName">Coffee Name</FormLabel>
+          <StyledInput name="coffeeName" id="coffeeName" value={coffeeName} onChange={({ target }) => setCoffeeName(target.value)} />
 
-          <FormLabel htmlFor="brand">Brand</FormLabel>
+          <FormLabel required htmlFor="brand">Brand</FormLabel>
           <Autocomplete
             id="brand"
+            data-testid="brand:autocomplete"
             options={brands}
             value={selectedBrand || null}
             getOptionSelected={(option, value) => option.name === value.name}
@@ -162,13 +164,15 @@ const Add = () => {
             <Link component={RouterLink} style={{ cursor: 'pointer' }} to={`/roasters/add`}> Add it here</Link>.
           </Typography>
 
-          <FormLabel htmlFor="price">Price ($)</FormLabel>
-          <StyledInput id="price" type="number" required value={price} onChange={({ target }) => setPrice(target.value)} />
+          <FormLabel required htmlFor="price">Price ($)</FormLabel>
+          <StyledInput id="price" name="price" type="number" value={price} onChange={({ target }) => setPrice(target.value)} />
 
-          <FormLabel htmlFor="roastType">Roast Type</FormLabel>
+          <FormLabel required htmlFor="roastType">Roast Type</FormLabel>
           <Select
             classes={{ outlined: classes.outlined }}
             id="roastType"
+            name="roastType"
+            data-testid="roastType:select"
             value={roastType}
             onChange={({ target }) => setRoastType(target.value)}
             style={{ width: '100%', margin: '5px auto 15px' }}
@@ -202,8 +206,8 @@ const Add = () => {
             </Select>
           </FormControl>
 
-          <FormLabel htmlFor="url">Product URL</FormLabel>
-          <StyledInput id="url" value={url} onChange={({ target }) => setUrl(target.value)} />
+          <FormLabel required htmlFor="url">Product URL</FormLabel>
+          <StyledInput id="url" name="url" value={url} onChange={({ target }) => setUrl(target.value)} />
 
           <FormLabel color="primary" htmlFor="roasterImage">Product Image</FormLabel>
           <StyledInput ref={ref} type="file" name="roasterImage" id="roasterImage" onChange={handleUpload} />

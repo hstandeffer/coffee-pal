@@ -12,7 +12,9 @@
     "bootstrap": "^4.5.3",
     "dayjs": "^1.9.6",
     "humanize-duration": "^3.24.0",
+    "lodash": "^4.17.20",
     "node-fetch": "^2.6.1",
+    "query-string": "^6.13.8",
     "react": "^16.10.2",
     "react-bootstrap": "^1.4.0",
     "react-cool-onclickoutside": "^1.5.9",
@@ -29,7 +31,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cypress:open": "cypress open"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -46,5 +49,9 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:3001"
+  "proxy": "http://localhost:3001",
+  "devDependencies": {
+    "cypress": "^6.3.0",
+    "cypress-file-upload": "^5.0.2"
+  }
 }

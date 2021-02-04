@@ -29,6 +29,10 @@ app.use('/api/users', require('./controllers/users'))
 app.use('/api/auth', require('./controllers/auth'))
 app.use('/api/contact', require('./controllers/contact'))
 
+if (process.env.NODE_ENV === 'test') {
+  app.use('/api/testing', require('./controllers/testing'))
+}
+
 app.use(middleware.errorHandler)
 
 if (process.env.NODE_ENV === 'production') {

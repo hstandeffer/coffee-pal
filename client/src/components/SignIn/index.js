@@ -1,13 +1,13 @@
 import React, { useState, useContext } from 'react'
 import { Redirect } from 'react-router-dom'
 import { AuthUserContext } from '../Session'
-import { StyledH1, Wrapper, Input, StyledDiv, StyledButton, StyledLink } from '../../shared-style'
+import { Wrapper, InputWithLabelAbove, StyledDiv, StyledButton, StyledLink } from '../../shared-style'
 
 import { SignUpLink } from '../SignUp'
 import * as ROUTES from '../../constants/routes'
 import authService from '../../services/auth'
 import { PasswordForgetLink } from '../PasswordForget'
-import { Typography, Box } from '@material-ui/core'
+import { Typography, Box, FormLabel } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
 import Seo from '../../shared/components/Seo'
 
@@ -48,43 +48,33 @@ const SignIn = () => {
     return (<Redirect to={ROUTES.BROWSE} />)
   }
 
-  const isInvalid = password === '' || email === ''
-
   return (
     <Wrapper>
       <Seo title={'Sign In'} />
       <StyledDiv>
-        <StyledH1>Sign in</StyledH1>
-        <form onSubmit={handleSubmit}>
-          <Input
-            name="email"
-            value={email}
-            onChange={({ target }) => setEmail(target.value)}
-            type="text"
-            placeholder="Email Address"
-            tabIndex="1"
-          />
-          <Input
-            name="password"
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-            type="password"
-            placeholder="Password"
-            tabIndex="2"
-          />
-          <StyledButton disabled={isInvalid} tabIndex="3" type="submit">Sign In</StyledButton>
+        <Typography gutterBottom paragraph variant="h4" component="h2">Sign In</Typography>
+        <Box textAlign="left">
+          <form onSubmit={handleSubmit}>
+            <FormLabel required htmlFor="email">Email</FormLabel>
+            <InputWithLabelAbove name="email" value={email} onChange={({ target }) => setEmail(target.value)} type="text" tabIndex="1" />
+            
+            <FormLabel required htmlFor="password">Password</FormLabel>
+            <InputWithLabelAbove name="password" value={password} onChange={({ target }) => setPassword(target.value)} type="password" tabIndex="2" />
+            
+            <StyledButton tabIndex="3" type="submit">Sign In</StyledButton>
 
-          { error &&
-            <Box my="1rem">
-              <Alert severity="error">{error}</Alert>
+            { error &&
+              <Box my="1rem">
+                <Alert severity="error">{error}</Alert>
+              </Box>
+            }
+
+            <Box textAlign="center" mt={2}>
+              <PasswordForgetLink />
+              <SignUpLink />
             </Box>
-          }
-
-          <Box mt={2}>
-            <PasswordForgetLink />
-            <SignUpLink />
-          </Box>
-        </form>
+          </form>
+        </Box>
       </StyledDiv>
     </Wrapper>
   )

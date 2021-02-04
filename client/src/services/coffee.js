@@ -13,11 +13,44 @@ const get = async (coffeeId) => {
 }
 
 const add = async (coffeeObject) => {
-  const response = await api.post(baseUrl, coffeeObject)
+  const data = new FormData()
+  data.append('coffeeImage', coffeeObject.image)
+  data.append('coffeeName', coffeeObject.coffeeName)
+  if (coffeeObject.selectedBrand) {
+    data.append('selectedBrand', coffeeObject.selectedBrand.id)
+  }
+  else {
+    data.append('selectedBrand', null)
+  }
+  data.append('selectedCountry', coffeeObject.selectedCountry) 
+  data.append('fairTrade', coffeeObject.fairTrade) 
+  data.append('organic', coffeeObject.organic) 
+  data.append('shadeGrown', coffeeObject.shadeGrown) 
+  data.append('url', coffeeObject.url) 
+  data.append('price', coffeeObject.price) 
+  data.append('roastType', coffeeObject.roastType)
+  const response = await api.post(baseUrl, data)
   return response
 }
 
-const update = async (coffeeId, coffeeObject) => {
+const update = async (coffeeObject, coffeeId) => {
+  const data = new FormData()
+  data.append('coffeeImage', coffeeObject.image)
+  data.append('coffeeName', coffeeObject.coffeeName)
+  if (coffeeObject.selectedBrand) {
+    data.append('selectedBrand', coffeeObject.selectedBrand.id)
+  }
+  else {
+    data.append('selectedBrand', null)
+  }
+  data.append('selectedCountry', coffeeObject.selectedCountry) 
+  data.append('fairTrade', coffeeObject.fairTrade) 
+  data.append('organic', coffeeObject.organic) 
+  data.append('shadeGrown', coffeeObject.shadeGrown) 
+  data.append('url', coffeeObject.url) 
+  data.append('price', coffeeObject.price) 
+  data.append('roastType', coffeeObject.roastType)
+
   const response = await api.put(`${baseUrl}/${coffeeId}`, coffeeObject)
   return response
 }

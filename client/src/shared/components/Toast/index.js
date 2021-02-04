@@ -16,7 +16,7 @@ const Toast = ({ severity, message, open, setOpen }) => {
   }
 
   return (
-    <div>
+    <div data-testid={`toast:${severity}`}>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity={severity || 'success'}>
           {message}

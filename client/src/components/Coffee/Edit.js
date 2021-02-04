@@ -100,19 +100,20 @@ const Edit = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    const data = new FormData()
-    data.append('coffeeImage', image)
-    data.append('coffeeName', coffeeName)
-    data.append('selectedBrand', selectedBrand.id) 
-    data.append('selectedCountry', selectedCountry) 
-    data.append('fairTrade', fairTrade) 
-    data.append('organic', organic) 
-    data.append('shadeGrown', shadeGrown) 
-    data.append('url', url) 
-    data.append('price', price) 
-    data.append('roastType', roastType)
+    const coffeeObj = {
+      coffeeName,
+      selectedBrand,
+      selectedCountry,
+      fairTrade,
+      organic,
+      shadeGrown,
+      url,
+      image,
+      price,
+      roastType,
+    }
 
-    const response = await coffeeService.update(id, data).catch((err) => {
+    const response = await coffeeService.update(coffeeObj, id).catch((err) => {
       if (err.errors) {
         setError(`${err.errors[0].msg} for ${err.errors[0].param} field.`)
       }
