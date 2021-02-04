@@ -9,8 +9,9 @@ export const ProductLink = styled(Link)`
 
 export const BrowseWrapper = styled.div`
   width: 100%;
-	padding: 2.5em;
+	padding: 1em 2.5em;
   display: flex;
+  flex-wrap: wrap;
 
 	@media (max-width: 600px) {
     padding: 1em 0;
@@ -264,7 +265,6 @@ export const AlgoliaSearchBarForm = styled.form`
   display: flex;
   align-items: center;
   padding: 0 16px;
-
 `
 
 export const AlgoliaSearchBarInput = styled.input`

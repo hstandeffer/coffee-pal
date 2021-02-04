@@ -7,42 +7,29 @@ const jwt = require('jsonwebtoken')
 const cryptoRandomString = require('crypto-random-string')
 const { auth } = require('../utils/middleware')
 const { upload } = require('../utils/multer')
-const { forgotPwValidation, validate } = require('../utils/validator')
+const { signToken } = require('../utils/authToken')
+const { forgotPwValidation, signUpValidation, validate } = require('../utils/validator')
 
-usersRouter.get('/', async (request, response) => {
-  const users = await User.find({})
-  response.json(users.map(user => user.toJSON()))
-})
-
-usersRouter.post('/', async (request, response) => {
+usersRouter.post('/', signUpValidation(), validate, async (request, response) => {
   const { username, email, password } = request.body
 
-  if (!username || !email || !password) {
-    response.status(400).json({ msg: 'Please enter all fields.' })
-  }
-
   const user = await User.findOne({ email })
+  
   if (user) {
-    response.status(400).json({ msg: 'User already exists' })
+    response.status(400).json({ error: 'User already exists' })
   }
 
-  const newUser = new User({
-    username,
-    email,
-    password
-  })  
+  const newUser = new User({ username, email, password })  
 
   bcrypt.genSalt(10, (err, salt) => {
     bcrypt.hash(newUser.password, salt, (err, hash) => {
       if (err) throw err
       newUser.password = hash
       newUser.save().then(user => {
-        jwt.sign({ id: user.id }, config.JWT_SECRET, { expiresIn: 3600 }, (err, token) => {
-          if (err) throw err
-          response.json({
-            token,
-            user: { id: user.id, name: user.username, email: user.email }
-          })
+        const token = signToken({ id: user._id })
+        response.json({
+          token,
+          user: { id: user.id, name: user.username, email: user.email }
         })
       })
     })
@@ -197,6 +184,11 @@ usersRouter.put('/update', auth, upload.single('userImage'), async (request, res
     updateObj,
     { new: true },
   )
+
+  if (!user) {
+    return response.status(400).json({ error: 'User does not exist' })
+  }
+  
   await user.save()
   return response.json(user.toJSON())
 })
@@ -211,6 +203,11 @@ usersRouter.get('/current-user', auth, async (request, response) => {
         model: 'Roaster'
       }
     })
+
+  if (!user) {
+    return response.status(400).json({ error: 'User does not exist' })
+  }
+  
   return response.json(user.toJSON())
 })
 

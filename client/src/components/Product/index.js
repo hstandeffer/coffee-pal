@@ -95,7 +95,7 @@ const Product = () => {
                 {coffee.coffeeName} has been added to your list!
               </Alert>
             </Snackbar>
-            <Dialog title="Sign in to continue" description={"Sign in or register with your email address"} open={dialogOpen} setOpen={setDialogOpen} />
+            <Dialog title="Sign in to add this coffee to your list" description={"Sign in or register with your email address"} open={dialogOpen} setOpen={setDialogOpen} />
           </Grid>
         </Grid>
       </Box>

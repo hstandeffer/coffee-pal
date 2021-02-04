@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Box } from '@material-ui/core'
-import ProductGrid from '../Product/ProductGrid'
+import ProductGrid from './ProductGrid'
 import Seo from '../../shared/components/Seo'
 
 export const SavedCoffees = ({ coffees, handleRemove }) => {

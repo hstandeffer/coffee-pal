@@ -4,6 +4,7 @@ const Roaster = require('../models/roaster')
 
 const { upload } = require('../utils/multer')
 const { auth } = require('../utils/middleware')
+const { coffeeValidation, validate } = require('../utils/validator')
 
 coffeesRouter.get('/', async (request, response) => {
   const coffees = await Coffee.find({}).populate('roaster')
@@ -15,16 +16,29 @@ coffeesRouter.get('/query', async (request, response) => {
 
   // checks is an object and empty: will be true if empty and false otherwise
   if (Object.keys(query).length === 0 && query.constructor === Object) {
-    const noQueryCoffees = await Coffee.find().limit(20).populate('roaster')
+    const noQueryCoffees = await Coffee.find().select(['imagePath', 'coffeeName', 'roastType', 'price']).limit(15).populate('roaster')
     return response.json(noQueryCoffees)
   }
 
-  const coffees = await Coffee.find({ roastType: { $in: query.roastType }, price: { $gte: query.priceLow, $lte: query.priceHigh } }).limit(20).populate('roaster')
+  let queryObj = {}
+  if (query.roastType) {
+    queryObj = Object.assign({ ...queryObj }, { roastType: { $in: query.roastType }} )
+  }
+
+  if (query.q) {
+    queryObj = Object.assign({...queryObj}, {$text: {$search: query.q }} )
+  }
+
+  if (query.priceLow && query.priceHigh) {
+    queryObj = Object.assign({ ...queryObj }, { price: { $gte: query.priceLow, $lte: query.priceHigh }} )
+  }
+
+  const coffees = await Coffee.find(queryObj).select(['imagePath', 'coffeeName', 'roastType', 'price']).limit(15).populate('roaster')
 
   return response.json(coffees.map(coffee => coffee.toJSON()))
 })
 
-coffeesRouter.post('/', auth, upload.single('coffeeImage'), async (request, response) => {
+coffeesRouter.post('/', auth, upload.single('coffeeImage'), coffeeValidation(), validate, async (request, response) => {
   const body = request.body
   const coffeeObj = {
     brand: body.selectedBrand,
@@ -42,7 +56,7 @@ coffeesRouter.post('/', auth, upload.single('coffeeImage'), async (request, resp
 
   if (request.file && request.file.filename) {
     request.file.key = request.file.filename
-    roasterObj.imagePath = request.file.key
+    coffeeObj.imagePath = request.file.key
   }
   
   const roaster = await Roaster.findById(body.selectedBrand)
@@ -61,7 +75,7 @@ coffeesRouter.get('/recent', async (request, response) => {
   return response.json(coffees.map(coffee => coffee.toJSON()))
 })
 
-coffeesRouter.put('/:id', auth, async (request, response) => {
+coffeesRouter.put('/:id', auth, upload.single('coffeeImage'), coffeeValidation(), validate, async (request, response) => {
   const body = request.body
   const coffeeObj = {
     brand: body.selectedBrand,
