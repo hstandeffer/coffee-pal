@@ -10,6 +10,7 @@ import CancelIcon from '@material-ui/icons/CancelSharp';
 
 import * as ROUTES from '../../constants/routes'
 import CoffeeBeanSvg from '../../shared/components/CoffeeBeanSvg'
+import { assetUrl } from '../../shared/utils/url'
 
 const ProductGrid = ({ coffees, route, heading, handleRemove, editing, setEditing }) => {
   return (
