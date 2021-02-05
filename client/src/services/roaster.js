@@ -2,8 +2,8 @@ import api from '../shared/utils/api'
 
 const baseUrl = '/api/roasters'
 
-const getAll = async () => {
-  const response = await api.get(baseUrl)
+const getAll = async (roasterId) => {
+  const response = await api.get(baseUrl, { roasterId })
   return response
 }
 

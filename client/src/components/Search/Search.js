@@ -2,27 +2,39 @@ import React, { useState, useEffect } from 'react'
 import { FlexContainer } from './style'
 import axios from 'axios'
 import { CoffeeItem } from '../Product/ProductGrid'
-import FullPageSpinner from '../../shared/components/Spinner'
-import { Typography } from '@material-ui/core'
+import FullPageSpinner, { ButtonSpinner } from '../../shared/components/Spinner'
+import { Button, Typography } from '@material-ui/core'
 
 // this is kept separate so when loading, it'll only hide the products being shown, not the entire page
 // might make more sense to rename as Products
 const Search = ({ filters, filtering }) => {
   const [loading, setLoading] = useState(false)
   const [coffees, setCoffees] = useState([])
+  const [loadMoreLoading, setLoadMoreLoading] = useState(false)
   
+  const coffeeId = coffees.length > 0 ? coffees[coffees.length - 1].id : null
+  
+  const handleLoadMoreClick = async () => {
+    setLoadMoreLoading(true)
+    const response = await axios.get('/api/coffees/query', 
+      { params: { coffeeId, filters: { q: filters.q, roastType: filters.roastType, priceLow: filters.price.min, priceHigh: filters.price.max }} }
+    )
+    setCoffees(coffees.concat(response.data))
+    setLoadMoreLoading(false)
+  }
+
   useEffect(() => {
     let isMounted = true
     if (isMounted) {
-      const getQuery = async () => {
+      const getInitialCoffees = async () => {
         setLoading(true)
         const response = await axios.get('/api/coffees/query', 
-          { params: { q: filters.q, roastType: filters.roastType, priceLow: filters.price.min, priceHigh: filters.price.max } }
+          { params: { filters: { q: filters.q, roastType: filters.roastType, priceLow: filters.price.min, priceHigh: filters.price.max }} }
         )
         setCoffees(response.data)
         setLoading(false)
       }
-      getQuery()
+      getInitialCoffees()
     }
     return () => { isMounted = false }
   }, [filters])
@@ -38,19 +50,25 @@ const Search = ({ filters, filtering }) => {
 
   return (
     coffees.length !== 0 ? 
-      <MemoizedCoffees coffees={coffees} />
+      <CoffeeItems coffees={coffees} loadMoreLoading={loadMoreLoading} handleLoadMoreClick={handleLoadMoreClick} />
       : <Typography variant="body1">No results found.</Typography>
   )
 }
 
-const CoffeeItems = ({ coffees }) => (
-  <FlexContainer>
-    {coffees.map(coffee => (
-      <CoffeeItem coffee={coffee} key={coffee.id} />
-    ))}
-  </FlexContainer>
+const CoffeeItems = ({ coffees, handleLoadMoreClick, loadMoreLoading }) => (
+  <>
+    <FlexContainer>
+      {coffees.map(coffee => (
+        <CoffeeItem coffee={coffee} key={coffee.id} />
+      ))}
+    </FlexContainer>
+    { loadMoreLoading 
+      ? <Button fullWidth><ButtonSpinner size="20" /></Button>
+      : <Button fullWidth onClick={handleLoadMoreClick}>Load More</Button>
+    }
+  </>
 )
 
-const MemoizedCoffees = React.memo(CoffeeItems)
+// const MemoizedCoffees = React.memo(CoffeeItems)
 
 export default Search

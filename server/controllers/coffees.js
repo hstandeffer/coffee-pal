@@ -2,6 +2,7 @@ const coffeesRouter = require('express').Router()
 const Coffee = require('../models/coffee')
 const Roaster = require('../models/roaster')
 
+const { toMongooseObjectId } = require('../utils/mongoose')
 const { upload } = require('../utils/multer')
 const { auth } = require('../utils/middleware')
 const { coffeeValidation, validate } = require('../utils/validator')
@@ -12,28 +13,30 @@ coffeesRouter.get('/', async (request, response) => {
 })
 
 coffeesRouter.get('/query', async (request, response) => {
-  const query = request.query
+  const filters = JSON.parse(request.query.filters)
+  const coffeeId = request.query.coffeeId
+
+  let queryObj = coffeeId ? { _id: {$lt: toMongooseObjectId(coffeeId)}} : {}
 
   // checks is an object and empty: will be true if empty and false otherwise
-  if (Object.keys(query).length === 0 && query.constructor === Object) {
-    const noQueryCoffees = await Coffee.find().select(['imagePath', 'coffeeName', 'roastType', 'price']).limit(15).populate('roaster')
+  if (Object.keys(filters).length === 0 && filters.constructor === Object) {
+    const noQueryCoffees = await Coffee.find(queryObj).select(['imagePath', 'coffeeName', 'roastType', 'price']).sort({ _id: -1 }).limit(12).populate('roaster')
     return response.json(noQueryCoffees)
   }
 
-  let queryObj = {}
-  if (query.roastType) {
-    queryObj = Object.assign({ ...queryObj }, { roastType: { $in: query.roastType }} )
+  if (filters.roastType.length !== 0) {
+    queryObj = Object.assign({ ...queryObj }, { roastType: { $in: filters.roastType }} )
   }
 
-  if (query.q) {
-    queryObj = Object.assign({...queryObj}, {$text: {$search: query.q }} )
+  if (filters.q) {
+    queryObj = Object.assign({...queryObj}, {$text: {$search: filters.q }} )
   }
 
-  if (query.priceLow && query.priceHigh) {
-    queryObj = Object.assign({ ...queryObj }, { price: { $gte: query.priceLow, $lte: query.priceHigh }} )
+  if (filters.priceLow && filters.priceHigh) {
+    queryObj = Object.assign({ ...queryObj }, { price: { $gte: filters.priceLow, $lte: filters.priceHigh }} )
   }
 
-  const coffees = await Coffee.find(queryObj).select(['imagePath', 'coffeeName', 'roastType', 'price']).limit(15).populate('roaster')
+  const coffees = await Coffee.find(queryObj).select(['imagePath', 'coffeeName', 'roastType', 'price']).sort({ _id: -1 }).limit(5).populate('roaster')
 
   return response.json(coffees.map(coffee => coffee.toJSON()))
 })
