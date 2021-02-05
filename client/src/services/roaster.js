@@ -2,8 +2,8 @@ import api from '../shared/utils/api'
 
 const baseUrl = '/api/roasters'
 
-const getAll = async () => {
-  const response = await api.get(baseUrl)
+const getAll = async (roasterId) => {
+  const response = await api.get(baseUrl, { roasterId })
   return response
 }
 
@@ -13,7 +13,14 @@ const get = async (roasterId) => {
 }
 
 const add = async (roasterObject) => {
-  const response = await api.post(baseUrl, roasterObject)
+  const data = new FormData()
+  data.append('roasterImage', roasterObject.image)
+  data.append('name', roasterObject.name)
+  data.append('summary', roasterObject.summary)
+  data.append('address', roasterObject.address)
+  data.append('website', roasterObject.website)
+
+  const response = await api.post(baseUrl, data)
   return response
 }
 

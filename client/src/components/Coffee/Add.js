@@ -1,29 +1,25 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Typography, FormLabel, Select, Link } from '@material-ui/core'
 import { Link as RouterLink } from 'react-router-dom';
-import Checkbox from '@material-ui/core/Checkbox'
-import { StyledButton } from '../../shared-style'
 import FullPageSpinner from '../../shared/components/Spinner'
+import Toast from '../../shared/components/Toast'
+import { StyledButton } from '../../shared-style'
 import { StyledInput, StyledTextField } from './style'
-import Input from '@material-ui/core/Input'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Autocomplete from '@material-ui/lab/Autocomplete'
 
-import { getStoredAuthToken } from '../../shared/utils/authToken'
-import axios from 'axios'
+import roasterService from '../../services/roaster'
+import coffeeService from '../../services/coffee'
 
 import countryList from '../../constants/countries'
 
+import { Box, Typography, FormLabel, Select, Link, Checkbox } from '@material-ui/core'
+import Input from '@material-ui/core/Input'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Autocomplete from '@material-ui/lab/Autocomplete'
 import MenuItem from '@material-ui/core/MenuItem'
 import { makeStyles } from '@material-ui/core/styles'
 import FormControl from '@material-ui/core/FormControl'
 import ListItemText from '@material-ui/core/ListItemText'
 import Alert from '@material-ui/lab/Alert'
-
-import roasterService from '../../services/roaster'
-
-import Toast from '../../shared/components/Toast'
-
+import Seo from '../../shared/components/Seo';
 
 const useStyles = makeStyles(() => ({
   formControl: {
@@ -58,10 +54,6 @@ const MenuProps = {
 }
 
 const Add = () => {
-  const config = {
-    headers: { Authorization: getStoredAuthToken() ? `Bearer ${getStoredAuthToken()}` : undefined },
-  }
-
   const classes = useStyles()
 
   const [loading, setLoading] = useState(true)
@@ -69,7 +61,7 @@ const Add = () => {
   const [open, setOpen] = useState(false)
 
   const [coffeeName, setCoffeeName] = useState('')
-  const [selectedBrand, setSelectedBrand] = useState('')
+  const [selectedBrand, setSelectedBrand] = useState(null)
   const [brands, setBrands] = useState([])
   const [selectedCountry, setSelectedCountry] = useState([])
   const [fairTrade, setFairTrade] = useState(false)
@@ -78,7 +70,7 @@ const Add = () => {
   const [url, setUrl] = useState('')
   const [image, setImage] = useState()
   const [price, setPrice] = useState('')
-  const [roastType, setRoastType] = useState('medium')
+  const [roastType, setRoastType] = useState('')
 
   const ref = React.useRef()
 
@@ -90,40 +82,50 @@ const Add = () => {
     setLoading(false)
   }, [])
 
-  const handleUpload = async event => {
+  const handleUpload = async (event) => {
     setImage(event.target.files[0])
   }
 
-  const handleSubmit = event => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    const data = new FormData()
-    data.append('coffeeImage', image)
-    data.append('coffeeName', coffeeName)
-    data.append('selectedBrand', selectedBrand.id) 
-    data.append('selectedCountry', selectedCountry) 
-    data.append('fairTrade', fairTrade) 
-    data.append('organic', organic) 
-    data.append('shadeGrown', shadeGrown) 
-    data.append('url', url) 
-    data.append('price', price) 
-    data.append('roastType', roastType)
+    const coffeeObj = {
+      coffeeName,
+      selectedBrand,
+      selectedCountry,
+      fairTrade,
+      organic,
+      shadeGrown,
+      url,
+      image,
+      price,
+      roastType,
+    }
 
-    axios.post('/api/coffees', data, config)
-      .then(response => {
-        setOpen(true)
-        setCoffeeName('')
-        setSelectedBrand('')
-        setSelectedCountry([])
-        setFairTrade('')
-        setOrganic('')
-        setShadeGrown('')
-        setUrl('')
-        setImage(null)
-        setPrice('')
-        setRoastType('')
-        ref.current.value = ''
-      })
-      .catch(err => setError(err.response.data.msg))
+    const response = await coffeeService.add(coffeeObj).catch((err) => {
+      if (err.errors) {
+        setError(`${err.errors[0].msg} for ${err.errors[0].param} field.`)
+      }
+      else {
+        setError(err.error)
+      }
+    })
+
+    if (!response) {
+      return
+    }
+
+    setOpen(true)
+    setCoffeeName('')
+    setSelectedBrand(null)
+    setSelectedCountry([])
+    setFairTrade(false)
+    setOrganic(false)
+    setShadeGrown(false)
+    setUrl('')
+    setImage(null)
+    setPrice('')
+    setRoastType('')
+    ref.current.value = ''
   }
 
   if (loading) {
@@ -132,17 +134,21 @@ const Add = () => {
 
   return (
     <Box maxWidth="600px" p="2.5rem" my="2.5rem" mx="auto" border="1px solid #d9e7ea" borderRadius="4px" textAlign="center">
+      <Seo title={'Add New Coffee'} />
       <Typography gutterBottom paragraph variant="h4" component="h2">Add New Coffee</Typography>
       <Box textAlign="left">
         <form onSubmit={handleSubmit} encType="multipart/form-data">
-          <FormLabel htmlFor="coffeeName">Coffee Name</FormLabel>
-          <StyledInput id="coffeeName" required value={coffeeName} onChange={({ target }) => setCoffeeName(target.value)} />
+          <FormLabel required htmlFor="coffeeName">Coffee Name</FormLabel>
+          <StyledInput name="coffeeName" id="coffeeName" value={coffeeName} onChange={({ target }) => setCoffeeName(target.value)} />
 
-          <FormLabel htmlFor="brand">Brand</FormLabel>
+          <FormLabel required htmlFor="brand">Brand</FormLabel>
           <Autocomplete
             id="brand"
+            data-testid="brand:autocomplete"
             options={brands}
-            getOptionLabel={(option) => option.name}
+            value={selectedBrand || null}
+            getOptionSelected={(option, value) => option.name === value.name}
+            getOptionLabel={(option) => option.name ? option.name : ''}
             style={{ width: '100%' }}
             onChange={(event, newValue, reason) => {
               if (reason === 'clear') {
@@ -155,16 +161,18 @@ const Add = () => {
             renderInput={(params) => <StyledTextField style={{ margin: '5px auto 5px', padding: 0 }} {...params} variant="outlined" />}
           />
           <Typography paragraph variant="body2" color="textSecondary">Brand not listed?
-            <Link component={RouterLink} style={{ cursor: 'pointer' }} to={`/roasters/add`}>Add it here</Link>.
+            <Link component={RouterLink} style={{ cursor: 'pointer' }} to={`/roasters/add`}> Add it here</Link>.
           </Typography>
 
-          <FormLabel htmlFor="price">Price ($)</FormLabel>
-          <StyledInput id="price" type="number" required value={price} onChange={({ target }) => setPrice(target.value)} />
+          <FormLabel required htmlFor="price">Price ($)</FormLabel>
+          <StyledInput id="price" name="price" type="number" value={price} onChange={({ target }) => setPrice(target.value)} />
 
-          <FormLabel htmlFor="roastType">Roast Type</FormLabel>
+          <FormLabel required htmlFor="roastType">Roast Type</FormLabel>
           <Select
             classes={{ outlined: classes.outlined }}
             id="roastType"
+            name="roastType"
+            data-testid="roastType:select"
             value={roastType}
             onChange={({ target }) => setRoastType(target.value)}
             style={{ width: '100%', margin: '5px auto 15px' }}
@@ -198,8 +206,8 @@ const Add = () => {
             </Select>
           </FormControl>
 
-          <FormLabel htmlFor="url">Product URL</FormLabel>
-          <StyledInput id="url" value={url} onChange={({ target }) => setUrl(target.value)} />
+          <FormLabel required htmlFor="url">Product URL</FormLabel>
+          <StyledInput id="url" name="url" value={url} onChange={({ target }) => setUrl(target.value)} />
 
           <FormLabel color="primary" htmlFor="roasterImage">Product Image</FormLabel>
           <StyledInput ref={ref} type="file" name="roasterImage" id="roasterImage" onChange={handleUpload} />

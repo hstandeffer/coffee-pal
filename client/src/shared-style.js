@@ -29,6 +29,17 @@ export const StyledDiv = styled.div`
 	}
 `
 
+export const LineClampSummary = styled.div`
+  text-align: left;
+  color: darkslategrey;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
+
 export const InputWithLabelAbove = styled.input`
 	display: block;
 	margin: 5px auto 15px;

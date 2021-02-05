@@ -41,7 +41,7 @@ const ProfileDrawer = ({ profileLinks, direction }) => {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      <Box py={5}>
+      <Box pt="65px" pb={5}>
         {profileLinks}
       </Box>
     </div>
@@ -50,7 +50,7 @@ const ProfileDrawer = ({ profileLinks, direction }) => {
   return (
     <>
       <Button onClick={toggleDrawer(direction, true)}>
-        <MenuOpenIcon style={{ borderRadius: '4px', background: '#3f51b5', color: '#fff' }} fontSize="large" />
+        <MenuOpenIcon style={{ borderRadius: '4px', color: 'black' }} fontSize="large" />
       </Button>
       <Drawer anchor={direction} open={state[direction]} onClose={toggleDrawer(direction, false)}>
         {list(direction)}

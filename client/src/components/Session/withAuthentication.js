@@ -29,9 +29,13 @@ const withAuthentication = Component => props => {
           console.log(err)
           logout()
         })
-        setLoading(false)
+        .finally(() => {
+          setLoading(false)
+        })
     }
-    setLoading(false)
+    else {
+      setLoading(false)
+    }
   }, [])
 
   if (loading) {

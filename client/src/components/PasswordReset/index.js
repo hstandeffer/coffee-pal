@@ -3,11 +3,12 @@ import { Redirect } from 'react-router-dom'
 import { StyledH1, Wrapper, Input, StyledDiv, StyledButton } from '../../shared-style'
 import { useParams } from 'react-router-dom'
 import userService from '../../services/user'
-import axios from 'axios'
 
 import * as ROUTES from '../../constants/routes'
 import Toast from '../../shared/components/Toast'
 import FullPageSpinner from '../../shared/components/Spinner'
+import Alert from '@material-ui/lab/Alert'
+import { Box } from '@material-ui/core'
 
 const PasswordReset = () => {
   const [loading, setLoading] = useState(true)
@@ -21,26 +22,37 @@ const PasswordReset = () => {
 
   useEffect(() => {
     setLoading(true)
-    axios.get(`/api/users/password-reset/${token}`)
-    .then((response) => {
-      if (response.status === 200) {
-        setLoading(false)
-      }
-    })
-    .catch((err) => {
-      if (err.response.status === 403) {
-        setError('Invalid Token')
+    const resetPassword = async () => {
+      const response = await userService.resetPassword(token).catch((err) => {
         setInvalid(true)
+      })
+      
+      if (!response) {
+        return
       }
-    })
+    }
+    resetPassword()
+      
+    setLoading(false)
   }, [token])
   
 
   const handleSubmit = async event => {
     event.preventDefault()
     const dataObj = { password, token }
-    const response = await userService.updatePassword(dataObj)
-    if (response.status === 200) {
+    const response = await userService.updatePassword(dataObj).catch((err) => {
+      if (err.errors) {
+        setError(`${err.errors[0].msg} for ${err.errors[0].param} field.`)
+      }
+      else {
+        setError(err.error)
+      }
+    })
+    if (!response) {
+      return
+    }
+
+    if (response) {
       setOpen(true)
       setPassword('')
       setConfirmPassword('')
@@ -80,7 +92,11 @@ const PasswordReset = () => {
         />
         <StyledButton disabled={isInvalid} type="submit">Update Password</StyledButton> 
 
-        {error && <p>{error.message}</p>}
+        { error &&
+          <Box my="1rem">
+            <Alert severity="error">{error}</Alert>
+          </Box>
+        }
       </form>
     </StyledDiv>
     <Toast open={open} setOpen={setOpen} severity="success" message="Your password has been successfully reset! You may now login using the new password." />

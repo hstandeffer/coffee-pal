@@ -1,14 +1,10 @@
-import axios from 'axios'
+import api from '../shared/utils/api'
 
 const baseUrl = '/api/contact'
 
 const send = async (email, message) => {
-  const contactObj = {
-    email: email,
-    message: message
-  }
-  const response = await axios.post(`${baseUrl}`, contactObj)
-  return response.data
+  const response = await api.post(`${baseUrl}`, { email, message })
+  return response
 }
 
 export default { send }

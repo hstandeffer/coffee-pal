@@ -1,11 +1,16 @@
 const roastersRouter = require('express').Router()
 const Roaster = require('../models/roaster')
 
+const { toMongooseObjectId } = require('../utils/mongoose')
 const { upload } = require('../utils/multer')
 const { auth } = require('../utils/middleware')
+const { roasterValidation, validate } = require('../utils/validator')
 
 roastersRouter.get('/', async (request, response) => {
-  const roasters = await Roaster.find({}).populate('coffees')
+  const lastRoasterId = request.query.roasterId
+  const findObj = lastRoasterId ? { _id: {$lt: toMongooseObjectId(lastRoasterId)}} : {}
+  const roasters = await Roaster.find(findObj).sort({ _id: -1 }).limit(10).populate('coffees')
+
   return response.json(roasters.map(roaster => roaster.toJSON()))
 })
 
@@ -20,7 +25,7 @@ roastersRouter.get('/list', async (request, response) => {
   return response.send(roasterMap)
 })
 
-roastersRouter.post('/', auth, upload.single('roasterImage'), async (request, response) => {
+roastersRouter.post('/', auth, upload.single('roasterImage'), roasterValidation(), validate, async (request, response) => {
   const body = request.body
   const roasterObj = {
     name: body.name,
@@ -38,7 +43,7 @@ roastersRouter.post('/', auth, upload.single('roasterImage'), async (request, re
   const newRoaster = new Roaster(roasterObj)
 
   const roaster = await newRoaster.save()
-  response.json(roaster.toJSON())
+  return response.json(roaster.toJSON())
 })
 
 roastersRouter.get('/recent-roasters', async (request, response) => {
@@ -47,7 +52,15 @@ roastersRouter.get('/recent-roasters', async (request, response) => {
 })
 
 roastersRouter.get('/:id', async (request, response) => {
-  const roaster = await Roaster.findById(request.params.id).populate('coffees')
+  const roaster = await Roaster.findById(request.params.id).populate({
+    path: 'coffees',
+    model: 'Coffee',
+    populate: {
+      path: 'roaster',
+      model: 'Roaster',
+      select: 'imagePath'
+    }
+  })
   return response.json(roaster.toJSON())
 })
 

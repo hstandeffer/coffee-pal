@@ -3,6 +3,7 @@ import * as ROUTES from '../../constants/routes'
 import { Input, StyledDiv, StyledButton, StyledLink, Wrapper, StyledH1 } from '../../shared-style'
 
 import Toast from '../../shared/components/Toast'
+import Seo from '../../shared/components/Seo'
 
 import Box from '@material-ui/core/Box'
 import { Typography } from '@material-ui/core'
@@ -10,6 +11,7 @@ import { Typography } from '@material-ui/core'
 import userService from '../../services/user'
 import { SignInLink } from '../SignIn'
 import { SignUpLink } from '../SignUp'
+import Alert from '@material-ui/lab/Alert'
 
 const PasswordForget = () => {
   const [email, setEmail] = useState('')
@@ -18,18 +20,26 @@ const PasswordForget = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    try {
-      await userService.forgotPassword(email)
-      setEmail('')
-      setOpen(true)
+    const response = await userService.forgotPassword(email).catch((err) => {
+      if (err.errors) {
+        setError(`${err.errors[0].msg} for ${err.errors[0].param} field.`)
+      }
+      else {
+        setError(err.error)
+      }
+    })
+
+    if (!response) {
+      return
     }
-    catch (err) {
-      setError(err)
-    }
+
+    setEmail('')
+    setOpen(true)
   }
 
   return (
     <Wrapper>
+      <Seo title={'Forgot Password'} />
       <StyledDiv>
         <StyledH1>Forgot your password?</StyledH1>
         <div>
@@ -45,7 +55,11 @@ const PasswordForget = () => {
               Reset Password
             </StyledButton>
           </form>
-          {error && <p>{error.message}</p>}
+          { error &&
+            <Box my="1rem">
+              <Alert severity="error">{error}</Alert>
+            </Box>
+          }
           <Box mt={2}>
             <SignUpLink />
             <SignInLink />

@@ -4,10 +4,10 @@ import Avatar from '@material-ui/core/Avatar'
 import { InputWithLabelAbove, StyledButton } from '../../shared-style'
 import FullPageSpinner from '../../shared/components/Spinner'
 import { makeStyles } from '@material-ui/styles'
-import { getStoredAuthToken } from '../../shared/utils/authToken'
-import axios from 'axios'
+import userService from '../../services/user'
 import Alert from '@material-ui/lab/Alert'
 import Toast from '../../shared/components/Toast'
+import Seo from '../../shared/components/Seo'
 
 const useStyles = makeStyles(() => ({
   outlined: {
@@ -23,10 +23,6 @@ const useStyles = makeStyles(() => ({
 }))
 
 const ProfilePage = ({ user }) => {
-  const config = {
-    headers: { Authorization: getStoredAuthToken() ? `Bearer ${getStoredAuthToken()}` : undefined },
-  }
-
   const [image, setImage] = useState()
   const [imagePath, setImagePath] = useState('')
   const [name, setName] = useState('')
@@ -58,14 +54,21 @@ const ProfilePage = ({ user }) => {
     data.append('favoriteCoffee', favoriteCoffee)
     data.append('favoriteBrewing', favoriteBrewing)
 
-    try {
-      await axios.put('/api/users/update', data, config)
-      setOpen(true)
-      ref.current.value = ''
+    const response = await userService.update(data).catch((err) => {
+      if (err.errors) {
+        setError(`${err.errors[0].msg} for ${err.errors[0].param} field.`)
+      }
+      else {
+        setError(err.error)
+      }
+    })
+
+    if (!response) {
+      return
     }
-    catch (err) {
-      setError(err.response.data.msg)
-    }
+    
+    setOpen(true)
+    ref.current.value = ''
   }
 
   const handleUpload = async event => {
@@ -78,6 +81,7 @@ const ProfilePage = ({ user }) => {
 
   return (
     <Box maxWidth="480px" px="2.5rem" mb="2.5rem" mx="auto" borderRadius="4px">
+      <Seo title={'Your Profile'} />
       <Typography align='center' variant="h5" component="h2">Your Profile</Typography>
       <Box textAlign="left" mt="1rem">
         <form onSubmit={handleSubmit}>

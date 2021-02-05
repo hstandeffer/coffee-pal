@@ -1,13 +1,15 @@
 import React, { useState, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
-import { StyledH1, Wrapper, Input, StyledDiv, StyledButton, StyledLink } from '../../shared-style';
+import { Wrapper, InputWithLabelAbove, StyledDiv, StyledButton, StyledLink } from '../../shared-style';
 import AuthUserContext from '../Session/context'
 
-import axios from 'axios'
+import userService from '../../services/user'
 
 import * as ROUTES from '../../constants/routes';
-import { Typography, Box } from '@material-ui/core';
+import { Typography, Box, FormLabel } from '@material-ui/core';
 import { SignInLink } from '../SignIn';
+import Alert from '@material-ui/lab/Alert';
+import Seo from '../../shared/components/Seo';
 
 const SignUp = () => {
   const authUserContext = useContext(AuthUserContext)
@@ -19,79 +21,69 @@ const SignUp = () => {
   const [error, setError] = useState('')
   
 
-  const handleSubmit = event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const newUser = {
+    const user = {
       username,
       email,
-      password
+      password,
+      confirmPassword
     }
 
-    axios.post('/api/users', newUser)
-      .then(response => {
-        const userObj = {
-          token: response.data.token,
-          id: response.data.user.id
-        }
-        authUserContext.login(userObj)
-        return (<Redirect to={ROUTES.BROWSE} />)
-      })
-      .catch(error => {
-        setError(error)
-      })  
-  };
+    const response = await userService.signUp(user).catch((err) => {
+      if (err.errors) {
+        setError(`${err.errors[0].msg} for ${err.errors[0].param} field.`)
+      }
+      else {
+        setError(err.error)
+      }
+    })
 
-  const isInvalid = 
-    password !== confirmPassword ||
-    password === '' ||
-    email === '' ||
-    username === ''
+    if (!response) {
+      return
+    }
+
+    const userObj = {
+      token: response.token,
+      id: response.user.id
+    }
+    authUserContext.login(userObj)
+    return (<Redirect to={ROUTES.BROWSE} />) 
+  }
 
   return (
     <Wrapper>
+      <Seo title={'Sign Up'} />
       <StyledDiv>
-        <StyledH1>Sign Up</StyledH1>
-        <form onSubmit={handleSubmit}>
-          <Input
-            name="username"
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
-            type="text"
-            placeholder="Username"
-            tabIndex="1"
-          />
-          <Input
-            name="email"
-            value={email}
-            onChange={({ target }) => setEmail(target.value)}
-            type="text"
-            placeholder="Email Address"
-            tabIndex="2"
-          />
-          <Input
-            name="password"
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-            type="password"
-            placeholder="Password"
-            tabIndex="3"
-          />
-          <Input
-            name="confirmPassword"
-            value={confirmPassword}
-            onChange={({ target }) => setConfirmPassword(target.value)}
-            type="password"
-            placeholder="Confirm Password"
-            tabIndex="4"
-          />
-          <StyledButton disabled={isInvalid} tabIndex="5" type="submit">Sign Up</StyledButton> 
-          {error && <p>{error.message}</p>}
+        <Typography gutterBottom paragraph variant="h4" component="h2">Sign Up</Typography>
+        <Box textAlign="left">
+          <form onSubmit={handleSubmit}>
+            <FormLabel required htmlFor="username">Username</FormLabel>
+            <InputWithLabelAbove name="username" value={username} onChange={({ target }) => setUsername(target.value)} type="text" tabIndex="1" />
 
-          <Box mt={2}>
-            <SignInLink />
-          </Box>
-        </form>
+            <FormLabel required htmlFor="email">Email</FormLabel>
+            <InputWithLabelAbove name="email" value={email} onChange={({ target }) => setEmail(target.value)} type="text" tabIndex="2" />
+
+            <FormLabel required htmlFor="password">Password</FormLabel>
+            <InputWithLabelAbove name="password" value={password} onChange={({ target }) => setPassword(target.value)} type="password" tabIndex="3" />
+
+            <FormLabel required htmlFor="confirmPassword">Confirm Password</FormLabel>
+            <InputWithLabelAbove name="confirmPassword" value={confirmPassword} onChange={({ target }) => setConfirmPassword(target.value)} type="password" tabIndex="4" />
+
+            <StyledButton tabIndex="5" type="submit">Sign Up</StyledButton> 
+            
+            { error &&
+              <Box my="1rem">
+                <Alert severity="error">{error}</Alert>
+              </Box>
+            }
+
+            <Box textAlign="center" mt={2}>
+              <SignInLink />
+            </Box>
+          </form>
+        </Box>
       </StyledDiv>
     </Wrapper>
   )

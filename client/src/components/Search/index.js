@@ -1,24 +1,36 @@
-import React, { useState, useEffect } from 'react'
-import {
-  FlexContainer,
-} from './style'
-import axios from 'axios'
-import Slider from '@material-ui/core/Slider'
+import React, { useState, useContext, useCallback } from 'react'
+import { SubmitNewButtonDiv } from './style'
+import AuthUserContext from '../Session/context'
 
-import Hidden from '@material-ui/core/Hidden'
-import { BrowseWrapper, BrowseFiltersDiv, TestDiv, BrowseFiltersHeaderDiv, ClearRefinementsButton, AlgoliaStyledUl, AlgoliaAllRefinementListsWrapper, AlgoliaRefinementListWrapper, AlgoliaStyledLi, AlgoliaStyledOuterRefinementListSpan, AlgoliaRefinementHeader, BrowseHitsDiv, TestButton, MobileFiltersButtonWrapper, ClearRefinementsButtonMobile, SaveFiltersButtonMobile, TestFooter } from '../Browse/style'
-import { CoffeeItem } from '../Product/ProductGrid'
-import FullPageSpinner from '../../shared/components/Spinner'
+import FilterList from './FilterList'
+import PriceFilter from './PriceFilter'
+import SearchBar from './SearchBar'
+import Search from './Search'
+
+import { Hidden, Button } from '@material-ui/core'
+import { BrowseWrapper, BrowseFiltersDiv, TestDiv, BrowseFiltersHeaderDiv, ClearRefinementsButton, AlgoliaAllRefinementListsWrapper, BrowseHitsDiv, TestButton, MobileFiltersButtonWrapper, ClearRefinementsButtonMobile, SaveFiltersButtonMobile, TestFooter } from '../Browse/style'
+import Dialog from '../../shared/components/Dialog'
+import Seo from '../../shared/components/Seo'
+import { useHistory } from 'react-router-dom'
+import { debounce } from 'lodash'
 
 const SearchPage = () => {
+  const authContext = useContext(AuthUserContext)
+  const [dialogOpen, setDialogOpen] = useState(false)
+
+  let history = useHistory()
+
   const minPrice = 1
   const maxPrice = 50
-  const initialFilters = {roastType: [], price: {min: minPrice, max: maxPrice}}
-  const initialItems = {roastTypes: [{ label: 'Light Roast', value: 'light', isRefined: false}, { label: 'Medium Roast', value: 'medium', isRefined: false}, { label: 'Dark Roast', value: 'dark', isRefined: false}], priceRange: [minPrice, maxPrice]}
+  const debounceDuration = 1000
+
+  const initialFilters = { roastType: [], price: {min: minPrice, max: maxPrice}, q: '' }
+  const initialItems = { roastTypes: [{ label: 'Light Roast', value: 'light', isRefined: false}, { label: 'Medium Roast', value: 'medium', isRefined: false}, { label: 'Dark Roast', value: 'dark', isRefined: false}], priceRange: [minPrice, maxPrice] }
 
   const [filtering, setFiltering] = useState(false)
   const [filters, setFilters] = useState(initialFilters)
-  const [items, setItems] = useState(initialItems)  
+  const [items, setItems] = useState(initialItems)
+  const [query, setQuery] = useState('')
 
   const handleRoastChange = async (event) => {
     if (filters.roastType.includes(event.target.value)) {
@@ -34,28 +46,48 @@ const SearchPage = () => {
     setFilters({...filters, price: {min: newValue[0], max: newValue[1]}})
   }
 
-  const clearFiltersAndRefinements = async (event) => {
+  const handleSearchFilterChange = (val) => {
+    setFilters({...filters, q: val})
+  }
+
+  // delays the actual api call for specified period of time to reduce calls
+  const debounceSearch = useCallback(debounce(handleSearchFilterChange, debounceDuration), [])
+
+  const handleSearchChange = (event) => {
+    setQuery(event.target.value)
+    debounceSearch(event.target.value)
+  }
+
+  const clearFiltersAndRefinements = () => {
     setFilters(initialFilters)
     setItems(initialItems)
   }
 
+  const handleSubmitButtonClick = async (event) => {
+    event.preventDefault()
+    if (!authContext.isLoggedIn) {
+      setDialogOpen(true)
+      return
+    }
+    history.push('/coffees/add')
+  }
+
   return (
     <BrowseWrapper>
-      <Hidden mdUp>
-        <TestButton filtering={filtering} onClick={() => setFiltering(!filtering)}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 14"><path d="M15 1H1l5.6 6.3v4.37L9.4 13V7.3z" stroke="#fff" strokeWidth="1.29" fill="none" fillRule="evenodd" strokeLinecap="round" strokeLinejoin="round"></path></svg>
-          Show Filters
-        </TestButton>
-      </Hidden>
+      <Seo title={'All Coffees'} />
+      <OpenMobileFilters filtering={filtering} setFiltering={setFiltering} />
+      <SubmitNewButtonDiv>
+        <Button variant="outlined" onClick={handleSubmitButtonClick} size="small">Submit New</Button>
+      </SubmitNewButtonDiv>
       <BrowseFiltersDiv>
-        <TestDiv filtering={filtering}>
+        <TestDiv data-testid="browse:filters" filtering={filtering}>
           <BrowseFiltersHeaderDiv>
             <h2>Filters</h2>
             <ClearFilters minPrice={minPrice} maxPrice={maxPrice} filters={filters} clearFiltersAndRefinements={clearFiltersAndRefinements} />
           </BrowseFiltersHeaderDiv>
           {/* Insert current filters here later - will require restructuring */}
           <AlgoliaAllRefinementListsWrapper>
-            <FilterList header={'Roast Type'} roastTypes={items.roastTypes} handleChange={handleRoastChange} />
+            <FilterList header={'Roast Type'} items={items.roastTypes} handleChange={handleRoastChange} />
             <PriceFilter items={items} minPrice={minPrice} maxPrice={maxPrice} setItems={setItems} header={'Price'} priceRange={items.priceRange} handlePriceChange={handlePriceChange} />
           </AlgoliaAllRefinementListsWrapper>
           <TestFooter filtering={filtering}>
@@ -66,53 +98,14 @@ const SearchPage = () => {
       </BrowseFiltersDiv>
 
       <BrowseHitsDiv>
+        <SearchBar query={query} handleSearchChange={handleSearchChange} />
         <Search filters={filters} filtering={filtering} />
       </BrowseHitsDiv>
+
+      <Dialog title="Sign in to submit a new coffee" description={"Sign in or register with your email address"} open={dialogOpen} setOpen={setDialogOpen} />
     </BrowseWrapper>
   )
 }
-
-const PriceFilter = ({ minPrice, maxPrice, header, items, setItems, priceRange, handlePriceChange }) => (
-  <AlgoliaRefinementListWrapper>
-    <AlgoliaRefinementHeader>
-      {header}
-    </AlgoliaRefinementHeader>
-    <Slider
-      value={priceRange}
-      onChange={(event, newValue) => setItems({...items, priceRange: newValue})}
-      onChangeCommitted={(event, newValue) => handlePriceChange(newValue)}
-      valueLabelDisplay="auto"
-      marks={[{value: minPrice, label: `$${minPrice}`}, {value: maxPrice, label: `$${maxPrice}`}]}
-      min={minPrice}
-      max={maxPrice}
-    />
-  </AlgoliaRefinementListWrapper>
-)
-
-const FilterList = ({ header, handleChange, roastTypes }) => (
-  <AlgoliaRefinementListWrapper>
-    <AlgoliaRefinementHeader>
-      {header}
-    </AlgoliaRefinementHeader>
-    <AlgoliaStyledUl>
-      {roastTypes.map(roast => (
-        <AlgoliaStyledLi key={roast.label}>
-          <label>
-            <input type="checkbox" checked={roast.isRefined} value={roast.value} onChange={handleChange} />
-            <AlgoliaStyledOuterRefinementListSpan>
-              <span style={{fontWeight: roast.isRefined ? '700' : ''}}>
-                {roast.label}
-              </span>
-            </AlgoliaStyledOuterRefinementListSpan>
-            {/* <AlgoliaStyledRefinementListCountSpan>
-              {roast.count}
-            </AlgoliaStyledRefinementListCountSpan> */}
-          </label>
-        </AlgoliaStyledLi>
-      ))}
-    </AlgoliaStyledUl>
-  </AlgoliaRefinementListWrapper>
-)
 
 const ClearFilters = ({ clearFiltersAndRefinements, filters, minPrice, maxPrice }) => (
   <ClearRefinementsButton onClick={clearFiltersAndRefinements} disabled={filters.roastType.length === 0 && (filters.price.min === minPrice && filters.price.max === maxPrice)}>
@@ -135,6 +128,15 @@ const ClearFilters = ({ clearFiltersAndRefinements, filters, minPrice, maxPrice 
   </ClearRefinementsButton>
 )
 
+const OpenMobileFilters = ({ filtering, setFiltering }) => (
+  <Hidden mdUp>
+    <TestButton filtering={filtering} onClick={() => setFiltering(!filtering)}>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 14"><path d="M15 1H1l5.6 6.3v4.37L9.4 13V7.3z" stroke="#fff" strokeWidth="1.29" fill="none" fillRule="evenodd" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+      Show Filters
+    </TestButton>
+  </Hidden>
+)
+
 const ClearFiltersMobile = ({ clearFiltersAndRefinements }) => (
   <MobileFiltersButtonWrapper>
     <ClearRefinementsButtonMobile onClick={clearFiltersAndRefinements}>Reset Filters</ClearRefinementsButtonMobile>
@@ -148,44 +150,5 @@ const SaveFiltersMobile = ({ onClick }) => (
     </SaveFiltersButtonMobile>
   </MobileFiltersButtonWrapper>
 )
-
-// this is kept separate so when loading, it'll only hide the products being shown, not the entire page
-// might make more sense to rename as Products
-const Search = ({ filters, filtering }) => {
-  // const [searchQuery, setSearchQuery] = useState('') // TODO: ADD SEARCH QUERY TO FILTERS
-  const [loading, setLoading] = useState(false)
-  const [coffees, setCoffees] = useState([])
-
-  useEffect(() => {
-    let isMounted = true
-    if (isMounted) {
-      const getQuery = async () => {
-        setLoading(true)
-        const response = await axios.get('/api/coffees/query', { params: { roastType: filters.roastType, priceLow: filters.price.min, priceHigh: filters.price.max } })
-        setCoffees(response.data)
-        setLoading(false)
-      }
-      getQuery()
-    }
-    return () => { isMounted = false }
-  }, [filters])
-
-  if (loading) {
-    return <FullPageSpinner size={50} />
-  }
-
-  // this hides the products so they aren't shown behind the mobile filter view
-  if (filtering) {
-    return null
-  }
-
-  return (
-    <FlexContainer>
-      {coffees.map(coffee => (
-          <CoffeeItem coffee={coffee} key={coffee.id} />
-        ))}
-    </FlexContainer>
-  )
-}
 
 export default SearchPage

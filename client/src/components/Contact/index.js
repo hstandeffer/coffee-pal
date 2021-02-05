@@ -4,6 +4,7 @@ import EmailIcon from '@material-ui/icons/Email'
 import contactService from '../../services/contact'
 import Toast from '../../shared/components/Toast'
 import Alert from '@material-ui/lab/Alert'
+import Seo from '../../shared/components/Seo'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,12 +45,19 @@ const Contact = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    try {
-      await contactService.send(email, message)
+    const response = await contactService.send(email, message).catch((err) => {
+      if (err.errors) {
+        setError(`${err.errors[0].msg} for ${err.errors[0].param} field.`)
+      }
+      else {
+        setError(err.error)
+      }
+    })
+
+    if (!response) {
+      return
     }
-    catch (err) {
-      setError(err.response.data.msg)
-    }
+
     setEmail('')
     setMessage('')
     setOpen(true)
@@ -57,6 +65,7 @@ const Contact = () => {
 
   return (
     <Box py={6} className={classes.root}>
+      <Seo title={'Contact Us'} />
       <Box pb={4} textAlign="center">
         <Typography variant="h4">Contact Us</Typography>
       </Box>

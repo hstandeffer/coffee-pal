@@ -43,7 +43,11 @@ const Ul = styled.ul`
 const nonAuthRoutes = [
   {
     route: ROUTES.BROWSE,
-    text: 'Browse'
+    text: 'Coffees'
+  },
+  {
+    route: ROUTES.ROASTERS,
+    text: 'Roasters'
   },
   {
     route: ROUTES.SIGN_IN,
@@ -54,7 +58,11 @@ const nonAuthRoutes = [
 const authRoutes = [
   {
     route: ROUTES.BROWSE,
-    text: 'Browse'
+    text: 'Coffees'
+  },
+  {
+    route: ROUTES.ROASTERS,
+    text: 'Roasters'
   },
   {
     route: ROUTES.PROFILE,

@@ -3,50 +3,55 @@ const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const config = require('../utils/config')
 const jwt = require('jsonwebtoken')
+const { signInValidation, validate } = require('../utils/validator')
 
-authRouter.post('/', (request, response) => {
+authRouter.post('/', signInValidation(), validate, async (request, response) => {
   const { email, password } = request.body
 
-  if (!email || !password) {
-    return response.status(400).json({ msg: 'Please enter all fields and try again' })
-  }
+  const user = await User.findOne({ email }, 'password')
+  if (!user) return response.status(400).json({ error: 'User does not exist' })
 
-  User.findOne({ email }, 'password')
-    .then(user => {
-      if (!user) return response.status(400).json({ msg: 'User does not exist' })
-      bcrypt.compare(password, user.password)
-        .then(isMatch => {
-          if (!isMatch) return response.status(400).json({ msg: 'Invalid credentials' })
+  bcrypt.compare(password, user.password)
+    .then(isMatch => {
+      if (!isMatch) return response.status(400).json({ error: 'Invalid credentials' })
 
-          jwt.sign({ id: user.id }, config.JWT_SECRET, { expiresIn: 3600 * 24 * 365 }, (err, token) => {
-            if (err) throw err
-            response.json({
-              token,
-              user: {
-                id: user.id,
-                name: user.name,
-                email: user.email
-              }
-            })
-          })
+      jwt.sign({ id: user.id }, config.JWT_SECRET, { expiresIn: 3600 * 24 * 365 }, (err, token) => {
+        if (err) {
+          return response.status(401).json({ error: 'Authentication token is invalid' })
+        }
+        
+        return response.json({
+          token,
+          user: {
+            id: user.id,
+            name: user.name,
+            email: user.email
+          }
         })
+      })
     })
 })
 
 authRouter.post('/verify', async (request, response) => {
   const { token } = request.body
-  try {
-    const decoded = jwt.verify(token, config.JWT_SECRET)
+  if (!token) {
+    return response.status(401).json({ error: 'Authentication token is invalid' })
+  }
+
+  jwt.verify(token, config.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return response.status(401).json({ error: 'Authentication token is invalid'})
+    }
+
     if (decoded) {
-      response.json(decoded)
+      return response.json(decoded)
     }
+
     else {
-      response.status(401).json({ msg: 'Unauthenticated' })
+      return response.status(401).json({ error: 'User is unauthenticated' })
     }
-  }
-  catch (err) {
-    response.status(404).json({ msg: err })
-  }
+  })
+  
 })
 
 module.exports = authRouter

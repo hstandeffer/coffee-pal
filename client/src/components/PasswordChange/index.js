@@ -4,6 +4,7 @@ import userService from '../../services/user'
 
 import Toast from '../../shared/components/Toast'
 import { Typography, FormLabel, Box } from '@material-ui/core'
+import Alert from '@material-ui/lab/Alert'
 
 export const PasswordChangeForm = () => {
   const [password, setPassword] = useState('')
@@ -14,15 +15,22 @@ export const PasswordChangeForm = () => {
   const handleSubmit = async event => {
     event.preventDefault()
     const dataObj = { password }
-    const response = await userService.changePassword(dataObj)
-    if (response.status === 200) {
-      setOpen(true)
-      setPassword('')
-      setConfirmPassword('')
+    const response = await userService.changePassword(dataObj).catch((err) => {
+      if (err.errors) {
+        setError(`${err.errors[0].msg} for ${err.errors[0].param} field.`)
+      }
+      else {
+        setError(err.error)
+      }
+    })
+
+    if (!response) {
+      return
     }
-    else {
-      setError('Something went wrong, please try again.')
-    }
+
+    setOpen(true)
+    setPassword('')
+    setConfirmPassword('')
   }
 
   const isInvalid = 
@@ -35,25 +43,19 @@ export const PasswordChangeForm = () => {
       <Box textAlign="left">
         <form onSubmit={handleSubmit}>
           <FormLabel required htmlFor="password">Password</FormLabel>
-          <InputWithLabelAbove
-            name="password"
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-            type="password"
-            placeholder="Password"
-          />
+          <InputWithLabelAbove name="password" value={password} onChange={({ target }) => setPassword(target.value)} type="password" />
+
           <FormLabel required htmlFor="confirmPassword">Confirm Password</FormLabel>
-          <InputWithLabelAbove
-            name="confirmPassword"
-            value={confirmPassword}
-            onChange={({ target }) => setConfirmPassword(target.value)}
-            type="password"
-            placeholder="Confirm Password"
-          />
+          <InputWithLabelAbove name="confirmPassword" value={confirmPassword} onChange={({ target }) => setConfirmPassword(target.value)} type="password" />
+
           <StyledButton disabled={isInvalid} type="submit">Update Password</StyledButton> 
 
-          {error && <p>{error.message}</p>}
-          <Toast open={open} setOpen={setOpen} severity="success" message="Your password has been successfully changed!" />
+          { error &&
+            <Box my="1rem">
+              <Alert severity="error">{error}</Alert>
+            </Box>
+          }
+          <Toast open={open} setOpen={setOpen} severity="success" message="Your password has been updated." />
         </form>
       </Box>
     </>

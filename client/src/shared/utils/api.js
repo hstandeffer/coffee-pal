@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { getStoredAuthToken, removeStoredAuthToken } from './authToken'
+import { getStoredAuthToken } from './authToken'
 
 const defaults = {
   baseURL: process.env.API_URL || 'http://localhost:3000',
@@ -30,11 +30,7 @@ const api = (method, url, variables) =>
       },
       error => {
         if (error.response) {
-          if (error.response) {
-            removeStoredAuthToken();
-          } else {
-            reject(error.response.data.error);
-          }
+          reject(error.response.data)
         } else {
           reject(defaults.error);
         }

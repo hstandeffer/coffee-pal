@@ -47,7 +47,7 @@ const ProfilePage = ({ children, heading }) => {
   return (
     <Box pb={"5rem"} bgcolor="rgb(242 242 242)">
       <Container maxWidth="md">
-        <Box py={4}>
+        <Box py={5}>
           <Hidden mdUp>
             <ProfileDrawer profileLinks={<ProfileLinks />} direction='left'/>
           </Hidden>
@@ -56,7 +56,7 @@ const ProfilePage = ({ children, heading }) => {
         <ProfileWrapper>
           <SidebarDiv>
             <TestDiv style={{ position: 'inherit' }}>
-            <Box py={3} width="100%">
+              <Box py={3} width="100%">
                 <ProfileLinks />
               </Box>
             </TestDiv> 
