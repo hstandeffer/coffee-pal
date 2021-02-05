@@ -1,9 +1,10 @@
 import axios from 'axios';
 
 import { getStoredAuthToken } from './authToken'
+import { apiUrl } from './url'
 
 const defaults = {
-  baseURL: process.env.API_URL || 'http://localhost:3000',
+  baseURL: apiUrl,
   headers: () => ({
     'Content-Type': 'application/json',
     Authorization: getStoredAuthToken() ? `Bearer ${getStoredAuthToken()}` : undefined,
