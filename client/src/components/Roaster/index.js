@@ -9,6 +9,7 @@ import { RoasterImageBox } from './style'
 import { LineClampSummary } from '../../shared-style'
 import FullPageSpinner, { ButtonSpinner } from '../../shared/components/Spinner';
 import Seo from '../../shared/components/Seo';
+import { assetUrl } from '../../shared/utils/url';
 
 const useStyles = makeStyles((theme) => ({
   roastImage: {
@@ -70,7 +71,7 @@ const Roaster = () => {
                     <Box display="flex">
                       <Box pr={1} className={classes.roastImage}>
                         <RoasterImageBox>
-                          {roaster.imagePath ? <img alt="roaster" src={`${process.env.REACT_APP_IMAGE_PATH}/${roaster.imagePath}`}></img> : null }
+                          {roaster.imagePath ? <img alt="roaster" src={`${assetUrl}/${roaster.imagePath}`}></img> : null }
                         </RoasterImageBox>
                       </Box>
                       <Box px="8px" display="flex" flexDirection="column" justifyContent="space-between" width={0} flexGrow={1}>

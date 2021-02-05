@@ -10,4 +10,6 @@ export const objectToQueryString = (obj, options = {}) =>
   queryString.stringify(obj, {
     arrayFormat: 'bracket',
     ...options,
-  });
+  })
+
+export const assetUrl = process.env.NODE_ENV === 'production' ? 'https://baroasta.s3.amazonaws.com' : 'http://localhost:3000/uploads'

@@ -8,6 +8,7 @@ import userService from '../../services/user'
 import Alert from '@material-ui/lab/Alert'
 import Toast from '../../shared/components/Toast'
 import Seo from '../../shared/components/Seo'
+import { assetUrl } from '../../shared/utils/url'
 
 const useStyles = makeStyles(() => ({
   outlined: {
@@ -88,7 +89,7 @@ const ProfilePage = ({ user }) => {
           <FormLabel>Avatar</FormLabel>
           <Box mt="5px" mb="1rem" display="flex" flexDirection="row" alignItems="center">
             {user.imagePath ?
-              <Avatar style={{ marginRight: '15px' }} src={`${process.env.REACT_APP_IMAGE_PATH}/${imagePath}`} /> :
+              <Avatar style={{ marginRight: '15px' }} src={`${assetUrl}/${imagePath}`} /> :
               <Avatar style={{ marginRight: '15px' }}>{user.username.charAt(0)}</Avatar> 
             }
             <Typography style={{ fontWeight: 500 }}>Change Avatar Picture</Typography>

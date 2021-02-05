@@ -10,6 +10,7 @@ import Button from '@material-ui/core/Button'
 import ProductGrid from '../Product/ProductGrid'
 import FullPageSpinner from '../../shared/components/Spinner'
 import Seo from '../../shared/components/Seo'
+import { assetUrl } from '../../shared/utils/url'
 
 const useStyles = makeStyles((theme) => ({
   roastImage: {
@@ -68,7 +69,7 @@ const Roaster = () => {
         <Container maxWidth="sm">
           <Box py={3}>
             <RoasterImageBox width="8rem" className={classes.roastImage}>
-              {roaster.imagePath ? <img alt="roaster" src={`${process.env.REACT_APP_IMAGE_PATH}/${roaster.imagePath}`}></img> : null }
+              {roaster.imagePath ? <img alt="roaster" src={`${assetUrl}/${roaster.imagePath}`}></img> : null }
             </RoasterImageBox>
           </Box>
           <Typography component="h1" variant="h3" align="center" color="textPrimary" gutterBottom>

@@ -4,6 +4,7 @@ import Toast from '../../shared/components/Toast'
 import FullPageSpinner from '../../shared/components/Spinner';
 import { StyledButton } from '../../shared-style'
 import { StyledInput, StyledTextField } from './style'
+import { assetUrl } from '../../shared/utils/url'
 
 import { Box, Typography, FormLabel, Select, Link, Checkbox } from '@material-ui/core'
 import Input from '@material-ui/core/Input'
@@ -221,7 +222,7 @@ const Edit = () => {
           <StyledInput type="file" name="roasterImage" id="roasterImage" onChange={handleUpload} />
 
           <FormLabel color="primary" htmlFor="currentImage">Current Image</FormLabel>
-          {image ? <img height="50" src={`${process.env.REACT_APP_IMAGE_PATH}/${image}`} alt={coffeeName} /> : ' None'}
+          {image ? <img height="50" src={`${assetUrl}/${image}`} alt={coffeeName} /> : ' None'}
           
 
           <Box display="flex" flexDirection="row" justifyContent="space-around">

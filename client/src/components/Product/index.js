@@ -14,6 +14,7 @@ import LanguageIcon from '@material-ui/icons/Language'
 import { Grid, Hidden, Button, Typography, Box, Container } from '@material-ui/core'
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert from '@material-ui/lab/Alert'
+import { assetUrl } from '../../shared/utils/url'
 
 const Alert = props => {
   return <MuiAlert elevation={6} variant="filled" {...props} />
@@ -69,7 +70,7 @@ const Product = () => {
             </Hidden>
             <ImageContainer>
               <ImageContentContainer>
-                <img src={`${process.env.REACT_APP_IMAGE_PATH}/${coffee.roaster.imagePath}`} alt={coffee.coffeeName} />
+                <img src={`${assetUrl}/${coffee.roaster.imagePath}`} alt={coffee.coffeeName} />
               </ImageContentContainer>
             </ImageContainer>
             <Box display="flex" flexDirection="row" pt={1}>

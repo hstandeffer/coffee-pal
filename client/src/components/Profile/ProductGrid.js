@@ -54,7 +54,7 @@ export const CoffeeItem = ({ coffee, route, editing, handleRemove }) => {
       <ProductLink to={`/${route ? route : 'coffees'}/${coffee.id}`}>
         <ImageContainer>
           <ImageContentContainer>
-            <img src={`${process.env.REACT_APP_IMAGE_PATH}/${coffee.imagePath ? coffee.imagePath : coffee.roaster.imagePath}`} alt={coffee.coffeeName} />
+            <img src={`${assetUrl}/${coffee.imagePath ? coffee.imagePath : coffee.roaster.imagePath}`} alt={coffee.coffeeName} />
           </ImageContentContainer>
         </ImageContainer>
         <InfoContainer>

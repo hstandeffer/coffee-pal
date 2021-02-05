@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom'
 
 import * as ROUTES from '../../constants/routes'
 import CoffeeBeanSvg from '../../shared/components/CoffeeBeanSvg'
+import { assetUrl } from '../../shared/utils/url'
 
 const ProductGrid = ({ coffees, route, heading }) => {
   return (
@@ -37,7 +38,7 @@ export const CoffeeItem = ({ coffee, route }) => {
       <ProductLink to={`/${route ? route : 'coffees'}/${coffee.id}`}>
         <ImageContainer>
           <ImageContentContainer>
-            <img src={`${process.env.REACT_APP_IMAGE_PATH}/${coffee.imagePath ? coffee.imagePath : coffee.roaster.imagePath}`} alt={coffee.coffeeName} />
+            <img src={`${assetUrl}/${coffee.imagePath ? coffee.imagePath : coffee.roaster.imagePath}`} alt={coffee.coffeeName} />
           </ImageContentContainer>
         </ImageContainer>
         <InfoContainer>
@@ -58,7 +59,7 @@ export const RoasterItem = ({ roaster }) => {
       <ProductLink to={`roasters/${roaster.id}`}>
         <ImageContainer>
           <ImageContentContainer>
-            <img src={`${process.env.REACT_APP_IMAGE_PATH}/${roaster.imagePath}`} alt={roaster.name} />
+            <img src={`${assetUrl}/${roaster.imagePath}`} alt={roaster.name} />
           </ImageContentContainer>
         </ImageContainer>
         <InfoContainer>
