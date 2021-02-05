@@ -11,7 +11,7 @@ import * as ROUTES from '../../constants/routes'
 import CoffeeBeanSvg from '../../shared/components/CoffeeBeanSvg'
 import { assetUrl } from '../../shared/utils/url'
 
-const ProductGrid = ({ coffees, route, heading }) => {
+const ProductGrid = ({ coffees, route }) => {
   return (
     <ProductGridDiv>
       <ProductWrapper>
