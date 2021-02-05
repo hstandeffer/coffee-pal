@@ -1,12 +1,16 @@
 const roastersRouter = require('express').Router()
 const Roaster = require('../models/roaster')
 
+const { toMongooseObjectId } = require('../utils/mongoose')
 const { upload } = require('../utils/multer')
 const { auth } = require('../utils/middleware')
 const { roasterValidation, validate } = require('../utils/validator')
 
 roastersRouter.get('/', async (request, response) => {
-  const roasters = await Roaster.find({}).populate('coffees')
+  const lastRoasterId = request.query.roasterId
+  const findObj = lastRoasterId ? { _id: {$lt: toMongooseObjectId(lastRoasterId)}} : {}
+  const roasters = await Roaster.find(findObj).sort({ _id: -1 }).limit(10).populate('coffees')
+
   return response.json(roasters.map(roaster => roaster.toJSON()))
 })
 

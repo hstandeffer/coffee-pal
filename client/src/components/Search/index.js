@@ -47,9 +47,7 @@ const SearchPage = () => {
   }
 
   const handleSearchFilterChange = (val) => {
-    if (val !== '') {
-      setFilters({...filters, q: val})
-    }
+    setFilters({...filters, q: val})
   }
 
   // delays the actual api call for specified period of time to reduce calls

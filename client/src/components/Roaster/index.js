@@ -7,7 +7,7 @@ import roasterService from '../../services/roaster'
 
 import { RoasterImageBox } from './style'
 import { LineClampSummary } from '../../shared-style'
-import FullPageSpinner from '../../shared/components/Spinner';
+import FullPageSpinner, { ButtonSpinner } from '../../shared/components/Spinner';
 import Seo from '../../shared/components/Seo';
 
 const useStyles = makeStyles((theme) => ({
@@ -21,16 +21,28 @@ const useStyles = makeStyles((theme) => ({
 
 const Roaster = () => {
   const classes = useStyles();
-  const [roasterList, setRoasterList] = useState()
+  const [roasterList, setRoasterList] = useState([])
   const [loading, setLoading] = useState(true)
+  const [loadMoreLoading, setLoadMoreLoading] = useState(false)
+
+  const getRoasters = async (roasterId = null) => {
+    const roasters = await roasterService.getAll(roasterId)
+    setRoasterList(roasterList.concat(roasters))
+  }
+
+  const handleLoadMoreClick = async () => {
+    setLoadMoreLoading(true)
+    await getRoasters(roasterList[roasterList.length - 1].id)
+    setLoadMoreLoading(false)
+  }
 
   useEffect(() => {
     setLoading(true)
-    const getRoasters = async () => {
+    const getInitialRoasters = async () => {
       const roasters = await roasterService.getAll()
       setRoasterList(roasters)
     }
-    getRoasters()
+    getInitialRoasters()
     setLoading(false)
   }, [])
 
@@ -43,8 +55,12 @@ const Roaster = () => {
       <Seo title={'All Roasters'} />
       <Container maxWidth="sm">
         <Box textAlign="center" pt={3} pb={2}>
-          <Typography gutterBottom variant="h4">All Roasters</Typography>
-          <Button size="small" variant="outlined">Submit New</Button>
+          <Box position="relative">
+            <Typography gutterBottom variant="h4">All Roasters</Typography>
+            <Box position="absolute" top="0" right="10px">
+              <Button size="small" variant="outlined">Submit New</Button>
+            </Box>
+          </Box>
         </Box>
         <Box borderRadius="1rem" px={3} py={1} bgcolor="white">
           {roasterList.map(roaster => (
@@ -70,6 +86,10 @@ const Roaster = () => {
                 </Link>
               </Box>
           ))}
+          { loadMoreLoading 
+            ? <Button fullWidth><ButtonSpinner size="20" /></Button>
+            : <Button fullWidth onClick={handleLoadMoreClick}>Load More</Button>
+          }
         </Box>
       </Container>
     </Box>
