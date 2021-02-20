@@ -53,7 +53,7 @@ const App = () => {
         {/* <PrivateRoute exact path={ROUTES.TASTINGS} component={TastingPage} /> */}
         <PrivateRoute path={ROUTES.PRODUCT_TASTING} component={ProductTastingPage} />
         <PrivateRoute path={ROUTES.ADD_COFFEE} component={AddCoffeePage} />
-        <PrivateRoute path={ROUTES.ADD_ROASTERS} component={AddRoasterPage} />
+        <PrivateRoute path={ROUTES.ADD_ROASTER} component={AddRoasterPage} />
         {/* <Route path={ROUTES.ADMIN} component={AdminPage} /> */}
 
         <PublicRoute restricted={true} exact path={ROUTES.LANDING} component={LandingPage} />
