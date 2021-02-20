@@ -34,10 +34,12 @@ roastersRouter.post('/', auth, upload.single('roasterImage'), roasterValidation(
     website: body.website,
     addedBy: request.user.id,
   }
-  
-  if (request.file && request.file.filename) {
-    request.file.key = request.file.filename
+
+  if (process.env.NODE_ENV === 'production') {
     roasterObj.imagePath = request.file.key
+  }
+  else {
+    roasterObj.imagePath = request.file.filename
   }
 
   const newRoaster = new Roaster(roasterObj)
