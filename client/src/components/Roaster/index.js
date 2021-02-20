@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Button, Container, Link } from '@material-ui/core';
+import { Box, Button, Container, Hidden, Link } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import roasterService from '../../services/roaster'
+import * as ROUTES from '../../constants/routes'
 
 import { RoasterImageBox } from './style'
 import { LineClampSummary } from '../../shared-style'
@@ -58,9 +59,14 @@ const Roaster = () => {
         <Box textAlign="center" pt={3} pb={2}>
           <Box position="relative">
             <Typography gutterBottom variant="h4">All Roasters</Typography>
-            <Box position="absolute" top="0" right="10px">
-              <Button size="small" variant="outlined">Submit New</Button>
-            </Box>
+            <Hidden smDown>
+              <Box position="absolute" top="0" right="10px">
+                <Link to={ROUTES.ADD_ROASTER}><Button variant="outlined">Submit New</Button></Link>
+              </Box>
+            </Hidden>
+            <Hidden mdUp>
+              <Link to={ROUTES.ADD_ROASTER}><Button size="small" variant="outlined">Submit New</Button></Link>
+            </Hidden>
           </Box>
         </Box>
         <Box borderRadius="1rem" px={3} py={1} bgcolor="white">
@@ -87,10 +93,12 @@ const Roaster = () => {
                 </Link>
               </Box>
           ))}
-          { loadMoreLoading 
-            ? <Button fullWidth><ButtonSpinner size="20" /></Button>
-            : <Button fullWidth onClick={handleLoadMoreClick}>Load More</Button>
-          }
+          <Box py={1}>
+            { loadMoreLoading 
+              ? <Button variant="outlined" fullWidth><ButtonSpinner size="20" /></Button>
+              : <Button variant="outlined" fullWidth onClick={handleLoadMoreClick}>Load More</Button>
+            }
+          </Box>
         </Box>
       </Container>
     </Box>

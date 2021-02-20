@@ -36,7 +36,7 @@ coffeesRouter.get('/query', async (request, response) => {
     queryObj = Object.assign({ ...queryObj }, { price: { $gte: filters.priceLow, $lte: filters.priceHigh }} )
   }
 
-  const coffees = await Coffee.find(queryObj).select(['imagePath', 'coffeeName', 'roastType', 'price']).sort({ _id: -1 }).limit(5).populate('roaster')
+  const coffees = await Coffee.find(queryObj).select(['imagePath', 'coffeeName', 'roastType', 'price']).sort({ _id: -1 }).limit(12).populate('roaster')
 
   return response.json(coffees.map(coffee => coffee.toJSON()))
 })

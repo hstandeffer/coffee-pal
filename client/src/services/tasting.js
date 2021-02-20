@@ -1,18 +1,18 @@
-import axios from 'axios'
+import api from '../shared/utils/api'
 const baseUrl = '/api/tasting'
 
 const getAll = async () => {
-  const response = await axios.get(baseUrl)
+  const response = await api.get(baseUrl)
   return response.data
 }
 
 const get = async (tastingId) => {
-  const response = await axios.get(`${baseUrl}/${tastingId}`)
+  const response = await api.get(`${baseUrl}/${tastingId}`)
   return response.data
 }
 
 const add = async (tastingObject) => {
-  const response = await axios.post(baseUrl, tastingObject)
+  const response = await api.post(baseUrl, tastingObject)
   return response.data
 }
 

@@ -14,7 +14,7 @@ import ProfilePage from '../Profile'
 // import AdminPage from '../Admin'
 import ContactPage from '../Contact'
 import BrowsePage from '../Search'
-import TastingPage from '../Tasting'
+// import TastingPage from '../Tasting'
 import ProductTastingPage from '../Tasting/ProductTasting'
 import ProductPage from '../Product'
 import CoffeeEditPage from '../Coffee/Edit'
@@ -50,7 +50,7 @@ const App = () => {
         <PrivateRouteWrapper path={ROUTES.SAVED_COFFEES} component={SavedCoffees} layout={Layout} />
 
         <PrivateRoute exact path={ROUTES.COFFEE_EDIT} component={CoffeeEditPage} />
-        <PrivateRoute exact path={ROUTES.TASTINGS} component={TastingPage} />
+        {/* <PrivateRoute exact path={ROUTES.TASTINGS} component={TastingPage} /> */}
         <PrivateRoute path={ROUTES.PRODUCT_TASTING} component={ProductTastingPage} />
         <PrivateRoute path={ROUTES.ADD_COFFEE} component={AddCoffeePage} />
         <PrivateRoute path={ROUTES.ADD_ROASTERS} component={AddRoasterPage} />

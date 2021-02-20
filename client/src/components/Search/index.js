@@ -91,7 +91,7 @@ const SearchPage = () => {
             <PriceFilter items={items} minPrice={minPrice} maxPrice={maxPrice} setItems={setItems} header={'Price'} priceRange={items.priceRange} handlePriceChange={handlePriceChange} />
           </AlgoliaAllRefinementListsWrapper>
           <TestFooter filtering={filtering}>
-            <ClearFiltersMobile />
+            <ClearFiltersMobile clearFiltersAndRefinements={clearFiltersAndRefinements}/>
             <SaveFiltersMobile onClick={() => setFiltering(false)} />
           </TestFooter>
         </TestDiv>
@@ -145,9 +145,7 @@ const ClearFiltersMobile = ({ clearFiltersAndRefinements }) => (
 
 const SaveFiltersMobile = ({ onClick }) => (
   <MobileFiltersButtonWrapper>
-    <SaveFiltersButtonMobile onClick={onClick}>
-      View coffees
-    </SaveFiltersButtonMobile>
+    <SaveFiltersButtonMobile onClick={onClick}>View coffees</SaveFiltersButtonMobile>
   </MobileFiltersButtonWrapper>
 )
 

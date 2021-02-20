@@ -3,7 +3,7 @@ import { FlexContainer } from './style'
 import axios from 'axios'
 import { CoffeeItem } from '../Product/ProductGrid'
 import FullPageSpinner, { ButtonSpinner } from '../../shared/components/Spinner'
-import { Button, Typography } from '@material-ui/core'
+import { Box, Button, Typography } from '@material-ui/core'
 
 // this is kept separate so when loading, it'll only hide the products being shown, not the entire page
 // might make more sense to rename as Products
@@ -62,10 +62,12 @@ const CoffeeItems = ({ coffees, handleLoadMoreClick, loadMoreLoading }) => (
         <CoffeeItem coffee={coffee} key={coffee.id} />
       ))}
     </FlexContainer>
-    { loadMoreLoading 
-      ? <Button fullWidth><ButtonSpinner size="20" /></Button>
-      : <Button fullWidth onClick={handleLoadMoreClick}>Load More</Button>
-    }
+    <Box py={1}>
+      { loadMoreLoading 
+        ? <Button variant="outlined" fullWidth><ButtonSpinner size="20" /></Button>
+        : <Button variant="outlined" fullWidth onClick={handleLoadMoreClick}>Load More</Button>
+      }
+    </Box>
   </>
 )
 

@@ -49,13 +49,14 @@ const ProfilePage = ({ user }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    const data = new FormData()
-    data.append('userImage', image)
-    data.append('name', name)
-    data.append('favoriteCoffee', favoriteCoffee)
-    data.append('favoriteBrewing', favoriteBrewing)
+    const dataObj = {
+      image,
+      name,
+      favoriteCoffee,
+      favoriteBrewing
+    }
 
-    const response = await userService.update(data).catch((err) => {
+    const response = await userService.update(dataObj).catch((err) => {
       if (err.errors) {
         setError(`${err.errors[0].msg} for ${err.errors[0].param} field.`)
       }
@@ -85,7 +86,7 @@ const ProfilePage = ({ user }) => {
       <Seo title={'Your Profile'} />
       <Typography align='center' variant="h5" component="h2">Your Profile</Typography>
       <Box textAlign="left" mt="1rem">
-        <form onSubmit={handleSubmit}>
+        <form encType="multipart/form-data" onSubmit={handleSubmit}>
           <FormLabel>Avatar</FormLabel>
           <Box mt="5px" mb="1rem" display="flex" flexDirection="row" alignItems="center">
             {user.imagePath ?
