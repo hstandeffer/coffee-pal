@@ -61,11 +61,11 @@ const Roaster = () => {
             <Typography gutterBottom variant="h4">All Roasters</Typography>
             <Hidden smDown>
               <Box position="absolute" top="0" right="10px">
-                <Link to={ROUTES.ADD_ROASTER}><Button variant="outlined">Submit New</Button></Link>
+                <Link component={RouterLink} underline="none" to={ROUTES.ADD_ROASTER}><Button variant="outlined">Submit New</Button></Link>
               </Box>
             </Hidden>
             <Hidden mdUp>
-              <Link to={ROUTES.ADD_ROASTER}><Button size="small" variant="outlined">Submit New</Button></Link>
+              <Link component={RouterLink} underline="none" to={ROUTES.ADD_ROASTER}><Button size="small" variant="outlined">Submit New</Button></Link>
             </Hidden>
           </Box>
         </Box>
