@@ -3,12 +3,12 @@ import styled from 'styled-components'
 import Burger from './Burger'
 import { Link } from 'react-router-dom';
 import * as ROUTES from '../../constants/routes'
+import { Box } from '@material-ui/core';
 
 export const StyledLink = styled(Link)`
   text-decoration: none;
-  color: #36414a;
   font-weight: 600;
-  color: #fff;
+  color: #383838;
 `
 
 const Nav = styled.nav`
@@ -18,13 +18,8 @@ const Nav = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #275e71;
-
-  .logo {
-    padding: 15px 0;
-    color: #fff;
-    font-size: 1.5rem;
-  }
+  background-color: #fff;
+  border-bottom: 1px solid rgb(236, 239, 241);
 
   @media (max-width: 768px) {
     padding: 0 20px;
@@ -34,11 +29,11 @@ const Nav = styled.nav`
 const Navbar = () => {
   return (
     <Nav>
-      <div className="logo">
+      <Box py="15px" px="0" color="#4e4e4e" fontSize="1.5rem">
         <StyledLink to={ROUTES.LANDING}>
           baroasta
         </StyledLink>
-      </div>
+      </Box>
       <Burger />
     </Nav>
   )

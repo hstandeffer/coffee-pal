@@ -80,6 +80,10 @@ coffeesRouter.get('/recent', async (request, response) => {
 
 coffeesRouter.put('/:id', auth, upload.single('coffeeImage'), coffeeValidation(), validate, async (request, response) => {
   const body = request.body
+  const coffee = await Coffee.findById(request.params.id)
+  if (request.user.id !== coffee.addedBy) {
+    return response.status(401).json({ error: 'Unauthorized' })
+  }
   const coffeeObj = {
     brand: body.selectedBrand,
     countries: body.selectedCountry,
@@ -99,14 +103,14 @@ coffeesRouter.put('/:id', auth, upload.single('coffeeImage'), coffeeValidation()
     roasterObj.imagePath = request.file.key
   }
 
-  const coffee = await Coffee.findByIdAndUpdate(request.params.id, coffeeObj, { new: true })
-  return response.status(204).json(coffee.toJSON())
+  const updatedCoffee = await Coffee.findByIdAndUpdate(request.params.id, coffeeObj, { new: true })
+  return response.status(204).json(updatedCoffee.toJSON())
 })
 
 coffeesRouter.delete('/:id', auth, async (request, response) => {
   const coffee = await Coffee.findById(request.params.id)
   if (coffee.addedBy === request.user.id) {
-    coffee.remove()
+    await coffee.remove()
     return response.status(204).json({ msg: 'Coffee deleted successfully' })
   }
   else {

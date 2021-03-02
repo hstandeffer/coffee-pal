@@ -82,7 +82,7 @@ const Product = () => {
             <Hidden xsDown>
               {coffee.coffeeName && <Typography variant="h4" component="p" align="left" m={0}>{coffee.coffeeName}</Typography>}
             </Hidden>
-            {coffee.brand && <Typography color="textPrimary" variant="h6" component="p" gutterBottom>{coffee.brand}</Typography>}
+            {coffee.roaster && <Typography color="textPrimary" variant="h6" component="p" gutterBottom>{coffee.roaster.name}</Typography>}
             {coffee.price && <Typography gutterBottom component="p">${coffee.price}</Typography>}
             {coffee.roastType && <Typography gutterBottom component="p" style={{textTransform: 'capitalize'}}>{coffee.roastType} Roast</Typography>}
             {coffee.countries.length > 0 && <Typography gutterBottom component="p"><strong>Countries: </strong>{coffee.countries.join(', ')}</Typography>}

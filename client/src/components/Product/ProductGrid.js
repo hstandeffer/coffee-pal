@@ -11,7 +11,7 @@ import * as ROUTES from '../../constants/routes'
 import CoffeeBeanSvg from '../../shared/components/CoffeeBeanSvg'
 import { assetUrl } from '../../shared/utils/url'
 
-const ProductGrid = ({ coffees, route }) => {
+const ProductGrid = ({ coffees, route, view='saved' }) => {
   return (
     <ProductGridDiv>
       <ProductWrapper>
@@ -19,7 +19,10 @@ const ProductGrid = ({ coffees, route }) => {
           <FlexContainer>
           {coffees.length === 0 ?
             <Box width="100%" py={2} align="center">
-              <Typography variant="body1">No saved coffees, try adding one from the <Link to={ROUTES.BROWSE}>browse page</Link>!</Typography>
+              {view === 'roaster' ? 
+                <Typography variant="body1">No saved coffees, try adding one from the <Link to={ROUTES.BROWSE}>browse page</Link>!</Typography> :
+                <Typography variant="body1">No coffees added, try <Link to={ROUTES.ADD_COFFEE}>adding one</Link>!</Typography>
+              }
             </Box> :
             coffees.map(coffee => (
               <CoffeeItem key={coffee.id} coffee={coffee} route={route} />

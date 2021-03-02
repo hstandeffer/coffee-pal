@@ -13,4 +13,4 @@ export const objectToQueryString = (obj, options = {}) =>
   })
 
 export const assetUrl = process.env.NODE_ENV === 'production' ? 'https://baroasta.s3.amazonaws.com' : 'http://localhost:3000/uploads'
-export const apiUrl = process.env.NODE_ENV === 'production' ? 'https://guarded-oasis-21130.herokuapp.com' : 'http://localhost:3000'
+export const apiUrl = process.env.NODE_ENV === 'production' ? 'https://baroasta.herokuapp.com' : 'http://localhost:3000'

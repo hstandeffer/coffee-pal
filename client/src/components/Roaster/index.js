@@ -53,7 +53,7 @@ const Roaster = () => {
   }
 
   return (
-    <Box py={3} bgcolor="rgb(242, 242, 242)">
+    <Box py={3}>
       <Seo title={'All Roasters'} />
       <Container maxWidth="sm">
         <Box textAlign="center" pt={3} pb={2}>

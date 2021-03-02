@@ -2,14 +2,10 @@ import styled from 'styled-components'
 
 export const LandingBanner = styled.div`
   width: 100%;
-  padding: 2.5em 1em 5em;
+  padding: 7.5em 1em;
   text-align: center;
-  color: white;
-  background: #275e71;
-
-  @media (max-width: 600px) {
-    padding: 5em 30px;
-  }
+  color: black;
+  background: linear-gradient(308deg,rgba(127,150,195,1) 0%,rgb(97 179 194 / 39%) 41%,rgba(5,88,138,0.3592787456779587) 100%)
 `
 
 export const StyledButton = styled.button`

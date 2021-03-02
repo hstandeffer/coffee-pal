@@ -93,7 +93,7 @@ const Roaster = () => {
       </div>
       <Container className={classes.cardGrid} maxWidth="md">
         {/* End hero unit */}
-        <ProductGrid coffees={roaster.coffees} showEdit={false} route={'coffees'} heading={`${roaster.name}'s coffees`}/>
+        <ProductGrid coffees={roaster.coffees} route={'coffees'} view={'roaster'}/>
       </Container>
     </>
   )
