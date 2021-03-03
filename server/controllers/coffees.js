@@ -7,10 +7,10 @@ const { upload } = require('../utils/multer')
 const { auth } = require('../utils/middleware')
 const { coffeeValidation, validate } = require('../utils/validator')
 
-coffeesRouter.get('/', async (request, response) => {
-  const coffees = await Coffee.find({}).populate('roaster')
-  return response.json(coffees.map(coffee => coffee.toJSON()))
-})
+// coffeesRouter.get('/', async (request, response) => {
+//   const coffees = await Coffee.find({}).populate('roaster')
+//   return response.json(coffees.map(coffee => coffee.toJSON()))
+// })
 
 coffeesRouter.get('/query', async (request, response) => {
   const filters = JSON.parse(request.query.filters)
@@ -36,7 +36,12 @@ coffeesRouter.get('/query', async (request, response) => {
     queryObj = Object.assign({ ...queryObj }, { price: { $gte: filters.priceLow, $lte: filters.priceHigh }} )
   }
 
-  const coffees = await Coffee.find(queryObj).select(['imagePath', 'coffeeName', 'roastType', 'price']).sort({ _id: -1 }).limit(12).populate('roaster')
+  const coffees = await Coffee
+    .find(queryObj)
+    .select(['imagePath', 'coffeeName', 'roastType', 'price'])
+    .sort({ _id: -1 })
+    .limit(12)
+    .populate('roaster', { name: 1, _id: 1, imagePath: 1 })
 
   return response.json(coffees.map(coffee => coffee.toJSON()))
 })
@@ -76,7 +81,7 @@ coffeesRouter.post('/', auth, upload.single('coffeeImage'), coffeeValidation(), 
 })
 
 coffeesRouter.get('/recent', async (request, response) => {
-  const coffees = await Coffee.find().limit(4).populate('roaster')
+  const coffees = await Coffee.find().sort({ _id: -1 }).limit(4).populate('roaster', { name: 1, _id: 1, imagePath: 1 })
   return response.json(coffees.map(coffee => coffee.toJSON()))
 })
 

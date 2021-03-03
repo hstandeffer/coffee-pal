@@ -25,7 +25,7 @@ const add = async (roasterObject) => {
 }
 
 const getRecent = async () => {
-  const response = await api.get(`${baseUrl}/recent-roasters`)
+  const response = await api.get(`${baseUrl}/recent`)
   return response
 }
 

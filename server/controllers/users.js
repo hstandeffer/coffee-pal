@@ -35,21 +35,6 @@ usersRouter.post('/', signUpValidation(), validate, async (request, response) =>
   catch (err) {
     return response.json({ error: 'User already exists' })
   }
-
-  // bcrypt.genSalt(10, (err, salt) => {
-  //   bcrypt.hash(newUser.password, salt, async (err, hash) => {
-  //     if (err) {
-  //       throw err
-  //     }
-  //     newUser.password = hash
-  //     const user = await newUser.save()
-  //       const token = signToken({ id: user._id })
-  //       response.json({
-  //         token,
-  //         user: { id: user.id, name: user.username, email: user.email }
-  //       })
-  //   })
-  // })
 })
 
 usersRouter.post('/save-coffee', auth, async (request, response) => {

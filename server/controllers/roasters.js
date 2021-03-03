@@ -9,7 +9,7 @@ const { roasterValidation, validate } = require('../utils/validator')
 roastersRouter.get('/', async (request, response) => {
   const lastRoasterId = request.query.roasterId
   const findObj = lastRoasterId ? { _id: {$lt: toMongooseObjectId(lastRoasterId)}} : {}
-  const roasters = await Roaster.find(findObj).sort({ _id: -1 }).limit(10).populate('coffees')
+  const roasters = await Roaster.find(findObj).select('-coffees -address -updatedAt').sort({ _id: -1 }).limit(10)
 
   return response.json(roasters.map(roaster => roaster.toJSON()))
 })
@@ -48,8 +48,8 @@ roastersRouter.post('/', auth, upload.single('roasterImage'), roasterValidation(
   return response.json(roaster.toJSON())
 })
 
-roastersRouter.get('/recent-roasters', async (request, response) => {
-  const roasters = await Roaster.find().limit(4)
+roastersRouter.get('/recent', async (request, response) => {
+  const roasters = await Roaster.find().sort({ _id: -1 }).limit(4)
   return response.json(roasters.map(roaster => roaster.toJSON()))
 })
 
@@ -57,6 +57,7 @@ roastersRouter.get('/:id', async (request, response) => {
   const roaster = await Roaster.findById(request.params.id).populate({
     path: 'coffees',
     model: 'Coffee',
+    select: 'coffeeName imagePath roastType price',
     populate: {
       path: 'roaster',
       model: 'Roaster',

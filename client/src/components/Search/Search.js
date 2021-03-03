@@ -65,7 +65,7 @@ const CoffeeItems = ({ coffees, handleLoadMoreClick, loadMoreLoading }) => (
     <Box py={1}>
       { loadMoreLoading 
         ? <Button variant="outlined" fullWidth><ButtonSpinner size="20" /></Button>
-        : <Button variant="outlined" fullWidth onClick={handleLoadMoreClick}>Load More</Button>
+        : <Box mx={1}><Button variant="outlined" fullWidth onClick={handleLoadMoreClick}>Load More</Button></Box>
       }
     </Box>
   </>
