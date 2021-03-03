@@ -7,7 +7,7 @@ import AuthUserContext from '../Session/context'
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-  color: ${({ open }) => open ? '#4A4A4A' : '#fff' };
+  color: ${({ open }) => open ? '#4A4A4A' : '#383838' };
   font-weight: 600;
 `
 

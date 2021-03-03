@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import * as ROUTES from '../../constants/routes'
-import { Input, StyledDiv, StyledButton, StyledLink, Wrapper, StyledH1 } from '../../shared-style'
+import { Input, StyledDiv, StyledButton, StyledLink, Wrapper } from '../../shared-style'
 
 import Toast from '../../shared/components/Toast'
 import Seo from '../../shared/components/Seo'
@@ -41,7 +41,7 @@ const PasswordForget = () => {
     <Wrapper>
       <Seo title={'Forgot Password'} />
       <StyledDiv>
-        <StyledH1>Forgot your password?</StyledH1>
+        <Typography gutterBottom paragraph variant="h4" component="h2">Forgot your password?</Typography>
         <div>
           <form onSubmit={handleSubmit}>
             <Input

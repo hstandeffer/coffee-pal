@@ -47,11 +47,11 @@ const update = async (coffeeObject, coffeeId) => {
   data.append('fairTrade', coffeeObject.fairTrade) 
   data.append('organic', coffeeObject.organic) 
   data.append('shadeGrown', coffeeObject.shadeGrown) 
-  data.append('url', coffeeObject.url) 
+  data.append('url', coffeeObject.url)
   data.append('price', coffeeObject.price) 
   data.append('roastType', coffeeObject.roastType)
 
-  const response = await api.put(`${baseUrl}/${coffeeId}`, coffeeObject)
+  const response = await api.put(`${baseUrl}/${coffeeId}`, data)
   return response
 }
 

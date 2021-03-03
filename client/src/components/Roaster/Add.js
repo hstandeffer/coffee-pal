@@ -66,7 +66,7 @@ const AddRoaster = () => {
           <FormLabel required htmlFor="name">Roaster Name</FormLabel>
           <Input id="name" name="name" value={name} onChange={({ target }) => setName(target.value)} />
 
-          <FormLabel htmlFor="summary">Roaster Summary</FormLabel>
+          <FormLabel required htmlFor="summary">Roaster Summary</FormLabel>
           <Textarea style={{ margin: '5px auto 15px', fontSize: 'inherit'}} id="summary" name="summary" value={summary} onChange={({ target }) => setSummary(target.value)} />
 
           <FormLabel required htmlFor="website">Website URL</FormLabel>

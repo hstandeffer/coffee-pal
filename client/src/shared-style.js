@@ -7,7 +7,8 @@ export const StyledH1 = styled.h1`
 
 export const Wrapper = styled.div`
   width: 100%;
-	padding: 2.5em;
+	padding: 2.5em 0;
+	background: #f3f3f6
 
 	@media (max-width: 600px) {
 		padding: 0;
@@ -22,6 +23,7 @@ export const StyledDiv = styled.div`
 	background: #fff;
 	border-radius: 4px;
 	border: 1px solid #d9e7ea;
+	border-top: 6px solid #6089a1;
 
 	@media (max-width: 600px) {
 		padding: 24px;

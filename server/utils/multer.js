@@ -13,7 +13,7 @@ var storage = multer.diskStorage({
   }
 })
 
-if (config.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
   const s3 = new aws.S3()
 
   aws.config.update({
@@ -28,7 +28,7 @@ if (config.NODE_ENV === 'production') {
     bucket: 'baroasta',
     key: function (req, file, cb) {
       let newFileName = Date.now() + '-' + file.originalname
-      let fullPath = 'images/' + newFileName
+      let fullPath = newFileName
       cb(null, fullPath)
     }
   })

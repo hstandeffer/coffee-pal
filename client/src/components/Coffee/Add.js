@@ -165,7 +165,7 @@ const Add = () => {
           </Typography>
 
           <FormLabel required htmlFor="price">Price ($)</FormLabel>
-          <StyledInput id="price" name="price" type="number" value={price} onChange={({ target }) => setPrice(target.value)} />
+          <StyledInput id="price" name="price" value={price} onChange={({ target }) => setPrice(target.value)} />
 
           <FormLabel required htmlFor="roastType">Roast Type</FormLabel>
           <Select

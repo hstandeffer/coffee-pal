@@ -3,7 +3,6 @@ const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const config = require('../utils/config')
 const { transporter } = require('../utils/mail')
-const jwt = require('jsonwebtoken')
 const cryptoRandomString = require('crypto-random-string')
 const { auth } = require('../utils/middleware')
 const { upload } = require('../utils/multer')
@@ -16,24 +15,41 @@ usersRouter.post('/', signUpValidation(), validate, async (request, response) =>
   const user = await User.findOne({ email })
   
   if (user) {
-    response.status(400).json({ error: 'User already exists' })
+    return response.status(400).json({ error: 'User already exists' })
   }
 
-  const newUser = new User({ username, email, password })  
+  const saltRounds = 10
+  const passwordHash = await bcrypt.hash(password, saltRounds)
 
-  bcrypt.genSalt(10, (err, salt) => {
-    bcrypt.hash(newUser.password, salt, (err, hash) => {
-      if (err) throw err
-      newUser.password = hash
-      newUser.save().then(user => {
-        const token = signToken({ id: user._id })
-        response.json({
-          token,
-          user: { id: user.id, name: user.username, email: user.email }
-        })
-      })
+  const newUser = new User({ username, email, password: passwordHash })
+
+  try {
+    const savedUser = await newUser.save()
+    const token = signToken({ id: savedUser._id })
+  
+    return response.json({
+      token,
+      user: { id: savedUser.id, name: savedUser.savedUsername, email: savedUser.email }
     })
-  })
+  }
+  catch (err) {
+    return response.json({ error: 'User already exists' })
+  }
+
+  // bcrypt.genSalt(10, (err, salt) => {
+  //   bcrypt.hash(newUser.password, salt, async (err, hash) => {
+  //     if (err) {
+  //       throw err
+  //     }
+  //     newUser.password = hash
+  //     const user = await newUser.save()
+  //       const token = signToken({ id: user._id })
+  //       response.json({
+  //         token,
+  //         user: { id: user.id, name: user.username, email: user.email }
+  //       })
+  //   })
+  // })
 })
 
 usersRouter.post('/save-coffee', auth, async (request, response) => {

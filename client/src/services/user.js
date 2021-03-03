@@ -38,7 +38,12 @@ const resetPassword = async (token) => {
 }
 
 const update = async (dataObj) => {
-  const response = await api.put(`${baseUrl}/update`, dataObj)
+  const data = new FormData()
+  data.append('userImage', dataObj.image)
+  data.append('name', dataObj.name)
+  data.append('favoriteCoffee', dataObj.favoriteCoffee)
+  data.append('favoriteBrewing', dataObj.favoriteBrewing)
+  const response = await api.put(`${baseUrl}/update`, data)
   return response
 }
 
