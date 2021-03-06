@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { useParams } from "react-router-dom"
+import { useParams, Link as RouterLink } from "react-router-dom"
 import coffeeService from '../../services/coffee'
 import userService from '../../services/user'
 
@@ -8,19 +8,30 @@ import FullPageSpinner from '../../shared/components/Spinner'
 import Dialog from '../../shared/components/Dialog'
 import Seo from '../../shared/components/Seo'
 import AuthUserContext from '../Session/context'
+import * as ROUTES from '../../constants/routes'
 
 import StarIcon from '@material-ui/icons/Star'
 import LanguageIcon from '@material-ui/icons/Language'
-import { Grid, Hidden, Button, Typography, Box, Container } from '@material-ui/core'
+import { Grid, Hidden, Button, Typography, Box, Container, Link, makeStyles } from '@material-ui/core'
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert from '@material-ui/lab/Alert'
 import { assetUrl } from '../../shared/utils/url'
+import { ReactComponent as Globe } from '../../img/globe.svg'
+import { ReactComponent as Check } from '../../img/check.svg'
+import { ReactComponent as Heat } from '../../img/heat.svg'
 
 const Alert = props => {
   return <MuiAlert elevation={6} variant="filled" {...props} />
 }
 
+const useStyles = makeStyles((theme) => ({
+  iconLabel: {
+    marginLeft: 4,
+  },
+}))
+
 const Product = () => {
+  const classes = useStyles()
   let { id } = useParams()
   const [coffee, setCoffee] = useState()
   const [loading, setLoading] = useState(false)
@@ -66,7 +77,7 @@ const Product = () => {
         <Grid container justify="flex-start" spacing={4}>
           <Grid item xs={12} sm={6} md={4}>
             <Hidden smUp>
-              <Typography variant="h4" component="p" align="center" gutterBottom m={0}>{coffee.coffeeName}</Typography>
+              <Typography style={{ fontWeight: 600 }} variant="h5" component="h1" align="center" gutterBottom m={0}>{coffee.coffeeName}</Typography>
             </Hidden>
             <ImageContainer>
               <ImageContentContainer>
@@ -80,17 +91,70 @@ const Product = () => {
           </Grid>
           <Grid item xs={12} sm={6} md={8}>
             <Hidden xsDown>
-              {coffee.coffeeName && <Typography variant="h4" component="p" align="left" m={0}>{coffee.coffeeName}</Typography>}
+              {coffee.coffeeName && <Typography style={{ fontWeight: 600 }} variant="h5" component="h1" align="left" m={0}>{coffee.coffeeName}</Typography>}
             </Hidden>
-            {coffee.roaster && <Typography color="textPrimary" variant="h6" component="p" gutterBottom>{coffee.roaster.name}</Typography>}
-            {coffee.price && <Typography gutterBottom component="p">${coffee.price}</Typography>}
-            {coffee.roastType && <Typography gutterBottom component="p" style={{textTransform: 'capitalize'}}>{coffee.roastType} Roast</Typography>}
-            {coffee.countries.length > 0 && <Typography gutterBottom component="p"><strong>Countries: </strong>{coffee.countries.join(', ')}</Typography>}
-            {coffee.fairTrade && <Typography gutterBottom component="p">Fair Trade</Typography>}
-            {coffee.organic && <Typography gutterBottom component="p">Organic</Typography>}
-            {coffee.shadeGrown && <Typography gutterBottom component="p">Shade Grown</Typography>}
-            {coffee.singleOrigin && <Typography gutterBottom component="p">Single Origin</Typography>}
-            {coffee.blend && <Typography gutterBottom component="p"></Typography>}
+            {coffee.roaster && 
+              <Link component={RouterLink} to={`${ROUTES.ROASTERS}/${coffee.roaster.id}`}>
+                <Typography color="textPrimary" variant="body1" component="p" gutterBottom>{coffee.roaster.name}</Typography>
+              </Link>
+            }
+            {coffee.price && 
+              <Box my={1}>
+                <Typography variant="h4" component="p">${coffee.price}</Typography>
+              </Box>
+            }
+            {coffee.roastType && 
+              <Box my={1} display="flex" alignItems="center">
+                <Heat />
+                <Typography className={classes.iconLabel} component="p">
+                  <span style={{ textTransform: `capitalize` }}>{`${coffee.roastType} Roast`}</span>
+                </Typography>
+              </Box>
+            }
+            {coffee.countries.length > 0 && 
+                <Box my={1} display="flex" alignItems="center">
+                  <Globe />
+                  <Typography className={classes.iconLabel} component="p">
+                    <span>{coffee.countries.join(', ')}</span>
+                  </Typography>
+                </Box>
+            }
+            {coffee.fairTrade && 
+              <Box my={1} display="flex" alignItems="center">
+                <Check />
+                <Typography className={classes.iconLabel} component="p">
+                  <span>Fair trade</span>
+                </Typography>
+              </Box>
+            }
+            
+            {coffee.organic && 
+              <Box my={1} display="flex" alignItems="center">
+                <Check />
+                <Typography className={classes.iconLabel} component="p">
+                  <span>Organic</span>
+                </Typography>
+              </Box>
+            }
+
+            {coffee.shadeGrown && 
+              <Box my={1} display="flex" alignItems="center">
+                <Check />
+                <Typography className={classes.iconLabel} component="p">
+                  <span>Shade grown</span>
+                </Typography>
+              </Box>
+            }
+
+            {coffee.singleOrigin && 
+              <Box my={1} display="flex" alignItems="center">
+                <Check />
+                <Typography className={classes.iconLabel} component="p">
+                  <span>Single origin</span>
+                </Typography>
+              </Box>
+            }
+
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
               <Alert onClose={handleClose} severity="success">
                 {coffee.coffeeName} has been added to your list!

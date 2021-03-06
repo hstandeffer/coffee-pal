@@ -75,7 +75,9 @@ const Contact = () => {
             <Box className={`${classes.halfLg} ${classes.firstBox}`}>
               <Container>
                 <Typography variant="h5" component="h2" gutterBottom={true}>Questions or concerns?</Typography>
-                <Typography variant="subtitle1" color="textSecondary" paragraph={true}>Fill out the contact form or email the address below with any suggestions or questions, and we'll get back to you shortly.</Typography>
+                <Typography variant="subtitle1" color="textSecondary" paragraph={true}>
+                  Fill out the contact form or email the address below with any suggestions or questions, and we'll get back to you shortly.
+                </Typography>
                 <Box mt={4}>
                   <Box display="flex">
                     <EmailIcon className={classes.icon} />

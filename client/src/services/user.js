@@ -39,7 +39,6 @@ const resetPassword = async (token) => {
 
 const update = async (dataObj) => {
   const data = new FormData()
-  data.append('userImage', dataObj.image)
   data.append('name', dataObj.name)
   data.append('favoriteCoffee', dataObj.favoriteCoffee)
   data.append('favoriteBrewing', dataObj.favoriteBrewing)

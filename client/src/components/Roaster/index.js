@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Button, Container, Hidden, Link } from '@material-ui/core';
+import { Box, Button, Container, Link } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import roasterService from '../../services/roaster'
-import * as ROUTES from '../../constants/routes'
 
 import { RoasterImageBox } from './style'
 import { LineClampSummary } from '../../shared-style'
@@ -43,9 +42,9 @@ const Roaster = () => {
     const getInitialRoasters = async () => {
       const roasters = await roasterService.getAll()
       setRoasterList(roasters)
+      setLoading(false)
     }
     getInitialRoasters()
-    setLoading(false)
   }, [])
 
   if (loading || !roasterList) {
@@ -53,20 +52,15 @@ const Roaster = () => {
   }
 
   return (
-    <Box py={3}>
+    <Box bgcolor="#f3f3f6" py={3}>
       <Seo title={'All Roasters'} />
       <Container maxWidth="sm">
         <Box textAlign="center" pt={3} pb={2}>
           <Box position="relative">
             <Typography gutterBottom variant="h4">All Roasters</Typography>
-            <Hidden smDown>
-              <Box position="absolute" top="0" right="10px">
-                <Link component={RouterLink} underline="none" to={ROUTES.ADD_ROASTER}><Button variant="outlined">Submit New</Button></Link>
-              </Box>
-            </Hidden>
-            <Hidden mdUp>
-              <Link component={RouterLink} underline="none" to={ROUTES.ADD_ROASTER}><Button size="small" variant="outlined">Submit New</Button></Link>
-            </Hidden>
+            <Typography color="textSecondary" variant="body1" component="p">Don't see a roaster? 
+              <Link component={RouterLink} to={'/contact'}> Suggest one to be added.</Link>
+            </Typography>
           </Box>
         </Box>
         <Box borderRadius="1rem" px={3} py={1} bgcolor="white">

@@ -5,6 +5,7 @@ import FullPageSpinner from '../../shared/components/Spinner';
 import { StyledButton } from '../../shared-style'
 import { StyledInput, StyledTextField } from './style'
 import { assetUrl } from '../../shared/utils/url'
+import { useHistory } from 'react-router-dom'
 
 import { Box, Typography, FormLabel, Select, Link, Checkbox } from '@material-ui/core'
 import Input from '@material-ui/core/Input'
@@ -18,6 +19,7 @@ import Alert from '@material-ui/lab/Alert'
 
 import countryList from '../../constants/countries'
 
+import userService from '../../services/user'
 import roasterService from '../../services/roaster'
 import coffeeService from '../../services/coffee'
 import Seo from '../../shared/components/Seo';
@@ -58,6 +60,7 @@ const MenuProps = {
 const Edit = () => {
   const classes = useStyles()
   let { id } = useParams()
+  const history = useHistory()
 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState()
@@ -76,24 +79,37 @@ const Edit = () => {
   const [roastType, setRoastType] = useState('')
 
   useEffect(() => {
-    setLoading(true)
-    roasterService.getList().then(roasters => {
-      setBrands(roasters)
-    })
-    coffeeService.get(id).then(coffee => {
-      setCoffeeName(coffee.coffeeName)
-      setSelectedBrand(coffee.roaster)
-      setSelectedCountry(coffee.countries)
-      setFairTrade(coffee.fairTrade)
-      setOrganic(coffee.organic)
-      setShadeGrown(coffee.shadeGrown)
-      setUrl(coffee.url)
-      setImage(coffee.imagePath)
-      setPrice(coffee.price)
-      setRoastType(coffee.roastType)
-    })
-    setLoading(false)
-  }, [id])
+    let isMounted = true
+    if (isMounted) {
+      setLoading(true)
+      const getInfo = async () => {
+        const response = await userService.getCurrentUser()
+        if (response.email !== 'baroastacoffee@gmail.com') {
+          history.replace('/')
+          return
+        }
+        
+        const roasterList = await roasterService.getList()
+        setBrands(roasterList)
+        
+        const coffee = await coffeeService.get(id)
+        setCoffeeName(coffee.coffeeName)
+        setSelectedBrand(coffee.roaster)
+        setSelectedCountry(coffee.countries)
+        setFairTrade(coffee.fairTrade)
+        setOrganic(coffee.organic)
+        setShadeGrown(coffee.shadeGrown)
+        setUrl(coffee.url)
+        setImage(coffee.imagePath)
+        setPrice(coffee.price)
+        setRoastType(coffee.roastType)
+        
+        setLoading(false)
+      }
+      getInfo()
+    }  
+    return () => { isMounted = false }
+  }, [id, history])
 
   const handleUpload = async (event) => {
     setImage(event.target.files[0])

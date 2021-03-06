@@ -93,6 +93,9 @@ const Roaster = () => {
       </div>
       <Container className={classes.cardGrid} maxWidth="md">
         {/* End hero unit */}
+        <Box textAlign="center" mb={2}>
+          <Typography variant="h4">All Coffees</Typography>
+        </Box>
         <ProductGrid coffees={roaster.coffees} route={'coffees'} view={'roaster'}/>
       </Container>
     </>

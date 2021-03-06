@@ -26,7 +26,6 @@ const withAuthentication = Component => props => {
           login(userObj)
         })
         .catch(err => {
-          console.log(err)
           logout()
         })
         .finally(() => {

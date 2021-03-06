@@ -45,7 +45,7 @@ const ProfilePage = ({ children, heading }) => {
   }
 
   return (
-    <Box pb={"5rem"} bgcolor="rgb(242 242 242)">
+    <Box pb={"5rem"} bgcolor="#f3f3f6">
       <Container maxWidth="md">
         <Box py={5}>
           <Hidden mdUp>

@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import * as ROUTES from '../../constants/routes'
-import { Input, StyledDiv, StyledButton, StyledLink, Wrapper } from '../../shared-style'
+import { InputWithLabelAbove, StyledDiv, StyledButton, StyledLink, Wrapper } from '../../shared-style'
 
 import Toast from '../../shared/components/Toast'
 import Seo from '../../shared/components/Seo'
 
 import Box from '@material-ui/core/Box'
-import { Typography } from '@material-ui/core'
+import { FormLabel, Typography } from '@material-ui/core'
 
 import userService from '../../services/user'
 import { SignInLink } from '../SignIn'
@@ -41,15 +41,16 @@ const PasswordForget = () => {
     <Wrapper>
       <Seo title={'Forgot Password'} />
       <StyledDiv>
-        <Typography gutterBottom paragraph variant="h4" component="h2">Forgot your password?</Typography>
-        <div>
+        <Typography gutterBottom paragraph variant="h4" component="h2">Forgot password?</Typography>
+        <Box textAlign="left">
           <form onSubmit={handleSubmit}>
-            <Input
+            <FormLabel required htmlFor="email">Email</FormLabel>
+            <InputWithLabelAbove
               name="email"
               value={email}
               onChange={({ target }) => setEmail(target.value)}
               type="email"
-              placeholder="Email Address"
+              tabIndex="1"
             />
             <StyledButton disabled={email === ''} type="submit">
               Reset Password
@@ -60,11 +61,11 @@ const PasswordForget = () => {
               <Alert severity="error">{error}</Alert>
             </Box>
           }
-          <Box mt={2}>
+          <Box textAlign="center" mt={2}>
             <SignUpLink />
             <SignInLink />
           </Box>
-        </div>
+        </Box>
       </StyledDiv>
       <Toast open={open} setOpen={setOpen} severity="success" message="If an account exists, a password reset link will be sent to the submitted email." />
     </Wrapper>

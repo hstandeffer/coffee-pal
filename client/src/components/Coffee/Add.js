@@ -4,9 +4,11 @@ import FullPageSpinner from '../../shared/components/Spinner'
 import Toast from '../../shared/components/Toast'
 import { StyledButton } from '../../shared-style'
 import { StyledInput, StyledTextField } from './style'
+import { useHistory } from 'react-router-dom'
 
 import roasterService from '../../services/roaster'
 import coffeeService from '../../services/coffee'
+import userService from '../../services/user'
 
 import countryList from '../../constants/countries'
 
@@ -55,10 +57,11 @@ const MenuProps = {
 
 const Add = () => {
   const classes = useStyles()
-
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState()
   const [open, setOpen] = useState(false)
+
+  const history = useHistory()
 
   const [coffeeName, setCoffeeName] = useState('')
   const [selectedBrand, setSelectedBrand] = useState(null)
@@ -75,12 +78,24 @@ const Add = () => {
   const ref = React.useRef()
 
   useEffect(() => {
-    setLoading(true)
-    roasterService.getList().then(roasters => {
-      setBrands(roasters)
-    })
-    setLoading(false)
-  }, [])
+    let isMounted = true
+    if (isMounted) {
+      setLoading(true)
+      const loadRoasters = async () => {
+        const response = await userService.getCurrentUser()
+        if (response.email !== 'baroastacoffee@gmail.com') {
+          history.replace('/')
+          return
+        }
+
+        const roasterList = await roasterService.getList()
+        setBrands(roasterList)
+        setLoading(false)
+      }
+      loadRoasters()
+    }  
+    return () => { isMounted = false }
+  }, [history])
 
   const handleUpload = async (event) => {
     setImage(event.target.files[0])
