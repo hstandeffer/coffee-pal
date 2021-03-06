@@ -9,7 +9,7 @@ export const ProductLink = styled(Link)`
 
 export const BrowseWrapper = styled.div`
   width: 100%;
-	padding: 1em 2.5em;
+	padding: 1.5em 2.5em;
   display: flex;
   flex-wrap: wrap;
 

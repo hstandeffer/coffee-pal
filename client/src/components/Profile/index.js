@@ -1,6 +1,5 @@
 import React, { useState, useEffect} from 'react'
-import { Box, Typography, FormLabel, Button, MenuItem, Select } from '@material-ui/core'
-import Avatar from '@material-ui/core/Avatar'
+import { Box, Typography, FormLabel, MenuItem, Select } from '@material-ui/core'
 import { InputWithLabelAbove, StyledButton } from '../../shared-style'
 import FullPageSpinner from '../../shared/components/Spinner'
 import { makeStyles } from '@material-ui/styles'
@@ -8,7 +7,6 @@ import userService from '../../services/user'
 import Alert from '@material-ui/lab/Alert'
 import Toast from '../../shared/components/Toast'
 import Seo from '../../shared/components/Seo'
-import { assetUrl } from '../../shared/utils/url'
 
 const useStyles = makeStyles(() => ({
   outlined: {
@@ -24,14 +22,9 @@ const useStyles = makeStyles(() => ({
 }))
 
 const ProfilePage = ({ user }) => {
-  const [image, setImage] = useState()
-  const [imagePath, setImagePath] = useState('')
   const [name, setName] = useState('')
   const [favoriteCoffee, setFavoriteCoffee] = useState('')
   const [favoriteBrewing, setFavoriteBrewing] = useState('')
-
-
-  const ref = React.useRef()
   
   const [loading, setLoading] = useState(true)
   const [open, setOpen] = useState(false)
@@ -41,7 +34,6 @@ const ProfilePage = ({ user }) => {
   useEffect(() => {
     setLoading(true)
     setName(user.name || '')
-    setImagePath(user.imagePath || null)
     setFavoriteCoffee(user.favorite_coffee_type || '')
     setFavoriteBrewing(user.favorite_brewing_method || '')
     setLoading(false)
@@ -50,7 +42,6 @@ const ProfilePage = ({ user }) => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     const dataObj = {
-      image,
       name,
       favoriteCoffee,
       favoriteBrewing
@@ -70,11 +61,6 @@ const ProfilePage = ({ user }) => {
     }
     
     setOpen(true)
-    ref.current.value = ''
-  }
-
-  const handleUpload = async event => {
-    setImage(event.target.files[0])
   }
 
   if (loading) {
@@ -87,18 +73,6 @@ const ProfilePage = ({ user }) => {
       <Typography align='center' variant="h5" component="h2">Your Profile</Typography>
       <Box textAlign="left" mt="1rem">
         <form encType="multipart/form-data" onSubmit={handleSubmit}>
-          <FormLabel>Avatar</FormLabel>
-          <Box mt="5px" mb="1rem" display="flex" flexDirection="row" alignItems="center">
-            {user.imagePath ?
-              <Avatar style={{ marginRight: '15px' }} src={`${assetUrl}/${imagePath}`} /> :
-              <Avatar style={{ marginRight: '15px' }}>{user.username.charAt(0)}</Avatar> 
-            }
-            <Typography style={{ fontWeight: 500 }}>Change Avatar Picture</Typography>
-            <Button style={{ marginLeft: '15px' }} variant="outlined">
-              <input ref={ref} onChange={handleUpload} style={{ inset: '0px', width: '100%', cursor: 'pointer', position: 'absolute', opacity: 0 }} type="file" />Upload
-            </Button>
-          </Box>
-
           <FormLabel htmlFor="name">Name</FormLabel>
           <InputWithLabelAbove name="name" value={name} onChange={({ target }) => setName(target.value)}/>
 

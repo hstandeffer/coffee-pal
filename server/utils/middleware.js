@@ -1,5 +1,6 @@
 const config = require('../utils/config')
 const jwt = require('jsonwebtoken')
+const User = require('../models/user')
 
 const getAuthTokenFromRequest = request => {
   const header = request.get('Authorization') || ''
@@ -20,7 +21,16 @@ const auth = (request, response, next) => {
     request.user = decoded
     next()
   } catch (e) {
-    response.status(400).json({ msg: 'Invalid token' })
+    response.status(400).json({ error: 'Invalid token' })
+  }
+}
+
+const authAdmin = (request, response, next) => {
+  const user = User.findById(request.user.id)
+  const isAdminUser = user.email === config.EMAIL_ADDRESS
+  
+  if (!isAdminUser) {
+    return response.status(400).json({ error: 'Unauthorized' })
   }
 }
 
@@ -51,5 +61,6 @@ const errorHandler = (error, request, response, next) => {
 module.exports = {
   auth,
   errorHandler,
-  requestLogger
+  requestLogger,
+  authAdmin
 }
