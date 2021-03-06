@@ -4,7 +4,7 @@ const Roaster = require('../models/roaster')
 
 const { toMongooseObjectId } = require('../utils/mongoose')
 const { upload } = require('../utils/multer')
-const { auth } = require('../utils/middleware')
+const { auth, authAdmin } = require('../utils/middleware')
 const { coffeeValidation, validate } = require('../utils/validator')
 
 // coffeesRouter.get('/', async (request, response) => {
@@ -46,7 +46,7 @@ coffeesRouter.get('/query', async (request, response) => {
   return response.json(coffees.map(coffee => coffee.toJSON()))
 })
 
-coffeesRouter.post('/', auth, upload.single('coffeeImage'), coffeeValidation(), validate, async (request, response) => {
+coffeesRouter.post('/', auth, authAdmin, upload.single('coffeeImage'), coffeeValidation(), validate, async (request, response) => {
   const body = request.body
   const coffeeObj = {
     brand: body.selectedBrand,
@@ -85,7 +85,7 @@ coffeesRouter.get('/recent', async (request, response) => {
   return response.json(coffees.map(coffee => coffee.toJSON()))
 })
 
-coffeesRouter.put('/:id', auth, upload.single('coffeeImage'), coffeeValidation(), validate, async (request, response) => {
+coffeesRouter.put('/:id', auth, authAdmin, upload.single('coffeeImage'), coffeeValidation(), validate, async (request, response) => {
   const body = request.body
   const coffee = await Coffee.findById(request.params.id)
   if (request.user.id !== coffee.addedBy) {

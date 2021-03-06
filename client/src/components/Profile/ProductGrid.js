@@ -18,7 +18,7 @@ const ProductGrid = ({ coffees, route, heading, handleRemove, editing, setEditin
         <Box>
           <Typography align='center' variant="h5" component="h2">{heading}</Typography>
       { coffees.length !== 0 ?
-        <Button onClick={() => setEditing(!editing)} size="small" variant="text">edit</Button>
+        <Button onClick={() => setEditing(!editing)} size="small" variant="text">{editing ? 'stop editing' : 'edit'}</Button>
         : null
       }
         </Box>
@@ -46,7 +46,7 @@ export const CoffeeItem = ({ coffee, route, editing, handleRemove }) => {
       {editing ?
         <Fade style={{ zIndex: 10 }} in={editing}>
           <Box position="relative">
-            <Box component="span" position="absolute" top="0" right="0" marginRight="-5px" marginTop="-5px">
+            <Box component="span" position="absolute" top="0" right="0" marginRight="-7px" marginTop="-7px">
               <CancelIcon onClick={() => handleRemove(coffee.id)} style={{ color: '#f83e3e', cursor: 'pointer' }}/>
             </Box>
           </Box>

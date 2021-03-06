@@ -4,8 +4,7 @@ const bcrypt = require('bcrypt')
 const config = require('../utils/config')
 const { transporter } = require('../utils/mail')
 const cryptoRandomString = require('crypto-random-string')
-const { auth } = require('../utils/middleware')
-const { upload } = require('../utils/multer')
+const { auth, authAdmin } = require('../utils/middleware')
 const { signToken } = require('../utils/authToken')
 const { forgotPwValidation, signUpValidation, validate } = require('../utils/validator')
 
@@ -168,17 +167,12 @@ usersRouter.put('/change-password', auth, async (request, response) => {
   })
 })
 
-usersRouter.put('/update', auth, upload.single('userImage'), async (request, response) => {
+usersRouter.put('/update', authAdmin, auth, async (request, response) => {
   const { name, favoriteCoffee, favoriteBrewing } = request.body
   const updateObj = {
     name: name,
     favorite_coffee_type: favoriteCoffee,
     favorite_brewing_method: favoriteBrewing,
-  }
-
-  if (request.file && request.file.filename) {
-    request.file.key = request.file.filename
-    updateObj.imagePath = request.file.key
   }
 
   const user = await User.findByIdAndUpdate(request.user.id,

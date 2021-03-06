@@ -1,24 +1,18 @@
-import React, { useState, useContext, useCallback } from 'react'
-import { SubmitNewButtonDiv } from './style'
-import AuthUserContext from '../Session/context'
+import React, { useState, useCallback } from 'react'
 
 import FilterList from './FilterList'
 import PriceFilter from './PriceFilter'
 import SearchBar from './SearchBar'
 import Search from './Search'
 
-import { Hidden, Button } from '@material-ui/core'
+import { Hidden } from '@material-ui/core'
 import { BrowseWrapper, BrowseFiltersDiv, TestDiv, BrowseFiltersHeaderDiv, ClearRefinementsButton, AlgoliaAllRefinementListsWrapper, BrowseHitsDiv, TestButton, MobileFiltersButtonWrapper, ClearRefinementsButtonMobile, SaveFiltersButtonMobile, TestFooter } from '../Browse/style'
 import Dialog from '../../shared/components/Dialog'
 import Seo from '../../shared/components/Seo'
-import { useHistory } from 'react-router-dom'
 import { debounce } from 'lodash'
 
 const SearchPage = () => {
-  const authContext = useContext(AuthUserContext)
   const [dialogOpen, setDialogOpen] = useState(false)
-
-  let history = useHistory()
 
   const minPrice = 1
   const maxPrice = 50
@@ -63,22 +57,10 @@ const SearchPage = () => {
     setItems(initialItems)
   }
 
-  const handleSubmitButtonClick = async (event) => {
-    event.preventDefault()
-    if (!authContext.isLoggedIn) {
-      setDialogOpen(true)
-      return
-    }
-    history.push('/coffees/add')
-  }
-
   return (
     <BrowseWrapper>
       <Seo title={'All Coffees'} />
       <OpenMobileFilters filtering={filtering} setFiltering={setFiltering} />
-      <SubmitNewButtonDiv>
-        <Button variant="outlined" onClick={handleSubmitButtonClick} size="small">Submit New</Button>
-      </SubmitNewButtonDiv>
       <BrowseFiltersDiv>
         <TestDiv data-testid="browse:filters" filtering={filtering}>
           <BrowseFiltersHeaderDiv>

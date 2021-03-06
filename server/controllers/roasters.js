@@ -3,7 +3,7 @@ const Roaster = require('../models/roaster')
 
 const { toMongooseObjectId } = require('../utils/mongoose')
 const { upload } = require('../utils/multer')
-const { auth } = require('../utils/middleware')
+const { auth, authAdmin } = require('../utils/middleware')
 const { roasterValidation, validate } = require('../utils/validator')
 
 roastersRouter.get('/', async (request, response) => {
@@ -16,16 +16,16 @@ roastersRouter.get('/', async (request, response) => {
 
 roastersRouter.get('/list', async (request, response) => {
   const roasters = await Roaster.find({})
-  let roasterMap = []
+  let roasterList = []
   roasters.forEach((roaster) => {
     let roasterObj = { 'id': roaster._id, 'name': roaster.name }
-    roasterMap.push(roasterObj)
+    roasterList.push(roasterObj)
   })
 
-  return response.send(roasterMap)
+  return response.send(roasterList)
 })
 
-roastersRouter.post('/', auth, upload.single('roasterImage'), roasterValidation(), validate, async (request, response) => {
+roastersRouter.post('/', auth, authAdmin, upload.single('roasterImage'), roasterValidation(), validate, async (request, response) => {
   const body = request.body
   const roasterObj = {
     name: body.name,
