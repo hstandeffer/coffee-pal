@@ -81,7 +81,7 @@ const Product = () => {
             </Hidden>
             <ImageContainer>
               <ImageContentContainer>
-                <img src={`${assetUrl}/${coffee.roaster.imagePath}`} alt={coffee.coffeeName} />
+                <img src={`${assetUrl}/${coffee.imagePath ? coffee.imagePath : coffee.roaster.imagePath}`} alt={coffee.coffeeName} />
               </ImageContentContainer>
             </ImageContainer>
             <Box display="flex" flexDirection="row" pt={1}>

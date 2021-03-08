@@ -167,7 +167,7 @@ usersRouter.put('/change-password', auth, async (request, response) => {
   })
 })
 
-usersRouter.put('/update', authAdmin, auth, async (request, response) => {
+usersRouter.put('/update', auth, async (request, response) => {
   const { name, favoriteCoffee, favoriteBrewing } = request.body
   const updateObj = {
     name: name,
