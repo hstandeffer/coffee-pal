@@ -64,14 +64,14 @@ const Contact = () => {
   }
 
   return (
-    <Box py={6} className={classes.root}>
+    <Box bgcolor="rgb(243, 243, 246)" py={6} className={classes.root}>
       <Seo title={'Contact Us'} />
       <Box pb={4} textAlign="center">
         <Typography variant="h4">Contact Us</Typography>
       </Box>
       <Grid container>
         <Grid item xs={12} md={6}>
-          <Box py={10} borderRadius="1rem" display="flex" bgcolor="action.selected">
+          <Box py={10} borderRadius="1rem" display="flex" bgcolor="#fff">
             <Box className={`${classes.halfLg} ${classes.firstBox}`}>
               <Container>
                 <Typography variant="h5" component="h2" gutterBottom={true}>Questions or concerns?</Typography>
