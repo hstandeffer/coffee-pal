@@ -62,11 +62,13 @@ coffeesRouter.post('/', auth, authAdmin, upload.single('coffeeImage'), coffeeVal
     addedBy: request.user.id
   }
 
-  if (process.env.NODE_ENV === 'production') {
-    coffeeObj.imagePath = request.file.key
-  }
-  else {
-    coffeeObj.imagePath = request.file.filename
+  if (request.file) {
+    if (process.env.NODE_ENV === 'production') {
+      coffeeObj.imagePath = request.file.key
+    }
+    else {
+      coffeeObj.imagePath = request.file.filename
+    }
   }
   
   const roaster = await Roaster.findById(body.selectedBrand)
@@ -102,11 +104,13 @@ coffeesRouter.put('/:id', auth, authAdmin, upload.single('coffeeImage'), coffeeV
     addedBy: request.user.id
   }
 
-  if (process.env.NODE_ENV === 'production') {
-    coffeeObj.imagePath = request.file.key
-  }
-  else {
-    coffeeObj.imagePath = request.file.filename
+  if (request.file) {
+    if (process.env.NODE_ENV === 'production') {
+      coffeeObj.imagePath = request.file.key
+    }
+    else {
+      coffeeObj.imagePath = request.file.filename
+    }
   }
 
   const updatedCoffee = await Coffee.findByIdAndUpdate(request.params.id, coffeeObj, { new: true })

@@ -95,14 +95,14 @@ const Edit = () => {
         const coffee = await coffeeService.get(id)
         setCoffeeName(coffee.coffeeName)
         setSelectedBrand(coffee.roaster)
-        setSelectedCountry(coffee.countries)
-        setFairTrade(coffee.fairTrade)
-        setOrganic(coffee.organic)
-        setShadeGrown(coffee.shadeGrown)
+        setSelectedCountry(coffee.countries || [])
+        setFairTrade(coffee.fairTrade || false)
+        setOrganic(coffee.organic || false)
+        setShadeGrown(coffee.shadeGrown || false)
         setUrl(coffee.url)
         setImage(coffee.imagePath)
         setPrice(coffee.price)
-        setRoastType(coffee.roastType)
+        setRoastType(coffee.roastType || '')
         
         setLoading(false)
       }
@@ -137,19 +137,16 @@ const Edit = () => {
       else {
         setError(err.error)
       }
-    })
-
-    if (!response) {
       return
-    }
+    })
 
     setOpen(true)
     setCoffeeName('')
-    setSelectedBrand('')
-    setSelectedCountry('')
-    setFairTrade('')
-    setOrganic('')
-    setShadeGrown('')
+    setSelectedBrand(null)
+    setSelectedCountry([])
+    setFairTrade(false)
+    setOrganic(false)
+    setShadeGrown(false)
     setUrl('')
     setImage(null)
     setPrice('')
@@ -192,7 +189,7 @@ const Edit = () => {
           </Typography>
 
           <FormLabel htmlFor="price">Price ($)</FormLabel>
-          <StyledInput id="price" type="number" required value={price} onChange={({ target }) => setPrice(target.value)} />
+          <StyledInput id="price" required value={price} onChange={({ target }) => setPrice(target.value)} />
 
           <FormLabel htmlFor="roastType">Roast Type</FormLabel>
             <Select

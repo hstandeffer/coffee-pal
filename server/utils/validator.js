@@ -42,7 +42,7 @@ const coffeeValidation = () => {
     body('coffeeName').notEmpty(),
     body('selectedBrand').notEmpty(),
     body('price').isNumeric(),
-    body('roastType').isIn(['light', 'medium', 'dark']),
+    body('roastType').isIn(['light', 'medium', 'dark', '']),
     body('url').isURL(),
   ]
 }
