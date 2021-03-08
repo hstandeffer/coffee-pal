@@ -87,10 +87,7 @@ coffeesRouter.get('/recent', async (request, response) => {
 
 coffeesRouter.put('/:id', auth, authAdmin, upload.single('coffeeImage'), coffeeValidation(), validate, async (request, response) => {
   const body = request.body
-  const coffee = await Coffee.findById(request.params.id)
-  if (request.user.id !== coffee.addedBy) {
-    return response.status(401).json({ error: 'Unauthorized' })
-  }
+
   const coffeeObj = {
     brand: body.selectedBrand,
     countries: body.selectedCountry,
@@ -116,15 +113,11 @@ coffeesRouter.put('/:id', auth, authAdmin, upload.single('coffeeImage'), coffeeV
   return response.status(204).json(updatedCoffee.toJSON())
 })
 
-coffeesRouter.delete('/:id', auth, async (request, response) => {
+coffeesRouter.delete('/:id', auth, authAdmin, async (request, response) => {
   const coffee = await Coffee.findById(request.params.id)
-  if (coffee.addedBy === request.user.id) {
-    await coffee.remove()
-    return response.status(204).json({ msg: 'Coffee deleted successfully' })
-  }
-  else {
-    return response.status(401).json({ error: 'Unauthorized' })
-  }
+  
+  await coffee.remove()
+  return response.status(204).json({ msg: 'Coffee deleted successfully' })
 })
 
 // keep at bottom so wildcard doesnt catch above routes
