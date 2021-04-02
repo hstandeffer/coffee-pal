@@ -12,5 +12,5 @@ export const objectToQueryString = (obj, options = {}) =>
     ...options,
   })
 
-export const assetUrl = process.env.NODE_ENV === 'production' ? 'https://baroasta.s3.amazonaws.com' : 'http://localhost:3000/uploads'
+export const assetUrl = process.env.NODE_ENV === 'production' ? 'd5aggsfpikv29.cloudfront.net' : 'http://localhost:3000/uploads'
 export const apiUrl = process.env.NODE_ENV === 'production' ? 'https://squigcoffee.com' : 'http://localhost:3000'
