@@ -174,7 +174,6 @@ usersRouter.put('/update', auth, async (request, response) => {
     favorite_coffee_type: favoriteCoffee,
     favorite_brewing_method: favoriteBrewing,
   }
-  console.log(updateObj)
 
   const user = await User.findByIdAndUpdate(request.user.id,
     updateObj,

@@ -130,7 +130,7 @@ const Edit = () => {
       roastType,
     }
 
-    const response = await coffeeService.update(coffeeObj, id).catch((err) => {
+    await coffeeService.update(coffeeObj, id).catch((err) => {
       if (err.errors) {
         setError(`${err.errors[0].msg} for ${err.errors[0].param} field.`)
       }
