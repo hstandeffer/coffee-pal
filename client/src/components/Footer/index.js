@@ -43,12 +43,12 @@ const Footer = () => {
       <Container maxWidth="lg">
         <Box py={6}  display="flex" flexWrap="wrap" alignItems="center" className={classes.rootBox}>
           <Link component={RouterLink} to={ROUTES.LANDING} variant="h5" color="inherit" underline="none">
-            baroasta
+            squig
           </Link>
           <Box component="nav" className={classes.footerNav}>
             <Link component={RouterLink} to={ROUTES.CONTACT} variant="body1" color="textSecondary" className={classes.footerLink}>Contact Us</Link>
           </Box>
-          <Typography color="textSecondary" component="p" variant="body2" gutterBottom={false} className={classes.copy}>2021 Baroasta. All rights reserved.</Typography>
+          <Typography color="textSecondary" component="p" variant="body2" gutterBottom={false} className={classes.copy}>2021 Squig Coffee. All rights reserved.</Typography>
         </Box>
       </Container>
     </footer>

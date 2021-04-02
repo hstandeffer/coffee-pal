@@ -31,7 +31,7 @@ const Navbar = () => {
     <Nav>
       <Box py="15px" px="0" color="#4e4e4e" fontSize="1.5rem">
         <StyledLink to={ROUTES.LANDING}>
-          baroasta
+          squig
         </StyledLink>
       </Box>
       <Burger />

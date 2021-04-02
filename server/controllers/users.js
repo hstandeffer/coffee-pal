@@ -86,7 +86,7 @@ usersRouter.post('/forgot-password', forgotPwValidation(), validate, async (requ
   const mailOptions = {
     from: `${config.EMAIL_ADDRESS}`,
     to: `${user.email}`,
-    subject: 'Reset Baroasta Password',
+    subject: 'Reset Squig Password',
     text:
       'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n'
       + 'Please click on the following link, or paste this into your browser to complete the process within one hour of receiving it:\n\n'

@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async'
 
 const Seo = ({ title }) => (
   <Helmet>
-    <title>{`${title} - Baroasta`}</title>
+    <title>{`${title} - Squig Coffee`}</title>
   </Helmet>
 )
 
