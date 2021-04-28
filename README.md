@@ -1,6 +1,6 @@
-# Baroasta
+# Squig Coffee
 
-Baroasta lets coffee lovers explore all kinds of different coffees from all over the world, all in one place. 
+Squig Coffee lets coffee lovers explore all kinds of different coffees from all over the world, all in one place. 
 
 ## Features
 
