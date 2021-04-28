@@ -1,22 +1,9 @@
-# Coffee Pal
+# Baroasta
 
-Coffee Pal lets coffee lovers explore all kinds of different coffees from all over the world, all in one place. 
+Baroasta lets coffee lovers explore all kinds of different coffees from all over the world, all in one place. 
 
 ## Features
 
 - Search page to discover coffees listed in our database
 - Logged-in users can save coffees to their own list
-- Filters for roast type, price, and grind type when searching
-
-## Installation
-
-```
-<!-- Install dependencies -->
-npm install
-```
-
-```
-<!-- Run the project -->
-npm run start
-```
-
+- Filters for roast type and price when searching (more will be added in future)
