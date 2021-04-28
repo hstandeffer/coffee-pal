@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Box, Typography, FormLabel } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert';
-import { PlacesAutocomplete } from '../../shared/hooks/PlacesAutocomplete'
 
 import { StyledButton, Textarea } from '../../shared-style'
 import { Input } from './style'
@@ -73,7 +72,7 @@ const AddRoaster = () => {
           <Input id="website" name="website" value={website} onChange={({ target }) => setWebsite(target.value)} />
 
           <FormLabel htmlFor="address">Address</FormLabel>
-          <PlacesAutocomplete address={address} setAddress={setAddress} />
+          <Input id="address" value={address} onChange={({ target }) => setAddress(target.value)} />
 
           <FormLabel required color="primary" htmlFor="roasterImage">Logo Image</FormLabel>
           <Input type="file" ref={ref} name="roasterImage" id="roasterImage" onChange={handleUpload} />
