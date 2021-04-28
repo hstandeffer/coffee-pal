@@ -8,7 +8,6 @@ import { useHistory } from 'react-router-dom'
 
 import roasterService from '../../services/roaster'
 import coffeeService from '../../services/coffee'
-import userService from '../../services/user'
 
 import countryList from '../../constants/countries'
 
@@ -82,12 +81,6 @@ const Add = () => {
     if (isMounted) {
       setLoading(true)
       const loadRoasters = async () => {
-        const response = await userService.getCurrentUser()
-        if (response.email !== 'baroastacoffee@gmail.com') {
-          history.replace('/')
-          return
-        }
-
         const roasterList = await roasterService.getList()
         setBrands(roasterList)
         setLoading(false)

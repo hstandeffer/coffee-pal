@@ -45,7 +45,7 @@ const SearchPage = () => {
   }
 
   // delays the actual api call for specified period of time to reduce calls
-  const debounceSearch = useCallback(debounce(handleSearchFilterChange, debounceDuration), [])
+  const debounceSearch = useCallback(debounce(handleSearchFilterChange, debounceDuration), []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSearchChange = (event) => {
     setQuery(event.target.value)

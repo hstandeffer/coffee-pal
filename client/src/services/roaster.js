@@ -34,4 +34,6 @@ const getList = async () => {
   return response
 }
 
-export default { getAll, get, add, getRecent, getList }
+const services = { getAll, get, add, getRecent, getList }
+
+export default services

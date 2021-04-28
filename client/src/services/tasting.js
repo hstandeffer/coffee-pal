@@ -16,4 +16,6 @@ const add = async (tastingObject) => {
   return response.data
 }
 
-export default { getAll, get, add }
+const services = { getAll, get, add }
+
+export default services

@@ -19,7 +19,6 @@ import Alert from '@material-ui/lab/Alert'
 
 import countryList from '../../constants/countries'
 
-import userService from '../../services/user'
 import roasterService from '../../services/roaster'
 import coffeeService from '../../services/coffee'
 import Seo from '../../shared/components/Seo';
@@ -82,13 +81,7 @@ const Edit = () => {
     let isMounted = true
     if (isMounted) {
       setLoading(true)
-      const getInfo = async () => {
-        const response = await userService.getCurrentUser()
-        if (response.email !== 'baroastacoffee@gmail.com') {
-          history.replace('/')
-          return
-        }
-        
+      const getInfo = async () => {        
         const roasterList = await roasterService.getList()
         setBrands(roasterList)
         

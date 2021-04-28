@@ -7,4 +7,6 @@ const signIn = async (user) => {
   return response
 }
 
-export default { signIn }
+const services = { signIn }
+
+export default services

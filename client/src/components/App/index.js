@@ -49,12 +49,11 @@ const App = () => {
         <PrivateRouteWrapper path={ROUTES.ACCOUNT} component={AccountPage} layout={Layout} />
         <PrivateRouteWrapper path={ROUTES.SAVED_COFFEES} component={SavedCoffees} layout={Layout} />
 
-        <PrivateRoute exact path={ROUTES.COFFEE_EDIT} component={CoffeeEditPage} />
+        <AdminRoute exact path={ROUTES.COFFEE_EDIT} component={CoffeeEditPage} />
         {/* <PrivateRoute exact path={ROUTES.TASTINGS} component={TastingPage} /> */}
         <PrivateRoute path={ROUTES.PRODUCT_TASTING} component={ProductTastingPage} />
-        <PrivateRoute path={ROUTES.ADD_COFFEE} component={AddCoffeePage} />
-        <PrivateRoute path={ROUTES.ADD_ROASTER} component={AddRoasterPage} />
-        {/* <Route path={ROUTES.ADMIN} component={AdminPage} /> */}
+        <AdminRoute path={ROUTES.ADD_COFFEE} component={AddCoffeePage} />
+        <AdminRoute path={ROUTES.ADD_ROASTER} component={AddRoasterPage} />
 
         <PublicRoute restricted={true} exact path={ROUTES.LANDING} component={LandingPage} />
         <PublicRoute restricted={true} path={ROUTES.SIGN_UP} component={SignUpPage} />
@@ -96,6 +95,17 @@ const PublicRoute = ({component: Component, restricted, ...rest}) => {
               <Redirect to={ROUTES.BROWSE} />
           : <Component {...props} />
       )} />
+  )
+}
+
+const AdminRoute = ({component: Component, isAdmin, ...rest}) => {
+  const authContext = useContext(AuthUserContext)
+  return (
+    <Route {...rest} render={props => (
+        !authContext.isAdmin ?
+            <Redirect to={ROUTES.BROWSE} />
+        : <Component {...props} />
+    )} />
   )
 }
 

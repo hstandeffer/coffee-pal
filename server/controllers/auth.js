@@ -8,14 +8,15 @@ const { signInValidation, validate } = require('../utils/validator')
 authRouter.post('/', signInValidation(), validate, async (request, response) => {
   const { email, password } = request.body
 
-  const user = await User.findOne({ email }, 'password')
+  const user = await User.findOne({ email }, 'password isAdmin')
   if (!user) return response.status(400).json({ error: 'User does not exist' })
 
   bcrypt.compare(password, user.password)
     .then(isMatch => {
       if (!isMatch) return response.status(400).json({ error: 'Invalid credentials' })
+      console.log(user)
 
-      jwt.sign({ id: user.id }, config.JWT_SECRET, { expiresIn: 3600 * 24 * 365 }, (err, token) => {
+      jwt.sign({ id: user.id, isAdmin: user.isAdmin }, config.JWT_SECRET, { expiresIn: 3600 * 24 * 365 }, (err, token) => {
         if (err) {
           return response.status(401).json({ error: 'Authentication token is invalid' })
         }

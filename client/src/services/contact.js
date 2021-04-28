@@ -7,4 +7,6 @@ const send = async (email, message) => {
   return response
 }
 
-export default { send }
+const services = { send } 
+
+export default services

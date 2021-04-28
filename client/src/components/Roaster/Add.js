@@ -1,23 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Box, Typography, FormLabel } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert';
 import { PlacesAutocomplete } from '../../shared/hooks/PlacesAutocomplete'
-import { useHistory } from 'react-router-dom'
 
 import { StyledButton, Textarea } from '../../shared-style'
 import { Input } from './style'
 
-import userService from '../../services/user'
 import roasterService from '../../services/roaster'
 import Seo from '../../shared/components/Seo'
 import Toast from '../../shared/components/Toast'
-import FullPageSpinner from '../../shared/components/Spinner'
 
 const AddRoaster = () => {
   const ref = React.useRef()
-  const history = useHistory()
 
-  const [loading, setLoading] = useState(true)
   const [name, setName] = useState('')
   const [summary, setSummary] = useState('')
   const [address, setAddress] = useState('')
@@ -27,29 +22,8 @@ const AddRoaster = () => {
   const [error, setError] = useState('')
   const [open, setOpen] = useState(false)
 
-  useEffect(() => {
-    let isMounted = true
-    if (isMounted) {
-      setLoading(true)
-      const checkUser = async () => {
-        const response = await userService.getCurrentUser()
-        if (response.email !== 'baroastacoffee@gmail.com') {
-          history.replace('/')
-          return
-        }
-        setLoading(false)
-      }
-      checkUser()
-    }
-    return () => { isMounted = false }
-  }, [history])
-
   const handleUpload = async event => {
     setImage(event.target.files[0])
-  }
-
-  if (loading) {
-    return <FullPageSpinner size={50} />
   }
 
   const handleSubmit = async event => {

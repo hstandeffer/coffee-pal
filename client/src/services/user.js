@@ -47,4 +47,6 @@ const signUp = async (user) => {
   return response
 }
 
-export default { saveCoffee, deleteCoffee, getCurrentUser, forgotPassword, updatePassword, changePassword, resetPassword, update, signUp }
+const services = { saveCoffee, deleteCoffee, getCurrentUser, forgotPassword, updatePassword, changePassword, resetPassword, update, signUp }
+
+export default services

@@ -5,16 +5,16 @@ import { BoldLabel } from './style';
 import Rating from '@material-ui/lab/rating'
 import { Box, Typography } from '@material-ui/core';
 
-import { withRouter } from 'react-router-dom'
-import { compose } from 'recompose'
+import { useHistory } from 'react-router-dom'
 import * as ROUTES from '../../constants/routes'
 
 import coffeeService from '../../services/coffee'
 import tastingService from '../../services/tasting'
 import FullPageSpinner from '../../shared/components/Spinner';
 
-const ProductTasting = ({ history }) => {
+const ProductTasting = () => {
   let { id } = useParams()
+  const history = useHistory()
   const [coffee, setCoffee] = useState()
   const [loading, setLoading] = useState(false)
   const [brewMethod, setBrewMethod] = useState('')
@@ -96,8 +96,4 @@ const ProductTasting = ({ history }) => {
   )
 }
 
-const ProductTastingPage = compose(
-  withRouter
-)(ProductTasting)
-
-export default ProductTastingPage
+export default ProductTasting

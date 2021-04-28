@@ -60,4 +60,6 @@ const getRecent = async () => {
   return response
 }
 
-export default { getAll, get, add, update, getRecent }
+const services = { getAll, get, add, update, getRecent }
+
+export default services
