@@ -15,7 +15,7 @@ testRouter.delete('/reset', async (request, response) => {
 
 testRouter.post('/create-test-account', async (request, response) => {
   const user = await createTestAccount()
-  response.send({ token: signToken({ id: user._id }) })
+  response.send({ token: signToken({ id: user._id, isAdmin: user.isAdmin }) })
 })
 
 module.exports = testRouter

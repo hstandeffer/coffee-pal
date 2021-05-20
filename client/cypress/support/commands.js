@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { objectToQueryString } from '../../src/shared/utils/url'
 import { getStoredAuthToken, storeAuthToken } from '../../src/shared/utils/authToken'
 
@@ -24,13 +25,7 @@ Cypress.Commands.add('createTestAccount', () => {
 })
 
 Cypress.Commands.add('createTestUserAndStoreToken', () => {
-  const user = {
-    username: 'jimbo',
-    email: 'jimbo@gmail.com',
-    password: 'password',
-    confirmPassword: 'password'
-  }
-  cy.apiRequest('POST', '/api/users/', user).then(response => {
+  cy.apiRequest('POST', '/api/testing/create-test-account').then(response => {
     storeAuthToken(response.body.token)
     // visiting baseUrl here updates the withAuthentication provider to update context to logged in user
     cy.visit(`${Cypress.env('baseUrl')}`)

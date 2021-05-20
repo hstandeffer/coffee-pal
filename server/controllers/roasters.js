@@ -59,7 +59,7 @@ roastersRouter.get('/:id', async (request, response) => {
   const roaster = await Roaster.findById(request.params.id).populate({
     path: 'coffees',
     model: 'Coffee',
-    select: 'coffeeName imagePath roastType price',
+    select: 'coffeeName imagePath imageUrl roastType price',
     populate: {
       path: 'roaster',
       model: 'Roaster',

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { FlexProductDiv, ImageContainer, ImageContentContainer, InfoContainer } from '../Search/style'
+import { FlexProductDiv, ImageContainer, ImageContentContainer, InfoContainer } from '../Browse/style'
 import { BrowseHitsDiv, FlexContainer, ProductLink } from '../Browse/style'
 import { ProductWrapper, ProductGridDiv } from '../Product/style'
 import Typography from '@material-ui/core/Typography'
@@ -62,7 +62,7 @@ export const CoffeeItem = ({ coffee, route, editing, handleRemove }) => {
           <Box textAlign="left" marginBottom="5px" height='40px' overflow="hidden" fontWeight="bold">{coffee.coffeeName}</Box>
           <Box display="flex" flexDirection="row" justifyContent="space-between">
             <CoffeeBeanSvg roastType={coffee.roastType} />
-            <Box fontWeight="fontWeightBold">${coffee.price}</Box>
+            <Box fontWeight="fontWeightBold">${coffee.price.toFixed(2)}</Box>
           </Box>
         </InfoContainer>
       </ProductLink>

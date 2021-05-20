@@ -1,5 +1,152 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 import { Link } from 'react-router-dom'
+
+export const FiltersWrapper = styled.div`
+  
+  @media(max-width: 961px) {
+    width: 250px;
+    padding: 1em 2.5em;
+  }
+`
+
+export const SubmitNewButtonDiv = styled.div`
+  text-align: right;
+  margin: 0 1.5% 10px;
+  flex-basis: 100%;
+    
+  @media(max-width: 960px) {
+    margin: 0 calc(5%/3) 10px;
+  }
+
+  @media(max-width: 600px) {
+    margin: 0px 5% 10px;
+  }
+`
+
+export const FiltersDiv = styled.div`
+	padding: 24px;
+  margin: 0 10px;
+	text-align: center;
+	background: #fff;
+	border-radius: 4px;
+`
+
+export const StyledH2 = styled.h2`
+  margin-top: 0;
+`
+
+export const ItemsDiv = styled.div`
+	background: #fff;
+  border-radius: 4px;
+  text-align: center;
+
+  @media (max-width: 600px) {
+    margin: 0 auto;
+    border-radius: 0px;
+  }
+`
+
+export const StyledCoffeeItemDiv = styled.div`
+  margin: 8px auto;
+  padding: 8px;
+  width: 90%;
+  box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+`
+
+export const FlexContainer = styled.div`
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+
+  &:after {
+    content: "";
+    margin-left: 22%;
+
+    @media(max-width: 600px) {
+      marign-left: 47%;
+    }
+
+    @media(max-width: 960px) {
+      margin-left: 30%;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    margin: 0 3.5%;
+  }
+`
+
+export const FlexProductDiv = styled.div`
+  text-align: center;
+  flex: 0 0 22%;
+  margin: 2% 1.5%;
+  flex-flow: column;  
+  box-shadow: 1px 0px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+
+  @media (max-width: 960px) {
+    flex: 0 0 30%;
+    margin: 2% calc(5%/3);
+  }
+  
+  @media (max-width: 600px) {
+    flex: 0 0 47%;
+    margin: 2% 1.5%;
+  }
+`
+
+export const ImageContainer = styled.div`
+  position: relative;
+  width: 100%;
+
+  &:before {
+    display: block;
+    content: "";
+    width: 100%;
+    padding-top: 100%;
+  }
+
+  &:after {
+    position: absolute;
+    top: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    content: " ";
+    background-color: none;
+  }
+`
+
+export const ImageContentContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    position: relative;
+    top: 50%;
+    height: 100%;
+    object-fit: cover;
+    transform: translateY(-50%);
+  }
+`
+
+export const InfoContainer = styled.div`
+  width: 100%;
+  padding: 10px;
+`
+
+export const Image = styled.img`
+  width: 100%;
+`
+
+export const ProductInfoDiv = styled.div`
+  margin-top: auto;
+	padding-top: 20px;
+`
 
 export const ProductLink = styled(Link)`
   text-decoration: none;
@@ -22,7 +169,7 @@ export const BrowseWrapper = styled.div`
   }
 `
 
-export const BrowseFiltersDiv = styled.div`
+export const BrowseFiltersWrapper = styled.div`
   flex: 1;
   max-width: 260px;
   margin-right: 50px;
@@ -32,7 +179,7 @@ export const BrowseHitsDiv = styled.div`
   flex: 3;
 `
 
-export const TestDiv = styled.div`
+export const ResponsiveFiltersDiv = styled.div`
   max-width: 260px;
   flex: 1;
   position: sticky;
@@ -54,7 +201,7 @@ export const TestDiv = styled.div`
   }
 `
 
-export const TestFooter = styled.footer`
+export const MobileFiltersFooter = styled.footer`
   display: none;
   @media(max-width:960px) {
     background-color: #fff;
@@ -69,7 +216,7 @@ export const TestFooter = styled.footer`
   }
 `
 
-export const TestButton = styled.button`
+export const OpenMobileFiltersButton = styled.button`
   display: none;
   @media(max-width: 960px) {
     align-items: center;
@@ -194,34 +341,7 @@ export const ClearRefinementsButtonMobile = styled.button`
   }
 `
 
-export const FlexContainer = styled.div`
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: flex-start;
-
-  &:after {
-    content: "";
-    margin-left: 22%;
-
-    @media(max-width: 600px) {
-      marign-left: 47%;
-    }
-
-    @media(max-width: 960px) {
-      margin-left: 30%;
-    }
-  }
-  
-  @media (max-width: 600px) {
-    margin: 0 3.5%;
-  }
-
-  @media(max-width: 960px) {
-    display: ${props => props.filtering ? 'none' : 'flex'};
-  }
-`
-
-export const AlgoliaRefinementHeader = styled.div`
+export const RefinementHeader = styled.div`
   border: none;
   color: #21243d;
   font-size: 0.8rem;
@@ -232,19 +352,19 @@ export const AlgoliaRefinementHeader = styled.div`
   text-transform: uppercase;
 `
 
-export const AlgoliaAllRefinementListsWrapper = styled.div`
+export const AllRefinementListsWrapper = styled.div`
   @media(max-width: 960px) {
     padding: 2rem 2rem 0 2rem;
   }
 `
 
-export const AlgoliaRefinementListWrapper = styled.div`
+export const RefinementListWrapper = styled.div`
   border-top: 1px solid #ebecf3;
   padding-bottom: 2rem;
   padding-top: 2rem;
 `
 
-export const AlgoliaSearchBarDiv = styled.div`
+export const SearchBarDiv = styled.div`
   height: 50px;
   border-radius: 4px;
   background: #f5f5fa;
@@ -259,7 +379,7 @@ export const AlgoliaSearchBarDiv = styled.div`
   }
 `
 
-export const AlgoliaSearchBarForm = styled.form`
+export const SearchBarForm = styled.form`
   height: 50px;
   text-align: center;
   display: flex;
@@ -267,7 +387,7 @@ export const AlgoliaSearchBarForm = styled.form`
   padding: 0 16px;
 `
 
-export const AlgoliaSearchBarInput = styled.input`
+export const SearchBarInput = styled.input`
   height: 50px;
   border: none;
   background: transparent;
@@ -277,7 +397,7 @@ export const AlgoliaSearchBarInput = styled.input`
   flex-grow: 1;
 `
 
-export const AlgoliaSearchBarSubmitButton = styled.button`
+export const SearchBarSubmitButton = styled.button`
   border: none;
   background: transparent;
   outline: none;
@@ -287,21 +407,21 @@ export const AlgoliaSearchBarSubmitButton = styled.button`
   }
 `
 
-export const AlgoliaSearchBarResetButton = styled.button`
+export const SearchBarResetButton = styled.button`
   background: transparent;
   border: none;
 `
 
-export const AlgoliaPoweredByImage = styled.img`
+export const PoweredByImage = styled.img`
   margin-left: 10px;
   height: 16px;
 `
 
-export const AlgoliaPoweredByLink = styled.a`
+export const PoweredByLink = styled.a`
   height: 16px;
 `
 
-export const AlgoliaStyledStats = styled.p`
+export const StyledStats = styled.p`
   margin: 5px 1.5%;
   text-align: right;
   font-size: 13px;
@@ -316,7 +436,7 @@ export const AlgoliaStyledStats = styled.p`
   }
 `
 
-export const AlgoliaStyledUl = styled.ul`
+export const StyledUl = styled.ul`
   display: flex;
   flex-flow: ${props => props.current ? 'row nowrap' : 'column nowrap'};
   list-style: none;
@@ -328,7 +448,7 @@ export const AlgoliaStyledUl = styled.ul`
   }
 `
 
-export const AlgoliaStyledCurrentRefinementOuterSpan = styled.span`
+export const StyledCurrentRefinementOuterSpan = styled.span`
   display: block;
   margin: 2px;
   padding: 4px 8px;
@@ -347,7 +467,7 @@ export const AlgoliaStyledCurrentRefinementOuterSpan = styled.span`
   }
 `
 
-export const AlgoliaStyledLi = styled.li`
+export const StyledLi = styled.li`
   margin-bottom: 8px;
 
   label {
@@ -355,12 +475,12 @@ export const AlgoliaStyledLi = styled.li`
   }
 `
 
-export const AlgoliaStyledOuterRefinementListSpan = styled.span`
+export const StyledOuterRefinementListSpan = styled.span`
   margin-left: 8px;
   cursor: pointer;
 `
 
-export const AlgoliaStyledRefinementListCountSpan = styled.span`
+export const StyledRefinementListCountSpan = styled.span`
   display: inline-block;
   background-color: rgba(197,201,224,.2);
   color: #848ab8;

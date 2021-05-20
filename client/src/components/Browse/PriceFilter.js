@@ -1,12 +1,12 @@
 import { Slider } from '@material-ui/core'
 import React from 'react'
-import { AlgoliaRefinementHeader, AlgoliaRefinementListWrapper } from '../Browse/style'
+import { RefinementHeader, RefinementListWrapper } from './style'
 
 const PriceFilter = ({ minPrice, maxPrice, header, items, setItems, priceRange, handlePriceChange }) => (
-  <AlgoliaRefinementListWrapper>
-    <AlgoliaRefinementHeader>
+  <RefinementListWrapper>
+    <RefinementHeader>
       {header}
-    </AlgoliaRefinementHeader>
+    </RefinementHeader>
     <Slider
       value={priceRange}
       onChange={(event, newValue) => setItems({...items, priceRange: newValue})}
@@ -16,7 +16,7 @@ const PriceFilter = ({ minPrice, maxPrice, header, items, setItems, priceRange, 
       min={minPrice}
       max={maxPrice}
     />
-  </AlgoliaRefinementListWrapper>
+  </RefinementListWrapper>
 )
 
 export default PriceFilter

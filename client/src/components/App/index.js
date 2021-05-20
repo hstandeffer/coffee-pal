@@ -8,14 +8,12 @@ import SignUpPage from '../SignUp'
 import SignInPage from '../SignIn'
 import PasswordForget from '../PasswordForget'
 import PasswordReset from '../PasswordReset'
+import AdminPage from '../Admin'
 import AccountPage from '../Profile/Account'
 import SavedCoffees from '../Profile/Saved'
 import ProfilePage from '../Profile'
-// import AdminPage from '../Admin'
 import ContactPage from '../Contact'
-import BrowsePage from '../Search'
-// import TastingPage from '../Tasting'
-import ProductTastingPage from '../Tasting/ProductTasting'
+import BrowsePage from '../Browse'
 import ProductPage from '../Product'
 import CoffeeEditPage from '../Coffee/Edit'
 import AddCoffeePage from '../Coffee/Add'
@@ -23,7 +21,7 @@ import RoasterPage from '../Roaster'
 import AddRoasterPage from '../Roaster/Add'
 import ViewRoasterPage from '../Roaster/View'
 import NotFoundPage from '../../shared/components/404'
-import Footer from '../Footer'
+import Footer from '../../shared/components/Footer'
 
 import Layout from '../../shared/layouts/Profile'
 
@@ -49,9 +47,8 @@ const App = () => {
         <PrivateRouteWrapper path={ROUTES.ACCOUNT} component={AccountPage} layout={Layout} />
         <PrivateRouteWrapper path={ROUTES.SAVED_COFFEES} component={SavedCoffees} layout={Layout} />
 
+        <AdminRoute exact path={ROUTES.ADMIN} component={AdminPage} />
         <AdminRoute exact path={ROUTES.COFFEE_EDIT} component={CoffeeEditPage} />
-        {/* <PrivateRoute exact path={ROUTES.TASTINGS} component={TastingPage} /> */}
-        <PrivateRoute path={ROUTES.PRODUCT_TASTING} component={ProductTastingPage} />
         <AdminRoute path={ROUTES.ADD_COFFEE} component={AddCoffeePage} />
         <AdminRoute path={ROUTES.ADD_ROASTER} component={AddRoasterPage} />
 
@@ -71,17 +68,6 @@ const App = () => {
       </Switch>
       <Footer />
     </Router>
-  )
-}
-
-const PrivateRoute = ({component: Component, ...rest}) => {
-  const authContext = useContext(AuthUserContext)
-  return (
-    <Route {...rest} render={props => (
-        authContext.isLoggedIn ?
-            <Component {...props} />
-        : <Redirect to={ROUTES.SIGN_IN} />
-    )} />
   )
 }
 
@@ -126,5 +112,4 @@ const PrivateRouteWrapper = ({
   )
 }
 
-// this wraps the entire app around the authentication context
 export default withAuthentication(App)

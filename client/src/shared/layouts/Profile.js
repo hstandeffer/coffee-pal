@@ -3,7 +3,7 @@ import { Box, Button, Link, Hidden, Container, Typography } from '@material-ui/c
 import { Link as RouterLink } from 'react-router-dom';
 import userService from '../../services/user'
 import { SidebarDiv, MainContentDiv, ProfileWrapper } from '../../components/Profile/style'
-import { TestDiv } from '../../components/Browse/style'
+import { ResponsiveFiltersDiv } from '../../components/Browse/style'
 import ProfileDrawer from '../components/ProfileDrawer'
 import FullPageSpinner from '../components/Spinner'
 
@@ -55,11 +55,11 @@ const ProfilePage = ({ children, heading }) => {
         </Box>
         <ProfileWrapper>
           <SidebarDiv>
-            <TestDiv style={{ position: 'inherit' }}>
+            <ResponsiveFiltersDiv style={{ position: 'inherit' }}>
               <Box py={3} width="100%">
                 <ProfileLinks />
               </Box>
-            </TestDiv> 
+            </ResponsiveFiltersDiv> 
           </SidebarDiv>
           <MainContentDiv>
             <Box pt={3} pb={5}>

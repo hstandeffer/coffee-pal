@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { testid } from '../support/utils'
 
 describe('add coffee', () => {

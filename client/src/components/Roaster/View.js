@@ -96,7 +96,7 @@ const Roaster = () => {
         <Box textAlign="center" mb={2}>
           <Typography variant="h4">All Coffees</Typography>
         </Box>
-        <ProductGrid coffees={roaster.coffees} route={'coffees'} view={'roaster'}/>
+        <ProductGrid coffees={roaster.coffees} view={'roaster'}/>
       </Container>
     </>
   )

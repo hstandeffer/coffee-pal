@@ -27,7 +27,7 @@ const auth = (request, response, next) => {
 
 const authAdmin = async (request, response, next) => {
   const user = await User.findById(request.user.id)
-  const isAdminUser = user.email === config.EMAIL_ADDRESS
+  const isAdminUser = user.email === config.EMAIL_ADDRESS && user.isAdmin === true
   
   if (!isAdminUser) {
     return response.status(400).json({ error: 'Unauthorized' })

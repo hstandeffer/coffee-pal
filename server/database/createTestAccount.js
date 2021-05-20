@@ -5,13 +5,14 @@ const Roaster = require('../models/roaster')
 const seedUsers = () => {
   const users = [
     User.create({
-      username: 'jimbo',
-      email: 'jimbo@gmail.com',
-      password: 'password'
+      username: 'baroasta',
+      email: 'baroastacoffee@gmail.com',
+      password: 'password',
+      isAdmin: true
     }),
     User.create({
-      username: 'john',
-      email: 'john@gmail.com',
+      username: 'test',
+      email: 'test@gmail.com',
       password: 'password'
     })
   ]

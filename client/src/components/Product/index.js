@@ -3,7 +3,7 @@ import { useParams, Link as RouterLink } from "react-router-dom"
 import coffeeService from '../../services/coffee'
 import userService from '../../services/user'
 
-import { ImageContainer, ImageContentContainer } from '../Search/style'
+import { ImageContainer, ImageContentContainer } from '../Browse/style'
 import FullPageSpinner from '../../shared/components/Spinner'
 import Dialog from '../../shared/components/Dialog'
 import Seo from '../../shared/components/Seo'
@@ -15,10 +15,10 @@ import LanguageIcon from '@material-ui/icons/Language'
 import { Grid, Hidden, Button, Typography, Box, Container, Link, makeStyles } from '@material-ui/core'
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert from '@material-ui/lab/Alert'
-import { assetUrl } from '../../shared/utils/url'
 import { ReactComponent as Globe } from '../../img/globe.svg'
 import { ReactComponent as Check } from '../../img/check.svg'
 import { ReactComponent as Heat } from '../../img/heat.svg'
+import CoffeeImage from '../../shared/components/CoffeeImage'
 
 const Alert = props => {
   return <MuiAlert elevation={6} variant="filled" {...props} />
@@ -81,7 +81,7 @@ const Product = () => {
             </Hidden>
             <ImageContainer>
               <ImageContentContainer>
-                <img src={`${assetUrl}/${coffee.imagePath ? coffee.imagePath : coffee.roaster.imagePath}`} alt={coffee.coffeeName} />
+                <CoffeeImage coffee={coffee} />
               </ImageContentContainer>
             </ImageContainer>
             <Box display="flex" flexDirection="row" pt={1}>
@@ -95,12 +95,12 @@ const Product = () => {
             </Hidden>
             {coffee.roaster && 
               <Link component={RouterLink} to={`${ROUTES.ROASTERS}/${coffee.roaster.id}`}>
-                <Typography color="textPrimary" variant="body1" component="p" gutterBottom>{coffee.roaster.name}</Typography>
+                <Typography style={{ fontWeight: 500 }} color="textPrimary" variant="body1" component="p" gutterBottom>{coffee.roaster.name}</Typography>
               </Link>
             }
             {coffee.price && 
               <Box my={1}>
-                <Typography variant="h4" component="p">${coffee.price}</Typography>
+                <Typography variant="h4" component="p">${coffee.price.toFixed(2)}</Typography>
               </Box>
             }
             {coffee.roastType && 
@@ -111,7 +111,7 @@ const Product = () => {
                 </Typography>
               </Box>
             }
-            {coffee.countries.length > 0 && 
+            {coffee.countries && coffee.countries.length > 0 && 
                 <Box my={1} display="flex" alignItems="center">
                   <Globe />
                   <Typography className={classes.iconLabel} component="p">

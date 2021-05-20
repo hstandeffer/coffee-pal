@@ -1,15 +1,14 @@
 import React from 'react'
 
-import { FlexProductDiv, ImageContainer, ImageContentContainer, InfoContainer } from '../Search/style'
-import { BrowseHitsDiv, FlexContainer, ProductLink } from '../Browse/style'
+import { FlexProductDiv, ImageContainer, ImageContentContainer, InfoContainer, BrowseHitsDiv, FlexContainer, ProductLink } from '../Browse/style'
 import { ProductWrapper, ProductGridDiv, LineClampSummary } from './style'
-import Typography from '@material-ui/core/Typography'
-import { Box } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 
 import * as ROUTES from '../../constants/routes'
 import CoffeeBeanSvg from '../../shared/components/CoffeeBeanSvg'
 import { assetUrl } from '../../shared/utils/url'
+import CoffeeImage from '../../shared/components/CoffeeImage'
 
 const ProductGrid = ({ coffees, route, view='saved' }) => {
   return (
@@ -35,20 +34,20 @@ const ProductGrid = ({ coffees, route, view='saved' }) => {
   )
 }
 
-export const CoffeeItem = ({ coffee, route }) => {
+export const CoffeeItem = ({ coffee }) => {
   return (
     <FlexProductDiv data-testid="search:coffeeItem">
-      <ProductLink to={`/${route ? route : 'coffees'}/${coffee.id}`}>
+      <ProductLink to={`coffees/${coffee.id}`}>
         <ImageContainer>
           <ImageContentContainer>
-            <img src={`${assetUrl}/${coffee.imagePath ? coffee.imagePath : coffee.roaster.imagePath}`} alt={coffee.coffeeName} />
+            <CoffeeImage coffee={coffee}/>
           </ImageContentContainer>
         </ImageContainer>
         <InfoContainer>
           <Box textAlign="left" marginBottom="5px" height='40px' overflow="hidden" fontWeight="bold">{coffee.coffeeName}</Box>
           <Box display="flex" flexDirection="row" justifyContent="space-between">
             <CoffeeBeanSvg roastType={coffee.roastType} />
-            <Box fontWeight="fontWeightBold">${coffee.price}</Box>
+            <Box fontWeight="fontWeightBold">${coffee.price.toFixed(2)}</Box>
           </Box>
         </InfoContainer>
       </ProductLink>

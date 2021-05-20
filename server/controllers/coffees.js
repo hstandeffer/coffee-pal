@@ -7,10 +7,13 @@ const { upload } = require('../utils/multer')
 const { auth, authAdmin } = require('../utils/middleware')
 const { coffeeValidation, validate } = require('../utils/validator')
 
-// coffeesRouter.get('/', async (request, response) => {
-//   const coffees = await Coffee.find({}).populate('roaster')
-//   return response.json(coffees.map(coffee => coffee.toJSON()))
-// })
+coffeesRouter.get('/', async (request, response) => {
+  const lastCoffeeId = request.query.coffeeId
+  const findObj = lastCoffeeId ? { _id: {$lt: toMongooseObjectId(lastCoffeeId)}} : {}
+  const coffees = await Coffee.find(findObj).populate('roaster', { name: 1 }).select().sort({ _id: -1 }).limit(20)
+
+  return response.json(coffees.map(coffee => coffee.toJSON()))
+})
 
 coffeesRouter.get('/query', async (request, response) => {
   const filters = JSON.parse(request.query.filters)
@@ -20,7 +23,7 @@ coffeesRouter.get('/query', async (request, response) => {
 
   // checks is an object and empty: will be true if empty and false otherwise
   if (Object.keys(filters).length === 0 && filters.constructor === Object) {
-    const noQueryCoffees = await Coffee.find(queryObj).select(['imagePath', 'coffeeName', 'roastType', 'price']).sort({ _id: -1 }).limit(12).populate('roaster')
+    const noQueryCoffees = await Coffee.find(queryObj).select(['imagePath', 'imageUrl', 'coffeeName', 'roastType', 'price']).sort({ _id: -1 }).limit(12).populate('roaster')
     return response.json(noQueryCoffees)
   }
 
@@ -38,7 +41,7 @@ coffeesRouter.get('/query', async (request, response) => {
 
   const coffees = await Coffee
     .find(queryObj)
-    .select(['imagePath', 'coffeeName', 'roastType', 'price'])
+    .select(['imagePath', 'imageUrl', 'coffeeName', 'roastType', 'price'])
     .sort({ _id: -1 })
     .limit(12)
     .populate('roaster', { name: 1, _id: 1, imagePath: 1 })
@@ -50,7 +53,7 @@ coffeesRouter.post('/', auth, authAdmin, upload.single('coffeeImage'), coffeeVal
   const body = request.body
   const coffeeObj = {
     brand: body.selectedBrand,
-    countries: body.selectedCountry,
+    countries: body.selectedCountry || [],
     fairTrade: body.fairTrade,
     organic: body.organic,
     price: body.price,
@@ -92,7 +95,7 @@ coffeesRouter.put('/:id', auth, authAdmin, upload.single('coffeeImage'), coffeeV
 
   const coffeeObj = {
     brand: body.selectedBrand,
-    countries: body.selectedCountry,
+    countries: body.selectedCountry || [],
     fairTrade: body.fairTrade,
     organic: body.organic,
     price: body.price,
@@ -114,7 +117,7 @@ coffeesRouter.put('/:id', auth, authAdmin, upload.single('coffeeImage'), coffeeV
   }
 
   const updatedCoffee = await Coffee.findByIdAndUpdate(request.params.id, coffeeObj, { new: true })
-  return response.status(204).json(updatedCoffee.toJSON())
+  return response.status(200).json(updatedCoffee.toJSON())
 })
 
 coffeesRouter.delete('/:id', auth, authAdmin, async (request, response) => {
