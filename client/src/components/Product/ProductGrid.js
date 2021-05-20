@@ -37,7 +37,7 @@ const ProductGrid = ({ coffees, route, view='saved' }) => {
 export const CoffeeItem = ({ coffee }) => {
   return (
     <FlexProductDiv data-testid="search:coffeeItem">
-      <ProductLink to={`coffees/${coffee.id}`}>
+      <ProductLink to={`/coffees/${coffee.id}`}>
         <ImageContainer>
           <ImageContentContainer>
             <CoffeeImage coffee={coffee}/>
@@ -58,7 +58,7 @@ export const CoffeeItem = ({ coffee }) => {
 export const RoasterItem = ({ roaster }) => {
   return (
     <FlexProductDiv>
-      <ProductLink to={`roasters/${roaster.id}`}>
+      <ProductLink to={`/roasters/${roaster.id}`}>
         <ImageContainer>
           <ImageContentContainer>
             <img src={`${assetUrl}/${roaster.imagePath}`} alt={roaster.name} />
