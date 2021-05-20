@@ -1,6 +1,7 @@
 # Squig Coffee
 
 Squig Coffee lets coffee lovers explore all kinds of different coffees from all over the world, all in one place. 
+### [Visit Site](https://squigcoffee.com)
 
 ## Features
 
