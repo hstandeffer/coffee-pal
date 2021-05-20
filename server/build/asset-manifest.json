@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/static/css/main.9c323f0c.chunk.css",
+    "main.js": "/static/js/main.e1042af2.chunk.js",
+    "main.js.map": "/static/js/main.e1042af2.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.b20e8644.js",
+    "runtime-main.js.map": "/static/js/runtime-main.b20e8644.js.map",
+    "static/js/2.dedeb5bb.chunk.js": "/static/js/2.dedeb5bb.chunk.js",
+    "static/js/2.dedeb5bb.chunk.js.map": "/static/js/2.dedeb5bb.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.9c323f0c.chunk.css.map": "/static/css/main.9c323f0c.chunk.css.map",
+    "static/js/2.dedeb5bb.chunk.js.LICENSE.txt": "/static/js/2.dedeb5bb.chunk.js.LICENSE.txt",
+    "static/media/bean-grey.31be6073.svg": "/static/media/bean-grey.31be6073.svg",
+    "static/media/bean.00fda257.svg": "/static/media/bean.00fda257.svg",
+    "static/media/check.71b4d946.svg": "/static/media/check.71b4d946.svg",
+    "static/media/globe.47547137.svg": "/static/media/globe.47547137.svg",
+    "static/media/heat.f66a8215.svg": "/static/media/heat.f66a8215.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.b20e8644.js",
+    "static/js/2.dedeb5bb.chunk.js",
+    "static/css/main.9c323f0c.chunk.css",
+    "static/js/main.e1042af2.chunk.js"
+  ]
+}
